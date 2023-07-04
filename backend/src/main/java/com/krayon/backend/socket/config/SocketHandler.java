@@ -7,11 +7,16 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @Log4j2
+
 public class SocketHandler extends TextWebSocketHandler {
 
     private static List<WebSocketSession> list = new ArrayList<>();
@@ -29,7 +34,6 @@ public class SocketHandler extends TextWebSocketHandler {
     /* Client가 접속 시 호출되는 메서드 */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-
         list.add(session);
 
         log.info(session + " 클라이언트 접속");
@@ -42,5 +46,20 @@ public class SocketHandler extends TextWebSocketHandler {
 
         log.info(session + " 클라이언트 접속 해제");
         list.remove(session);
+    }
+
+    @OnMessage
+    public void onMessage(String msg, Session session) throws Exception{
+
+    }
+
+    @OnOpen
+    public void onOpen(Session s) {
+
+    }
+
+    @OnClose
+    public void onClose(Session s) {
+
     }
 }

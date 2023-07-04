@@ -6,6 +6,7 @@ import Chatting from './Chatting';
 import UserInfo from './UserInfo';
 
 import '../../resource/scss/main/Main.scss';
+
 const Main = () => {
     return (
         <>
