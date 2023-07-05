@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class chatDTO {
 	private String id;
-	private MessageType chat;
+	private String  chat;
 	private String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
 
 }
