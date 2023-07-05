@@ -9,12 +9,13 @@
     // height: 100%;
     border-radius: 10px;
     border: 1px solid #000;
-    
+    box-sizing: border-box;
     margin-right: 5px;
     
     .in-chat{
         flex: 4;
-        height: 170px;
+        min-height: 170px;
+        max-height: 170px;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         background-color: #fff;
@@ -22,13 +23,11 @@
         
         display: flex;
         flex-direction: column;
-        justify-content: baseline;
+        // justify-content: baseline;
         
         overflow: scroll;
-        li{
-            
-            line-height: 24px;
-           
+        li{            
+            line-height: 24px;           
             font-size: 15px;
             text-indent: 20px;
             text-align: left;
@@ -40,14 +39,12 @@
         display: flex;
         input {
             flex: 7;
-            border-bottom-left-radius: 10px;
-            
-            margin-top: 5px;
+            border-bottom-left-radius: 10px;            
             outline: none;
             border: none;
         }
         button{
-            margin-top: 5px;
+            
             border: none;
             border-bottom-right-radius: 10px;
         }

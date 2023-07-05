@@ -1,9 +1,13 @@
 import React from 'react'
+// import PaintZone from './PaintZone'
+// import UserInfo from '../main/UserInfo'
+// import Chatting from '../main/Chatting'
+// import UserList from '../main/UserList'
+import "../../../resource/scss/game/can/can.scss"
 import PaintZone from './PaintZone'
-import UserInfo from '../main/UserInfo'
-import Chatting from '../main/Chatting'
-import UserList from '../main/UserList'
-import "../../resource/scss/game/can/can.scss"
+import Chatting from '../../main/Chatting'
+import UserInfo from '../../main/UserInfo'
+import UserList from '../../main/UserList'
 
 const CatchMind = () => {
   return (

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../../resource/scss/main/Chatting.scss';
-import {} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ChatItem from './ChatItem';
 const Chatting = () => {
-    // const redirection = useNavigate();
+    const redirection = useNavigate();
 
     const [chatting, setChatting] = useState([]);
     const fetchChat = async () => {
@@ -22,15 +22,18 @@ const Chatting = () => {
     };
     const chatHandler = () => {
         fetchChat();
+        redirection('/');
     };
-    useEffect(() => {}, [chatting]);
+    useEffect(() => {
+        // chatHandler();
+    }, [chatting]);
 
     return (
         <div className="chat">
             <ul className="in-chat">
-                {chatting.map((a) => {
-                    <ChatItem id={a.id} chat={a.chat} />;
-                })}
+                {chatting.map((a) => (
+                    <ChatItem id={a.id} chat={a.chat} time={a.time} />
+                ))}
             </ul>
             <div class="enter-chat">
                 <input type="text" name="" id="id" placeholder="임시아이디" />

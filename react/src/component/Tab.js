@@ -6,17 +6,15 @@ const Tab = () => {
         <>
             <div className="title">Krayon</div>
             <div className="tab">
-                <div class="tab-d">
-                    <Link to="/" className="d main">
-                        메인
-                    </Link>
-                    <Link to="/user" className="d info">
-                        내정보
-                    </Link>
-                    <Link to="/shop" className="d shop">
-                        상점
-                    </Link>
-                </div>
+                <Link to="/" className="d tab-main">
+                    메인
+                </Link>
+                <Link to="/user" className="d tab-info">
+                    내정보
+                </Link>
+                <Link to="/shop" className="d tab-shop">
+                    상점
+                </Link>
             </div>
         </>
     );

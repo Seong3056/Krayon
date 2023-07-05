@@ -2,6 +2,13 @@ package com.krayon.backend.socket.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.regex.Pattern;
+
 @Getter
 @Setter
 @ToString
@@ -12,4 +19,6 @@ import lombok.*;
 public class chatDTO {
 	private String id;
 	private String chat;
+	private String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+
 }

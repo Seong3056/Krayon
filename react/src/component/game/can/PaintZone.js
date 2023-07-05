@@ -1,12 +1,13 @@
 // react
 import React, { useRef, useEffect, useState } from "react";
 // style
-import { CanvasStyle } from "./style/canvas";
-import UserInfo from '../main/UserInfo';
-import Chatting from '../main/Chatting';
-import UserList from '../main/UserList';
+// import { CanvasStyle } from "./style/canvas";
+// import UserInfo from '../main/UserInfo';
+// import Chatting from '../main/Chatting';
+// import UserList from '../main/UserList';
 import Send from "./Send";
-import "../../resource/scss/game/can/can.scss"
+import { CanvasStyle } from "./style/canvas";
+
 const API = 'http://localhost:8181/catch'
 
 export default function PaintZone() {
