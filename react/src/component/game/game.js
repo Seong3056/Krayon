@@ -1,13 +1,15 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
 import FollowWord from './followword/FollowWord';
-import CatchMind from './catchmind/CatchMind';
+import CatchMind from './can/CatchMind';
+import A from './followword/A';
+
 
 const game = () => {
     return (
         <Routes>
-            <Route path="followword" Component={FollowWord} />
-            <Route path="catchmind" Component={CatchMind} />
+            <Route path="followword" Component={A} />
+            <Route path="can" Component={CatchMind} />
         </Routes>
     );
 };
