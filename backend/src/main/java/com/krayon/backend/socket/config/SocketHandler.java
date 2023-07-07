@@ -1,65 +1,46 @@
 package com.krayon.backend.socket.config;
 
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Component;
+
+import com.krayon.backend.socket.dto.chatDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Component
-@Log4j2
-
+@Slf4j
 public class SocketHandler extends TextWebSocketHandler {
+	private final Map<String , WebSocketSession> sessions = new ConcurrentHashMap<>();
 
-    private static List<WebSocketSession> list = new ArrayList<>();
+	//웹소켓 연결
+	@Override
+	public void afterConnectionEstablished(WebSocketSession session){
+		var sessionId = session.getId();
+		sessions.put(sessionId,session);
+		chatDTO dto = chatDTO.builder().id(sessionId).receiver("all").build();
+		dto.newConnect();
 
-    @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String payload = message.getPayload();
-        log.info("payload : " + payload);
+		sessions.values().forEach(s ->{
+//			if(!s.getId().equals(sessionId)) s.sendMessage();
+		});
+	}
 
-        for(WebSocketSession sess: list) {
-            sess.sendMessage(message);
-        }
-    }
+	@Override
+	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		super.handleTextMessage(session, message);
+	}
 
-    /* Client가 접속 시 호출되는 메서드 */
-    @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        list.add(session);
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		super.afterConnectionClosed(session, status);
+	}
 
-        log.info(session + " 클라이언트 접속");
-    }
-
-    /* Client가 접속 해제 시 호출되는 메서드드 */
-
-    @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-
-        log.info(session + " 클라이언트 접속 해제");
-        list.remove(session);
-    }
-
-    @OnMessage
-    public void onMessage(String msg, Session session) throws Exception{
-
-    }
-
-    @OnOpen
-    public void onOpen(Session s) {
-
-    }
-
-    @OnClose
-    public void onClose(Session s) {
-
-    }
+	@Override
+	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+		super.handleTransportError(session, exception);
+	}
 }
+
