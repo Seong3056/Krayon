@@ -8,7 +8,7 @@ import React, { useRef, useEffect, useState } from "react";
 import Send from "./Send";
 import { CanvasStyle } from "./style/canvas";
 
-const API = 'http://localhost:8181/catch'
+const API = 'http://localhost:8181/api/catch'
 
 export default function PaintZone() {
   // useRef

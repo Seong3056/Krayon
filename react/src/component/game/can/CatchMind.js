@@ -8,6 +8,7 @@ import PaintZone from './PaintZone'
 import Chatting from '../../main/Chatting'
 import UserInfo from '../../main/UserInfo'
 import UserList from '../../main/UserList'
+import GetQuiz from './style/GetQuiz'
 
 const CatchMind = () => {
   return (
@@ -15,12 +16,11 @@ const CatchMind = () => {
     <div className='view'>
         <div class="sectionMypage">
             <PaintZone/>
-        
         </div>
         <div class="can-bottom">
-            <Chatting className = "chat"/>
+            <Chatting className = "canChat"/>
+            <GetQuiz className = "getQuiz"/>
         </div>
-        
     </div>
         <div className="sectionUserList">
             <UserInfo className = "userInfo"/>
