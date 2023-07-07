@@ -16,8 +16,10 @@ function FollowedWord() {
     const value = event.target.value;
     const koreanRegex = /^[ㄱ-ㅎㅏ-ㅣ가-힣\s]*$/;
     if (koreanRegex.test(value)) {
+      setCurrentWord(value);
       setInputValue(value);
     } else {
+      setCurrentWord('');
       setInputValue('');
       if (value.trim() !== '') {
         alert('한글을 입력하세요!');
@@ -46,34 +48,41 @@ function FollowedWord() {
       previousWord.charAt(previousWord.length - 1).toLocaleLowerCase()
     );
   };
-
+  const $in = document.getElementById('in');
+  useEffect(() => {
+    if($in != null)
+    setCurrentWord($in.value);
+  }, [$in])
+  
   return (
     <div>
       <h1>끝말잇기 게임</h1>
       <p>이전 단어: {previousWord}</p>
       <p>현재 단어: {currentWord}</p>
       {!gameStarted ? (
-        <form onSubmit={handleFormSubmit}>
+        <>
           <input
             type="text"
             value={inputValue}
             onChange={handleInputChange}
+            onClick={handleFormSubmit}
           />
           <button type="submit">시작</button>
-        </form>
+        </>
       ) : (
-        <form onSubmit={handleFormSubmit}>
+        <>
           <input
             type="text"
             value={inputValue}
             onChange={handleInputChange}
+            onClick={handleFormSubmit}
+            id="in"
           />
           <button type="submit">제출</button>
-        </form>
+        </>
       )}
     </div>
   );
 }
 
 export default FollowedWord;
-

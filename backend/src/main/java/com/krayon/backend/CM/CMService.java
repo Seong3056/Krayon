@@ -13,7 +13,7 @@ import java.util.Random;
 
 @Service
 @Slf4j
-public class CMservice {
+public class CMService {
     public String getData(String drawData) {
         log.info("받아서 전파하는 데이터: {}", drawData);
         return drawData;
@@ -43,8 +43,10 @@ public class CMservice {
 
     public String findRandomWord() {
         try {
-            String url = "https://opendict.korean.go.kr/api/view?certkey_no=5609&key=BAAA5C2F46E8178AC1D5714D4775EAB5&&target_type=view&req_type=xml&method=target_code&q="+getTargetCode();
-
+//            String url = "https://opendict.korean.go.kr/api/view?certkey_no=5609&key=BAAA5C2F46E8178AC1D5714D4775EAB5&&target_type=view&req_type=xml&method=target_code&q="+getTargetCode();
+            String url = "https://krdict.korean.go.kr/api/view?key=EDA74127B22EE2D406A4F053EFC0E2BD&method=target_code&q=64288";
+//
+//            log.info();
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(url);
