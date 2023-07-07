@@ -9,7 +9,6 @@ import { Routes, Route } from 'react-router-dom';
 import User from './component/userinfo/User';
 import Shop from './component/shop/Shop';
 
-
 import FollowWord from './component/game/followword/FollowWord';
 import game from './component/game/game';
 import CatchMind from './component/game/can/CatchMind';

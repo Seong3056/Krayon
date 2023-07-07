@@ -76,3 +76,4 @@ function FollowedWord() {
 }
 
 export default FollowedWord;
+

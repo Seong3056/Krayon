@@ -4,7 +4,6 @@ import FollowWord from './followword/FollowWord';
 import CatchMind from './can/CatchMind';
 
 
-
 const game = () => {
     return (
         <Routes>
