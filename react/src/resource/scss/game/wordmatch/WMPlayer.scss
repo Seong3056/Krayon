@@ -1,0 +1,19 @@
+
+.playerWrapper {
+    display: flex;
+    flex-direction: row;
+
+    // justify-content: space-evenly;
+
+
+}
+
+.player {
+
+    background: greenyellow;
+    border: 5px solid pink;
+    margin: auto;
+    width: auto;
+    height: 300%;
+
+}

@@ -1,6 +1,13 @@
 package com.krayon.backend.socket.config;
 
 
+import com.krayon.backend.socket.dto.chatDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +24,7 @@ public class SocketHandler extends TextWebSocketHandler {
 		dto.newConnect();
 
 		sessions.values().forEach(s ->{
-			if(!s.getId().equals(sessionId)) s.sendMessage(new);
+//			if(!s.getId().equals(sessionId)) s.sendMessage();
 		});
 	}
 

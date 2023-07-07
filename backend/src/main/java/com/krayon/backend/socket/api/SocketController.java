@@ -15,21 +15,21 @@ import java.util.logging.SocketHandler;
 public class SocketController {
 
 	@PostMapping("api/chat")
-	public ResponseEntity<?> chat(@RequestBody chatDTO dto){
+	public ResponseEntity<?> chat(@RequestBody chatDTO dto) {
 		log.info(dto.toString());
 		return ResponseEntity.ok().body(dto);
 	}
+
 	@GetMapping("/api/chat")
 	public void chat() {
-//		User
-//		CustomUser user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+		// User
+		// CustomUser user =
+		// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		log.info("==================================");
-//		log.info("@ChatController, GET Chat / Username : " + user.getUsername());
+		// log.info("@ChatController, GET Chat / Username : " + user.getUsername());
 
-//		model.addAttribute("userid", user.getUsername());
+		// model.addAttribute("userid", user.getUsername());
 	}
-
 
 }
