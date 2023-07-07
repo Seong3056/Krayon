@@ -9,6 +9,7 @@ import Chatting from '../../main/Chatting'
 import UserInfo from '../../main/UserInfo'
 import UserList from '../../main/UserList'
 import GetQuiz from './style/GetQuiz'
+import Send from './Send'
 
 const CatchMind = () => {
   return (
@@ -25,6 +26,7 @@ const CatchMind = () => {
         <div className="sectionUserList">
             <UserInfo className = "userInfo"/>
             <UserList className = "userList"/>
+            <Send/>
         </div>
         
     </>
