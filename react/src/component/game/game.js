@@ -8,7 +8,7 @@ import A from './followword/A';
 const game = () => {
     return (
         <Routes>
-            <Route path="followword" Component={FollowWord} />
+            <Route path="followword" Component={A} />
             <Route path="can" Component={CatchMind} />
         </Routes>
     );
