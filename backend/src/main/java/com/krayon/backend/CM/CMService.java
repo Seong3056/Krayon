@@ -22,7 +22,8 @@ public class CMService {
     // 랜덤 수 생성
     public int getTargetCode() {
         Random rand = new Random();
-        int num = rand.nextInt(30001);  // 0 이상 30000 이하의 난수 생성
+        int num = rand.nextInt(100001);  // 0 이상 30000 이하의 난수 생성
+        System.out.println(num);
         return num;
     }
 
@@ -44,7 +45,7 @@ public class CMService {
     public String findRandomWord() {
         try {
 //            String url = "https://opendict.korean.go.kr/api/view?certkey_no=5609&key=BAAA5C2F46E8178AC1D5714D4775EAB5&&target_type=view&req_type=xml&method=target_code&q="+getTargetCode();
-            String url = "https://krdict.korean.go.kr/api/view?key=EDA74127B22EE2D406A4F053EFC0E2BD&method=target_code&q=64288";
+            String url = "https://krdict.korean.go.kr/api/view?key=EDA74127B22EE2D406A4F053EFC0E2BD&method=target_code&q="+getTargetCode();
 //
 //            log.info();
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -55,7 +56,7 @@ public class CMService {
             doc.getDocumentElement().normalize();
 
             // 파싱할 tag
-            NodeList nList = doc.getElementsByTagName("wordInfo");
+            NodeList nList = doc.getElementsByTagName("word_info");
 
             int randomIndex = new Random().nextInt(nList.getLength());
 

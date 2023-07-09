@@ -10,12 +10,12 @@ const GetQuiz = () => {
         const response = await fetch(API, {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'text/plain'
+          }
         });
 
         if (response.ok) {
-          const data = await response.json();
+          const data = await response.text();
           console.log('단어 생성:', data);
           setQuizData(data);
         } else {
@@ -32,7 +32,7 @@ const GetQuiz = () => {
   return (
     <div className="getQuiz">
       <p>속담</p>
-      <p>{quizData && <p>{quizData}</p>}</p>
+      {quizData && <p>{quizData}</p>}
     </div>
   );
 };
