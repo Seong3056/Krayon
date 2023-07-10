@@ -16,9 +16,20 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 @Builder
 
+
+
 public class chatDTO {
 	private String id;
-	private MessageType chat;
+	private String chat;
+	private String receiver;
 	private String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+	private String type;
+	public void newConnect(){
+		this.type = "new";
+	}
+	public void closeConnect(){
+		this.type = "close";
+	}
+
 
 }
