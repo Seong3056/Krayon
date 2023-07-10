@@ -12,6 +12,7 @@ import Shop from './component/shop/Shop';
 import FollowWord from './component/game/followword/FollowWord';
 import game from './component/game/game';
 import CatchMind from './component/game/can/CatchMind';
+import WordMatch from './component/game/wordmatch/WordMatch';
 
 const App = () => {
     return (
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/game" Component={game}>
                     <Route path="followword" Component={FollowWord} />
                     <Route path="can" Component={CatchMind} />
+                    <Route path="wordmatch" Component={WordMatch} />
                 </Route>
             </Routes>
         </div>

@@ -10,7 +10,7 @@ const WordQuiz = () => {
   
 
   let quiz = 'Word Quiz';
-  const url = 'http://localhost:8181/api/catch';
+  const url = 'http://localhost:8181/api/match';
 
   const [definition, setDefinition] = useState('');
   const [word, setWord] = useState('');
