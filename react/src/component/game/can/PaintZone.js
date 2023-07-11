@@ -36,8 +36,8 @@ export default function PaintZone() {
     ctx.lineWidth = 2.5;
     ctx.strokeStyle = "#000000";
     setGetCtx(ctx);
-    
-  
+
+
   }, []);
 
   //펜의 색상선택
@@ -107,7 +107,7 @@ export default function PaintZone() {
             console.error('오류:', error);
           });
   }
- 
+
   const sendCanvasData = () => {
     const canvas = canvasRef.current;
     const dataURL = canvas.toDataURL();
@@ -139,21 +139,21 @@ export default function PaintZone() {
   };
 
 
-  
+
   useEffect(() => {
-    console.log('이미지 src 바뀜');  
-  
+    console.log('이미지 src 바뀜');
+
   }, [getPic])
 
   return (
     <>
     <CanvasStyle>
       <div className="view">
-        
+
         <div className="sectionMyPage">
-        <div className="paintZone"> 
+        <div className="paintZone">
           <div className="canvasWrap" onClick={sendCanvasData}>
-              <canvas 
+              <canvas
                 className="canvas"
                 ref={canvasRef}
                 onMouseDown={() => setPainting(true)}
@@ -162,7 +162,7 @@ export default function PaintZone() {
                 onMouseLeave={() => setPainting(false)}
                 id="canvasDraw"
               />
-            
+
           </div>
           <div className = "canvasTools">
                   <button id="resetBtn" onClick={resetCanvas}>전체지우기</button>
@@ -215,13 +215,13 @@ export default function PaintZone() {
                 ></button>
               </div>
             </div>
-        
-           
-        </div>{/*sectionleft*/}
-        
 
-      
-         
+
+        </div>{/*sectionleft*/}
+
+
+
+
         </div>
 
       {/*그림 데이터 읽어서 이미지 src에 확인하기*/}
@@ -230,9 +230,9 @@ export default function PaintZone() {
       </div>
     </CanvasStyle>
 
-     
-    
-    
+
+
+
     </>
   )
 }
