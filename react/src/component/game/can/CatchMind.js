@@ -1,0 +1,36 @@
+import React from 'react'
+// import PaintZone from './PaintZone'
+// import UserInfo from '../main/UserInfo'
+// import Chatting from '../main/Chatting'
+// import UserList from '../main/UserList'
+import "../../../resource/scss/game/can/can.scss"
+import PaintZone from './PaintZone'
+import Chatting from '../../main/Chatting'
+import UserInfo from '../../main/UserInfo'
+import UserList from '../../main/UserList'
+import GetQuiz from './style/GetQuiz'
+import Send from './Send'
+
+const CatchMind = () => {
+  return (
+    <>
+    <div className='view'>
+        <div class="sectionMypage">
+            <PaintZone/>
+        </div>
+        <div class="can-bottom">
+            <Chatting className = "canChat"/>
+            <GetQuiz className = "getQuiz"/>
+        </div>
+    </div>
+        <div className="sectionUserList">
+            <UserInfo className = "userInfo"/>
+            <UserList className = "userList"/>
+            <Send/>
+        </div>
+        
+    </>
+  )
+}
+
+export default CatchMind

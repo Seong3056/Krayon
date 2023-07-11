@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import CheckWord from './CheckWord';
 
 const FollowWord = () => {
-    return <div>FollowWord</div>;
+
+  return (
+    <CheckWord/>
+  );
 };
 
 export default FollowWord;

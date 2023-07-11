@@ -5,12 +5,18 @@ const Rooms = () => {
     return (
         <div class="rooms">
             <ul>
+                
+                <Link to="/game/can" class="room">
+                    그림 맞추기방 1 4/5
+                </Link>
                 <Link to="/game/followword" class="room">
                     끝말잇기방 1 3/4
                 </Link>
-                <Link to="/game/catchmind" class="room">
-                    그림 맞추기방 1 4/5
-                </Link>
+                <Link to="/game/wordmatch" class="room">
+                    단어 맞추기방
+                </Link>                
+
+
                 <li class="room"></li>
                 <li class="room"></li>
             </ul>
