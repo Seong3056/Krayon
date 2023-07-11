@@ -83,6 +83,8 @@ public class SocketHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 
+
+
  log.info(session.toString());
 
  log.info(sessions.toString());
