@@ -49,7 +49,6 @@ public class CMController {
 
         if(randomWord != null){
             return  ResponseEntity.ok().body(randomWord);
-//return "/socket/chatt";
         }
         else{
             return ResponseEntity.notFound().build();
