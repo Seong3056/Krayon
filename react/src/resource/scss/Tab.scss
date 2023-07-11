@@ -2,49 +2,46 @@
     height: 30px;
     position: absolute;
     top: -30px;
-    left: 5px;
+    left: 8px;
+    z-index: -2;
     
-    .tab-d{
+    
         display: flex;
-        position: relative;
+        
         .d{
-            border: 1px solid #000;
-            border-bottom: 0px;
+            // border: 1px solid #000;
+            // border-bottom: none;
             border-radius: 6px; 
             width: 100px;
             font-size: 24px;
-            height: 30px;            
+            height: 36px;            
             cursor: pointer;
             line-height: 24px;
             transition: 0.2s;
+            padding: 5px;
             &:hover{
                 z-index: 10;
-                scale: 1.2  ;
+                scale: 1.15  ;
             }
            
         }
-        .main{
-            // position: absolute;
-            left: 0%;
-            top: 0px;
+        .tab-main{            
             background-color: #fdfd85;
+            // z-index: -1;
            } 
-        .info{
-            position: absolute;
-            left: 90%;
-            top: 0px;
+        .tab-info{
             background-color: #8bf58b;
-            
-            
+            // z-index: -1;
         }
-        .shop{
-            position: absolute;
-            left: 180%;
-            top: 0px;
+        .tab-shop{
             background-color: #93ffff;
-            
-            
+            // z-index: -1;
         }
-    }
+        .d:first-child{
+            border-bottom-left-radius: 6px;
+        }
+        .d:last-child {
+            border-top-right-radius: 6px;            
+        }
     
 }
