@@ -12,6 +12,9 @@ const Tab = () => {
                 <Link to="/user" className="d tab-info">
                     내정보
                 </Link>
+                <Link to="/diction" className="d tab-shop">
+                    단어장
+                </Link>
                 <Link to="/shop" className="d tab-shop">
                     상점
                 </Link>

@@ -3,17 +3,14 @@ package com.krayon.backend.user.service;
 //import com.krayon.backend.auth.TokenProvider;
 import com.krayon.backend.exception.DuplicatedUserIdException;
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
-import com.krayon.backend.user.dto.request.LoginRequestDTO;
+
 import com.krayon.backend.user.dto.request.UserRequestDTO;
-import com.krayon.backend.user.dto.response.LoginResponseDTO;
 import com.krayon.backend.user.dto.response.UserResponseDTO;
 import com.krayon.backend.user.entity.User;
 import com.krayon.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
@@ -50,7 +47,7 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
-    public LoginResponseDTO authenticate(final LoginRequestDTO dto) {
+    public UserResponseDTO authenticate(final UserRequestDTO dto) {
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(
@@ -68,8 +65,9 @@ public class UserService {
 
 //        String token = tokenProvider.createToken(user);
 
-//        return new LoginResponseDTO(user, token);
-        return new LoginResponseDTO(user);
+        return new UserResponseDTO(user
+//                token
+        );
     }
 
     public UserResponseDTO delete(String userId) {
@@ -80,10 +78,4 @@ public class UserService {
         }
         return null;
     }
-//
-//    public UserResponseDTO update(UserRequestDTO dto) throws RuntimeException {
-//        Optional<User> userEntity = userRepository.findById(dto.getUserId());
-//
-//
-//    }
 }
