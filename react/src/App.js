@@ -2,7 +2,7 @@ import React from 'react';
 
 import './index.css';
 
-import Main from './component/main/Main';
+import Main from './component/main/Main'
 import Tab from './component/Tab';
 import './resource/scss/Section.scss';
 import { Routes, Route } from 'react-router-dom';

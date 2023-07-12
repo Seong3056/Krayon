@@ -21,11 +21,12 @@ public class WMController {
 
     @GetMapping
     public ResponseEntity<?> getQuiz() {
-        Map<String, String> randomWord = wmService.findRandomWord();
-        if(randomWord != null) {
-            return ResponseEntity.ok().body(randomWord);
+        Map<String, String> wordFilter = wmService.wordFilter();
+
+        if(wordFilter != null) {
+            return ResponseEntity.ok().body(wordFilter);
         } else {
-            log.info("randomWord를 찾을 수 없음: " + randomWord);
+            log.info("randomWord를 찾을 수 없음: " + wordFilter);
             return ResponseEntity.notFound().build();
         }
     }
