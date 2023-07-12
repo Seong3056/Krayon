@@ -17,7 +17,7 @@ const Main = () => {
 
             <div class="bottom">
                 <UserInfo />
-                <Chatting />
+                {/* <Chatting /> */}
             </div>
         </>
     );
