@@ -31,7 +31,7 @@ public class WebSocketChat {
             log.info("이미 연결된 session");
         }
         for( Session s :clients){
-            s.getBasicRemote().sendText("{\"name\":\"시스템\",\"msg\":\"님이 접속했습니다.\",\"date\":\"05:43\"}");
+            s.getBasicRemote().sendText("{\"name\":\"\",\"msg\":\"님이 접속했습니다.\",\"date\":\"시스템\"}");
         }
     }
 
@@ -60,7 +60,7 @@ public class WebSocketChat {
         for (Session s : clients) {
 //            log.info("send data : {}", session.get);
             try {
-                s.getBasicRemote().sendText("{\"name\":\"시스템\",\"msg\":\"님이 접속을 해제했습니다.\",\"date\":\"05:43\"}");
+                s.getBasicRemote().sendText("{\"name\":\"\",\"msg\":\"님이 접속을 해제했습니다.\",\"date\":\"시스템\"}");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
