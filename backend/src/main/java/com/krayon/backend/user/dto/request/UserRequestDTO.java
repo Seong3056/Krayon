@@ -24,5 +24,4 @@ public class UserRequestDTO {
                 .userPw(this.userPw)
                 .build();
     }
-
 }

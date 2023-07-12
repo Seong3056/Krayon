@@ -1,6 +1,6 @@
 package com.krayon.backend.user.service;
 
-import com.krayon.backend.auth.TokenProvider;
+//import com.krayon.backend.auth.TokenProvider;
 import com.krayon.backend.exception.DuplicatedUserIdException;
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
 import com.krayon.backend.user.dto.request.LoginRequestDTO;
@@ -12,7 +12,9 @@ import com.krayon.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @Slf4j
@@ -20,8 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
-    private final TokenProvider tokenProvider;
+//    private final PasswordEncoder encoder;
+//    private final TokenProvider tokenProvider;
 
     public UserResponseDTO create(final UserRequestDTO dto) throws RuntimeException {
 
@@ -34,8 +36,8 @@ public class UserService {
             throw new DuplicatedUserIdException("중복된 아이디 입니다.");
         }
 
-        String encoded = encoder.encode(dto.getUserPw());
-        dto.setUserPw(encoded);
+//        String encoded = encoder.encode(dto.getUserPw());
+//        dto.setUserPw(encoded);
 
         User user = dto.toEntity();
 
@@ -60,13 +62,14 @@ public class UserService {
         String encodedPassword = user.getUserPw();
         log.info("encodedPassword : " + encodedPassword);
 
-        if(!encoder.matches(rawPassword, encodedPassword)) {
-            throw new RuntimeException("비밀번호가 틀렸습니다.");
-        }
+//        if(!encoder.matches(rawPassword, encodedPassword)) {
+//            throw new RuntimeException("비밀번호가 틀렸습니다.");
+//        }
 
-        String token = tokenProvider.createToken(user);
+//        String token = tokenProvider.createToken(user);
 
-        return new LoginResponseDTO(user, token);
+//        return new LoginResponseDTO(user, token);
+        return new LoginResponseDTO(user);
     }
 
     public UserResponseDTO delete(String userId) {
@@ -77,4 +80,10 @@ public class UserService {
         }
         return null;
     }
+//
+//    public UserResponseDTO update(UserRequestDTO dto) throws RuntimeException {
+//        Optional<User> userEntity = userRepository.findById(dto.getUserId());
+//
+//
+//    }
 }
