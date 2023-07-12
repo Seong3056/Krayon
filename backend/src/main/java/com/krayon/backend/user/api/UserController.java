@@ -1,6 +1,6 @@
 package com.krayon.backend.user.api;
 
-import com.krayon.backend.auth.TokenUserInfo;
+//import com.krayon.backend.auth.TokenUserInfo;
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
 import com.krayon.backend.user.dto.request.LoginRequestDTO;
 import com.krayon.backend.user.dto.request.UserRequestDTO;
@@ -9,8 +9,9 @@ import com.krayon.backend.user.dto.response.UserResponseDTO;
 import com.krayon.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+//import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -63,19 +64,33 @@ public class UserController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(
-            @AuthenticationPrincipal TokenUserInfo userInfo
+//            @AuthenticationPrincipal TokenUserInfo userInfo
+            @Validated @RequestBody UserRequestDTO dto
     ) {
-        log.info("DELETE 할 id : " + userInfo);
+        log.info("DELETE 할 id : " + dto.getUserId());
 
-        if(userInfo == null) {
+        if(dto.getUserId() == null) {
             return ResponseEntity.badRequest().body(UserResponseDTO.builder().error("ID를 전달해 주세요"));
         }
 
         try {
-            UserResponseDTO responseDTO = userService.delete(userInfo.getUserId());
+            UserResponseDTO responseDTO = userService.delete(dto.getUserId());
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(UserResponseDTO.builder().error(e.getMessage()));
         }
     }
+
+//    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH})
+//    public ResponseEntity<?> update(
+//            @Validated @RequestBody UserRequestDTO dto
+//            ) {
+//        log.info("modifying dto: {}", dto);
+//
+//        try {
+//            UserResponseDTO userResponseDTO = userService.update(dto);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.internalServerError().body(UserResponseDTO.builder().error(e.getMessage()));
+//        }
+//    }
 }
