@@ -14,6 +14,10 @@ const WordQuiz = () => {
 
   const [definition, setDefinition] = useState('');
   const [word, setWord] = useState('');
+  const [hintTime, setHintTime] = useState(20000);
+  const [answer, setAnswer] = useState('');
+
+  useEffect(() => { console.log(word); }, [word]);
 
   const fetchQuiz = async() => {
     const res = await fetch(url, { method: 'GET' });
@@ -30,17 +34,51 @@ const WordQuiz = () => {
   const handleKeyDown = (e) => {if (e.keyCode === 13) { handleSubmit(e.target.value); } };
   
 
-  const handleSubmit = (value) => {
-    if (value === word) alert('정답입니다!!');
-    else alert('틀렸습니다');
-    
+  const handleSubmit = (a) => {
+    // if (answer === word) alert('정답입니다!!');
+    // else alert('틀렸습니다');
+    // const a = document.getElementById('in').value;
+
+    setAnswer(a);
     setInputValue('');
     document.getElementById('in').value = '';
     console.log(inputValue);
   };
 
 
-  useEffect(() => { console.log(word); }, [word]);
+
+  
+
+
+
+  const runWordQuiz = () => {
+    console.log('버튼이 눌림');
+    let count = 1;
+    
+    let quiz =  setInterval(() => {
+      console.log('인터벌 진입');
+
+      count++;
+        console.log("count: " + count);
+
+        if(count > 4 ) {
+          console.log('중지시켜~~~~~~~~~~~~~~~~~~');
+          clearInterval(quiz);
+        }
+
+        fetchQuiz(); 
+        
+        if(answer === word) {
+          console.log("정답: " + word);
+          console.log("answer: " + answer);
+          clearInterval(quiz);          
+        }             
+    }, 3000);    
+  }
+
+
+
+
   
 
 
@@ -48,7 +86,7 @@ const WordQuiz = () => {
     
       <div className='quizBox'>
           <div className='textBox'>{ definition }</div>
-          <button onClick={fetchQuiz}>Quiz Start</button>
+          <button onClick={runWordQuiz}>Quiz Start</button>
           <input type='text' id='in' onKeyDown={handleKeyDown} />
       <button onClick={() => handleSubmit(inputValue)}>Submit</button>
       </div>

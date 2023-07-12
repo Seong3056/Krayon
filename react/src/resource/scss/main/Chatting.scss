@@ -14,18 +14,21 @@
     
     .in-chat{
         flex: 4;
-        min-height: 170px;
+        min-height: 169px;
         max-height: 170px;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         background-color: #fff;
-        text-align: center;
+        // text-align: center;
+        text-indent: 10px;
         
         display: flex;
         flex-direction: column;
         // justify-content: baseline;
         
-        overflow: scroll;
+        // overflow: scroll;
+        overflow: auto;        
+        scroll-margin: 50px;
         li{            
             line-height: 24px;           
             font-size: 15px;
