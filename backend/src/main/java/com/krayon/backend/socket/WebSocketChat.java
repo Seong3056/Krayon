@@ -18,9 +18,10 @@ public class WebSocketChat {
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     @OnOpen
-    public void onOpen(Session session) {
+    public void onOpen(Session session) throws IOException {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
+        session.getId();
         log.info("res={}", res);
 
         if(!clients.contains(session)) {
@@ -28,6 +29,9 @@ public class WebSocketChat {
             log.info("session open : {}", session);
         }else{
             log.info("이미 연결된 session");
+        }
+        for( Session s :clients){
+            s.getBasicRemote().sendText("{\"name\":\"시스템\",\"msg\":\"님이 접속했습니다.\",\"date\":\"05:43\"}");
         }
     }
 
@@ -48,10 +52,15 @@ public class WebSocketChat {
         log.info("session close : {}", session);
 //        clients.
         clients.remove(session);
+        log.info(clients.toString());
+        StringBuilder sb = new StringBuilder();
+        sb.append("{ ");
+        sb.append("name: \"");
+        sb.append("session");
         for (Session s : clients) {
 //            log.info("send data : {}", session.get);
             try {
-                s.getBasicRemote().sendText("{\"name\":\"ㅁㄴㅇㄻㄴㅇㄹ\",\"msg\":\"ㅁㄴㅇㄻㄴㅇㄹ\",\"date\":\"2023. 7. 11. 오후 5:43:46\"}");
+                s.getBasicRemote().sendText("{\"name\":\"시스템\",\"msg\":\"님이 접속을 해제했습니다.\",\"date\":\"05:43\"}");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
