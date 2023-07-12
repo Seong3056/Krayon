@@ -1,7 +1,6 @@
 package com.krayon.backend.wordmatch;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,10 +44,11 @@ public class WMService {
         return result;
     }
 
-    public Map<String, String> findRandomWord() {
-        try {
-            String url = "https://opendict.korean.go.kr/api/view?certkey_no=5609&key=BAAA5C2F46E8178AC1D5714D4775EAB5&&target_type=view&req_type=xml&method=target_code&q="+getTargetCode();
 
+    public Map<String, String> findRandomWord() {
+
+        try {
+            String url = "https://opendict.korean.go.kr/api/view?certkey_no=5609&key=BAAA5C2F46E8178AC1D5714D4775EAB5&&target_type=view&req_type=xml&method=target_code&q=" + getTargetCode();
 
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -59,10 +59,10 @@ public class WMService {
             doc.getDocumentElement().normalize();
 
 
-
             // 파싱할 tag
             NodeList senseInfoList = doc.getElementsByTagName("senseInfo");
             NodeList wordInfoList = doc.getElementsByTagName("wordInfo");
+
 
             int randomIndex = new Random().nextInt(senseInfoList.getLength());
 
@@ -75,19 +75,21 @@ public class WMService {
                 String definition = getTagValue("definition", senseInfoElement).replace(".", "");
                 String word = getTagValue("word", wordInfoElement).replace("-", "");
                 String pos = getTagValue("pos", senseInfoElement);
-                log.info("포스!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + pos);
+                log.info("품사: " + pos);
                 log.info("랜덤 단어: " + word);
                 log.info("뜻: " + definition);
 
                 Map<String, String> result = new HashMap<>();
 
-                if(pos.equals("명사")) {
-                    result.put("definition", definition);
-                    result.put("word", word);
-                    return result;
-                } else {
-                    findRandomWord();
-                }
+//                if(pos.equals("명사")) {
+//                    result.put("definition", definition);
+//                    result.put("word", word);
+//                    return result;
+//                }
+                result.put("definition", definition);
+                result.put("word", word);
+                result.put("pos", pos);
+                return result;
 
 
             }
@@ -97,5 +99,15 @@ public class WMService {
         }
         return null;
     }
+
+    public Map<String, String> wordFilter() {
+        Map<String, String> result;
+        while (true) {
+            result = findRandomWord();
+            if (result.get("pos").equals("명사")) break;
+        }
+        return result;
+    }
+
 
 }

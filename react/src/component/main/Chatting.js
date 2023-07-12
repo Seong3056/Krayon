@@ -19,7 +19,7 @@ const Chatting = () => {
         });
         const chat = await res.json();
         setChatting([...chatting, chat]);
-        console.log(chatting);
+        // console.log(chatting);
     };
     // let a = ws.onmessage();
     // console.log(a);
@@ -27,23 +27,23 @@ const Chatting = () => {
         // fetchChat();
 
         let $chat = document.getElementById('chat').value;
-        console.log($chat);
-        ws.send($chat);
+        // console.log($chat);
+        // ws.send($chat);
         // redirection('/');
     };
 
-    let c = ws.onmessage();
+    // let c = ws.onmessage();
     useEffect(() => {
         // chatHandler();\
-        setChatting(c);
-    }, [chatting, c]);
+        // setChatting(c);
+    }, [chatting]);
 
     const onOpen = () => {
-        ws.onopen();
+        // ws.onopen();
     };
 
     const sClose = () => {
-        ws.close();
+        // ws.close();
     };
 
     return (
