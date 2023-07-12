@@ -23,9 +23,9 @@ const App = () => {
                 <Route path="/user" Component={User} />
                 <Route path="/shop" Component={Shop} />
                 <Route path="/game" Component={game}>
-                    <Route path="followword" Component={FollowWord} />
-                    <Route path="can" Component={CatchMind} />
-                    <Route path="wordmatch" Component={WordMatch} />
+                <Route path="followword" Component={FollowWord} />
+                <Route path="can" Component={CatchMind} />
+                <Route path="wordmatch" Component={WordMatch} />
                 </Route>
             </Routes>
         </div>

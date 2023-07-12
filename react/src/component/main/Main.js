@@ -6,6 +6,7 @@ import Chatting from './Chatting';
 import UserInfo from './UserInfo';
 
 import '../../resource/scss/main/Main.scss';
+import Chat from './Chat';
 
 const Main = () => {
     return (
@@ -17,7 +18,7 @@ const Main = () => {
 
             <div class="bottom">
                 <UserInfo />
-                <Chatting />
+                <Chat />
             </div>
         </>
     );
