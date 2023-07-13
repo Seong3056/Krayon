@@ -1,11 +1,5 @@
-import React, {
-    useCallback,
-    useRef,
-    useState,
-    useEffect,
-    useContext,
-} from 'react';
-import SocketHandler from '../SocketHandler';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
+
 import '../../resource/scss/main/Chatting.scss';
 const Chat = ({ userList }) => {
     const [msg, setMsg] = useState(''); //메세지
@@ -38,6 +32,8 @@ const Chat = ({ userList }) => {
             setChatt(tempData);
         }
         userList(list);
+        const windowH = document.querySelector('.in-chat').scrollHeight;
+        document.querySelector('.in-chat').scrollTop = windowH - 170;
     }, [socketData, list]); //socketData가 바뀔때마다
 
     //webSocket
@@ -52,7 +48,7 @@ const Chat = ({ userList }) => {
     };
 
     const webSocketLogin = useCallback(() => {
-        const id = document.getElementById('d').value;
+        const id = document.getElementById('id').value;
         ws.current = new WebSocket(
             'ws://118.217.203.40:8181/socket/chatt?id=' + id
         );
@@ -149,12 +145,12 @@ const Chat = ({ userList }) => {
                             disabled={chkLog}
                             placeholder="이름을 입력하세요."
                             type="text"
-                            id="d"
+                            id="id"
                             value={name}
                             onChange={(event) => setName(event.target.value)}
                         />
 
-                        <textarea
+                        <input
                             id="chat"
                             value={msg}
                             onChange={onText}
@@ -163,7 +159,7 @@ const Chat = ({ userList }) => {
                                     send();
                                 }
                             }}
-                        ></textarea>
+                        />
                         <input
                             type="button"
                             value="전송"
