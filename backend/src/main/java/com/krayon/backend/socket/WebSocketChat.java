@@ -41,7 +41,7 @@ public class WebSocketChat {
 
         for (Session s : clients) {
             log.info("send data : {}", message);
-            s.getBasicRemote().sendText(message);
+            s.getBasicRemote().sendText((String) message);
         }
     }
 
