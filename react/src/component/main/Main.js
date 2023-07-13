@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Rooms from './Rooms';
 import UserList from './UserList';
@@ -9,16 +9,25 @@ import '../../resource/scss/main/Main.scss';
 import Chat from './Chat';
 
 const Main = () => {
+    const [list, setList] = useState([]);
+    const userList = (e) => {
+        setList(e);
+
+        if (e !== undefined) {
+            console.log(e);
+            return e;
+        }
+    };
     return (
         <>
             <div class="top">
                 <Rooms />
-                <UserList />
+                <UserList userList={list} />
             </div>
 
             <div class="bottom">
                 <UserInfo />
-                <Chat />
+                <Chat userList={userList} />
             </div>
         </>
     );

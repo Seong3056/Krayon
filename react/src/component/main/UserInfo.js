@@ -3,7 +3,7 @@ import '../../resource/scss/main/UserInfo.scss';
 const UserInfo = () => {
     return (
         <div className="box">
-            <img src="src\resource\image\test\anonymous.jpg" alt="" />
+            <img src="../../resource/image/test/anonymous.jpg" alt="" />
             <div class="info">
                 <p>아이디123</p>
                 <p>
