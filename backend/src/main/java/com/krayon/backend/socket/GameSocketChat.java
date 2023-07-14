@@ -14,7 +14,7 @@ import java.util.*;
 @Service
 @Slf4j
 @ServerEndpoint("/socket/game")
-public class OtherSocketChat {
+public class GameSocketChat {
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     @OnOpen

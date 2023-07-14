@@ -1,20 +1,16 @@
 package com.krayon.backend.socket;
 
-import com.krayon.backend.socket.service.ConversionJson;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.krayon.backend.socket.util.ConversionJson;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.BinaryMessage;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
 import java.util.*;
 
@@ -70,14 +66,23 @@ public class WebSocketChat {
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
         log.info("receive message : {}", message);
+        ObjectMapper json = new ObjectMapper();
+        Map<String, String > map = json.readValue((String) message, new TypeReference<Map<String, String>>() {});
 
-        for (Session s : clients) {
+
+        if(map.containsKey("msg")) {
+            for (Session s : clients) {
             log.info("send data : {}", message);
-            s.getBasicRemote().sendText(message);
+            s.getBasicRemote().sendText((String) message);
 
+            }
+        } else if(map.containsKey("room")){
+            for(Session s: clients){
+//                s.getBasicRemote().sendBinary();
+            }
         }
     }
-    @OnMessage
+
 
 
 

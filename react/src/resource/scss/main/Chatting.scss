@@ -14,11 +14,12 @@
     
     .in-chat{
         flex: 4;
-        min-height: 169px;
-        max-height: 170px;
+        min-height: 176px;
+        max-height: 176px;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         background-color: #fff;
+        // padding-bottom: 16px;
         // text-align: center;
         text-indent: 10px;
         
@@ -29,30 +30,40 @@
         // overflow: scroll;
         overflow: auto;        
         scroll-margin: 50px;
-        li{            
-            line-height: 24px;           
-            font-size: 15px;
+        div{            
+            line-height: 20px;           
+            font-size: 16px;
             text-indent: 20px;
             text-align: left;
+          &:last-child{
+            color: red;
+            margin-bottom: 16px;
+          }  
+          
+          
         }
-    }
-    .enter-chat{
-        width: 100%;
-        flex: 1;
-        display: flex;
-        input {
-            flex: 7;
-            border-bottom-left-radius: 10px;            
-            outline: none;
-            border: none;
-        }
-        button{
-            
-            border: none;
-            border-bottom-right-radius: 10px;
-        }
+       
+       
+        
     }
     
+    
+}
+.enter-chat{
+    width: 100%;
+    flex: 1;
+    display: flex;
+    input {
+        flex: 7;
+        border-bottom-left-radius: 10px;            
+        outline: none;
+        border: none;
+    }
+    button{
+        
+        border: none;
+        border-bottom-right-radius: 10px;
+    }
 }
 #id{
     flex: 1;

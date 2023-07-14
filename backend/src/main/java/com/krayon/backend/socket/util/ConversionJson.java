@@ -1,4 +1,4 @@
-package com.krayon.backend.socket.service;
+package com.krayon.backend.socket.util;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,7 +17,7 @@ public class ConversionJson {
 		StringBuilder sb = new StringBuilder();
 		Map<String,Object> map = new HashMap<>();
 
-
+		//접속중인 유저들을 리스트에 담는다.
 		Set<String> idList = new HashSet<>();
 //		JSONPObject json = new JSONPObject(idList);
 				clients.forEach(a -> {
@@ -27,15 +27,9 @@ public class ConversionJson {
 		 });
 		map.put("name",field[0]);
 		map.put("date",field[1]);
-		map.put("msg",field[0]+"님이 접속했습니다.");
 		map.put("list",idList);
 		ObjectMapper mapper = new ObjectMapper();
-		String json = "";
-		try {
-			json = mapper.writeValueAsString(map);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
+
 
 
 //		for (Object o : clientsArray){
@@ -49,34 +43,18 @@ public class ConversionJson {
 //		sb.append("{\"name\" : \"\", \"date\" : \"시스템\" ,\"msg\": \""+ field[0] +"님이 접속했습니다.\"}");
 		switch (state){
 			case "open":
-				sb.append("{\"name\":\"");
-				sb.append(field[0]);
-				sb.append("\",\"date\":\"");
-				sb.append(field[1]);
-				sb.append("\",\"msg\":\"");
-				sb.append(field[0]);
-				sb.append("님이 접속했습니다.\"");
-				sb.append(",\"list\":");
-				sb.append(Arrays.toString(idList.toArray()));
-				sb.append("}");
+				map.put("msg",field[0]+"님이 접속했습니다.");
 				break;
 			case "close":
-				sb.append("{\"name\":\"");
-				sb.append(field[0]);
-				sb.append("\",\"date\":\"");
-				sb.append(field[1]);
-				sb.append("\",\"msg\":\"");
-				sb.append(field[0]);
-				sb.append("님이 나갔습니다.\"");
-				sb.append(",\"list\":");
-				sb.append("[");
-				sb.append(Arrays.toString(idList.toArray()));
-				sb.append("]");
-				sb.append("}");
+				map.put("msg",field[0]+"님이 나갔습니다.");
 				break;
-				
 		}
-		
+		String json = "";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 		log.info(sb.toString());
 		return json;
 	}
