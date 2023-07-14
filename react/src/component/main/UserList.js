@@ -11,9 +11,9 @@ const UserList = ({ userList }) => {
     return (
         <>
             <ul class="user-list">
-                {list.map((e) => (
+                {/* {list.map((e) => (
                     <li>{e}</li>
-                ))}
+                ))} */}
             </ul>
         </>
     );

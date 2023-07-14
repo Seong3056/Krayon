@@ -9,6 +9,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 @Service
@@ -31,9 +32,10 @@ public class OtherSocketChat {
         }
     }
 
-    @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
+    @OnMessage(maxMessageSize = 100000)
+    public void onMessage(String  message, Session session) throws IOException {
         log.info("receive message : {}", message);
+//        ByteBuffer buffer = ByteBuffer.wrap(message);
 
         for (Session s : clients) {
             log.info("send data : {}", message);

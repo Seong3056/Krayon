@@ -16,7 +16,7 @@ export default function PaintZone() {
   const canvasRef2 = useRef(null);
 
   // getCtx
-  const [getCtx, setGetCtx] = useState(null);
+  const [getCtx, setGetCtx] = useState('');
   // painting state
   const [painting, setPainting] = useState(false);
   // const a =  document.getElementById('c');
@@ -39,23 +39,36 @@ export default function PaintZone() {
 
   let picData = "";
   const webSocketLogin = useCallback(() => {
-    ws.current = new WebSocket("ws://localhost:8181/socket/chatt");
+    ws.current = new WebSocket("ws://localhost:8181/socket/game");
     console.log("웹소켓 접속");
 
     ws.current.onmessage = (message) => {
       //웹소켓에서 전송한 데이터를 수신 및 객체 저장
-      console.log("웹소켓 수신 데이터: " + message.data);
+      console.log("웹소켓 수신 데이터: " + message);      
       const dataSet = JSON.parse(message.data);
-      setSocketData(dataSet);
+      const data = {
+        name: dataSet.name,
+        img: dataSet.img,
+        date: dataSet.date
+      }
+      console.log("----------------"+data);
+      setSocketData(data);
+      
+      
     };
   });
 
   //데이터 바뀔때마다 전송
   useEffect(() => {
+    console.log(socketData);
+    // const uurl = URL.createObjectURL(new Blob([socketData]));
+    // console.log("------------------"+uurl);
+    // document.getElementById('test').src = uurl;
+    // setImg(socketData.img);
     if (socketData !== undefined) {
-      const tempData = chatt.concat(socketData);
-      console.log(tempData);
-      setChatt(tempData);
+      // const tempData = chatt.concat(socketData);
+      // console.log(tempData);
+      // setChatt(tempData);
       // console.log("----------------------------------------------dataUrl"+dataURL.length);
     }
   }, [socketData]); //socketData가 바뀔때마다
@@ -124,13 +137,27 @@ export default function PaintZone() {
       getCtx.lineTo(mouseX, mouseY);
       getCtx.stroke();
     }
+
+    const smallCanvas = canvasRef2.current;
+    const smallCtx = smallCanvas.getContext("2d");
+    smallCtx.lineJoin = "round";
+    smallCtx.lineWidth = 2.5;
+    smallCtx.strokeStyle = getCtx.strokeStyle;
+    smallCtx.clearRect(0, 0, smallCanvas.width, smallCanvas.height);
+    smallCtx.drawImage(
+      canvasRef.current,
+      0,
+      0,
+      smallCanvas.width,
+      smallCanvas.height
+    );
   };
   
 
-  const sendCanvasData = () => {
+  const sendCanvasData = async () => {
     const canvas = canvasRef.current;
     const dataURL = canvas.toDataURL();
-    setImg(dataURL);
+    // setImg(dataURL);
     setgetPic(dataURL);
     // console.log(getPic);
 
@@ -138,7 +165,8 @@ export default function PaintZone() {
     const dataURLSmall = smallCanvas.toDataURL();
     console.log(dataURLSmall);
     
-
+    const blob = await (await fetch(dataURLSmall)).blob();
+    const file = new File([blob], "image.png", { type: "image/png" });
     // var formdata = new FormData(); // formData 생성
     // formdata.append("file", file); // file data 추가
 
@@ -167,7 +195,7 @@ export default function PaintZone() {
             //메세지를 data에 담아 백엔드로 JSON 객체 전송
             const data = {
                 name,
-                img:dataURLSmall,
+                img: dataURLSmall,
                 date: date,
             }; //전송 데이터(JSON)
 
@@ -294,8 +322,12 @@ export default function PaintZone() {
         </div>
 
         {/*그림 데이터 읽어서 이미지 src에 확인하기*/}
-        <div style={{ backGroundColor: "#ffff00", width: 160, height:108, marginTop: 500}}>
-          <canvas ref={canvasRef2} alt="" id="test" width='160' height='108' />
+        <div style={{ backGroundColor: "#ffff00", width: 400, height:270, marginTop: 500}}>
+          <canvas ref={canvasRef2} alt="" id="test1" width='400' height='270' />
+        </div>
+
+        <div>
+          <img src={img} id='test' alt="" style={{width: 800, height: 540,backgroundColor: "white"}}/>
         </div>
       </CanvasStyle>
     </>

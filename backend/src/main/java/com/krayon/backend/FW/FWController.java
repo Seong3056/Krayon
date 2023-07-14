@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/followWord")
 public class FWController {
 
@@ -17,6 +18,7 @@ public class FWController {
 
     @PostMapping
     public ResponseEntity<?> checkDict(@RequestBody String searchWord){
+
         int result = fwService.checkWord(searchWord);
         if (result == 1) {
             return ResponseEntity.ok("OK");

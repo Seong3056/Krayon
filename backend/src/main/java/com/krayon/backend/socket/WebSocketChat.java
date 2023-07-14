@@ -34,7 +34,8 @@ public class WebSocketChat {
     public void onOpen(Session session) throws IOException {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
-        String id = res.get("id").get(0);
+//        String id = res.get("id").get(0);
+        String id = "1234";
         log.info("시작");
 //        log.info(session.getId());
 //        log.info(session.getContainer().toString());
@@ -85,20 +86,20 @@ public class WebSocketChat {
     public void onClose(Session session) {
         log.info("session close : {}", session);
 //        clients.
-        Map<String, List<String>> map = session.getRequestParameterMap();
-        String id = map.get("id").get(0);
+//        Map<String, List<String>> map = session.getRequestParameterMap();
+//        String id = map.get("id").get(0);
         clients.remove(session);
         log.info(clients.toString());
-        String message = c.conversion("close",clients, id, "시스템");
+//        String message = c.conversion("close",clients, id, "시스템");
 
         for (Session s : clients) {
 //            log.info("send data : {}", session.get);
 
-            try {
-                s.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                s.getBasicRemote().sendText(message);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
         }
     }
 }
