@@ -1,18 +1,13 @@
-import React, {
-    useCallback,
-    useRef,
-    useState,
-    useEffect,
-    useContext,
-} from 'react';
-import SocketHandler from '../SocketHandler';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
+
 import '../../resource/scss/main/Chatting.scss';
-const Chat = () => {
+const Chat = ({ userList }) => {
     const [msg, setMsg] = useState(''); //메세지
     const [name, setName] = useState(''); //전송자
     const [chatt, setChatt] = useState([]); //웹소켓 수신 데이터들 [] 배열
     const [chkLog, setChkLog] = useState(false); //웹소켓 접속 여부
     const [socketData, setSocketData] = useState(); //웹소켓 수신 메세지 {name, msg, date}
+    const [list, setList] = useState([]);
 
     const ws = useRef(null); //webSocket을 담는 변수,
     //컴포넌트가 변경될 때 객체가 유지되어야하므로 'ref'로 저장
@@ -23,7 +18,7 @@ const Chat = () => {
             <div key={idx} className={item.name === name ? 'me ' : 'other '}>
                 [ {item.date} ]
                 <span>
-                    <b> {item.name}: </b>
+                    <b> {item.date === '시스템' ? '' : item.name + ':'} </b>
                 </span>{' '}
                 <span>{item.msg}</span>
             </div>
@@ -36,7 +31,10 @@ const Chat = () => {
             console.log(tempData);
             setChatt(tempData);
         }
-    }, [socketData]); //socketData가 바뀔때마다
+        userList(list);
+        const windowH = document.querySelector('.in-chat').scrollHeight;
+        document.querySelector('.in-chat').scrollTop = windowH - 170;
+    }, [socketData, list]); //socketData가 바뀔때마다
 
     //webSocket
     //webSocket
@@ -50,14 +48,29 @@ const Chat = () => {
     };
 
     const webSocketLogin = useCallback(() => {
-        ws.current = new WebSocket('ws://localhost:8181/socket/chatt');
+        const id = document.getElementById('id').value;
+        ws.current = new WebSocket(
+            'ws://118.217.203.40:8181/socket/chatt?id=' + id
+        );
         console.log('웹소켓 접속');
 
         ws.current.onmessage = (message) => {
             //웹소켓에서 전송한 데이터를 수신 및 객체 저장
             console.log('웹소켓 수신 데이터: ' + message.data);
             const dataSet = JSON.parse(message.data);
-            setSocketData(dataSet);
+            const data = {
+                name: dataSet.name,
+                date: dataSet.date,
+                msg: dataSet.msg,
+            };
+            console.log('11111111111 ' + dataSet.list);
+            if (dataSet.list !== undefined) {
+                console.log('진입');
+                console.log(dataSet.list);
+
+                setList(dataSet.list);
+            }
+            setSocketData(data);
         };
     });
 
@@ -132,12 +145,12 @@ const Chat = () => {
                             disabled={chkLog}
                             placeholder="이름을 입력하세요."
                             type="text"
-                            id="d"
+                            id="id"
                             value={name}
                             onChange={(event) => setName(event.target.value)}
                         />
 
-                        <textarea
+                        <input
                             id="chat"
                             value={msg}
                             onChange={onText}
@@ -146,7 +159,7 @@ const Chat = () => {
                                     send();
                                 }
                             }}
-                        ></textarea>
+                        />
                         <input
                             type="button"
                             value="전송"
