@@ -7,19 +7,23 @@ import UserInfo from './UserInfo';
 
 import '../../resource/scss/main/Main.scss';
 import Chat from './Chat';
-import Socket from '../Socket';
 
 const Main = () => {
     const ws = useRef(null);
     const [socketData, setSocketData] = useState('');
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
+    const [roomId, setRoomId] = useState(1);
     // const [msg, setMsg] = useState('');
-    const id = '123';
-    const URL = 'ws://118.217.203.40:8181/socket/chatt?id=' + id + '&room=1';
-
+    const id = localStorage.getItem('id');
+    const ip = '175.114.130.19';
+    const URL = 'ws://' + ip + ':8181/api/chatt?id=' + id + '&room=1';
+    const socketClose = () => {
+        if (ws.current.readyState === 1) ws.current.close();
+    };
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
+        if (ws.current.readyState === 1) ws.current.close();
         console.log('웹소켓 접속11');
         ws.current.onmessage = (message) => {
             //웹소켓에서 전송한 데이터를 수신 및 객체 저장
@@ -105,19 +109,25 @@ const Main = () => {
     //     }
     // };
 
-    window.onload = () => {
-        webSocketLogin();
+    // window.onload = () => {
+    //     webSocketLogin();
+    // };
+    const disconnectSocket = () => {
+        ws.current.close();
     };
     useEffect(() => {
         console.log(list);
     }, [list]);
+    useEffect(() => {
+        webSocketLogin();
+    }, []);
 
     return (
         <>
             <div class="top">
-                <Rooms wss={ws} />
+                <Rooms id={id} dis={disconnectSocket} />
                 <UserList userList={list} />
-                <Socket wss={ws} id={id} />
+                {/* <Socket wss={ws} id={id} /> */}
             </div>
 
             <div class="bottom">

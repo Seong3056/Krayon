@@ -14,8 +14,8 @@
     
     .in-chat{
         flex: 4;
-        min-height: 176px;
-        max-height: 176px;
+        min-height: 185px;
+        max-height: 185px;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         background-color: #fff;
@@ -37,7 +37,7 @@
             text-align: left;
           &:last-child{
             color: red;
-            margin-bottom: 16px;
+            margin-bottom: 30px;
           }  
           
           
@@ -45,26 +45,27 @@
        
        
         
+    }.enter-chat{
+        width: 100%;
+        flex: 3;
+        display: flex;
+        input {
+            flex: 7;
+            border-bottom-left-radius: 10px;            
+            border-bottom-right-radius: 10px;            
+            outline: none;
+            border: none;
+        }
+        button{
+            
+            border: none;
+            border-bottom-right-radius: 10px;
+        }
     }
     
     
 }
-.enter-chat{
-    width: 100%;
-    flex: 1;
-    display: flex;
-    input {
-        flex: 7;
-        border-bottom-left-radius: 10px;            
-        outline: none;
-        border: none;
-    }
-    button{
-        
-        border: none;
-        border-bottom-right-radius: 10px;
-    }
-}
+
 #id{
     flex: 1;
 }

@@ -15,15 +15,19 @@ const Chat = ({ ws, textData, send }) => {
 
     const msgBox = chatt.map(
         //웹소켓에서 받은 데이터를 채팅창에 전송
-        (item, idx) => (
-            <div key={idx} className={item.name === name ? 'me ' : 'other '}>
-                [ {item.date} ]
-                <span>
-                    <b> {item.date === '시스템' ? '' : item.name + ':'} </b>
-                </span>{' '}
-                <span>{item.msg}</span>
-            </div>
-        )
+        (item, idx) =>
+            !!item.name && (
+                <div
+                    key={idx}
+                    className={item.name === name ? 'me ' : 'other '}
+                >
+                    [ {item.date} ]
+                    <span>
+                        <b> {item.date === '시스템' ? '' : item.name + ':'} </b>
+                    </span>{' '}
+                    <span>{item.msg}</span>
+                </div>
+            )
     );
 
     useEffect(() => {
@@ -157,6 +161,7 @@ const Chat = ({ ws, textData, send }) => {
                         onKeyDown={(ev) => {
                             if (ev.keyCode === 13) {
                                 send(msg);
+                                document.getElementById('chat').value = '';
                             }
                         }}
                     />

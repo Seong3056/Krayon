@@ -1,0 +1,21 @@
+.in-game{
+    display: flex;
+    .prev{
+        display: flex;
+        width: 200px;
+        height: 300px;
+        margin-right: 30px;
+        color: #888;
+        border: 1px solid #000;
+        align-items: center;
+    }
+    .current{
+        display: flex;
+        width: 200px;
+        height: 300px;
+        margin-right: 30px;
+        
+        border: 1px solid #000;
+        align-items: center;
+    }
+}
