@@ -135,7 +135,7 @@ export default function PaintZone() {
       getCtx.moveTo(mouseX, mouseY);
     } else {
       getCtx.lineTo(mouseX, mouseY);
-      getCtx.stroke();
+      getCtx.strike();
     }
 
     const smallCanvas = canvasRef2.current;
