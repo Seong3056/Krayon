@@ -5,6 +5,7 @@ import '../../../resource/scss/game/followword/followword.scss';
 import { Link } from 'react-router-dom';
 const FollowWord = () => {
     const ws = useRef(null);
+    const oldWs = useRef(null);
     const [socketData, setSocketData] = useState('');
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
@@ -20,7 +21,14 @@ const FollowWord = () => {
 
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
-        if (ws.current.readyState === 1) ws.current.close();
+        if (!!sessionStorage.getItem('socketURL')) {
+            const socketURL = sessionStorage.getItem('socketURL');
+            if (socketURL !== URL) {
+                oldWs.current = new WebSocket(socketURL);
+                oldWs.current.close();
+            }
+        }
+        sessionStorage.setItem('socketURL', URL);
         console.log('웹소켓 접속11');
         ws.current.onmessage = (message) => {
             //웹소켓에서 전송한 데이터를 수신 및 객체 저장
@@ -30,7 +38,7 @@ const FollowWord = () => {
                 name: dataSet.name,
                 date: dataSet.date,
                 msg: dataSet.msg,
-                word: dataSet.word,
+                wordInfo: dataSet.wordInfo,
                 char: dataSet.char,
             };
 
@@ -44,11 +52,9 @@ const FollowWord = () => {
             setSocketData(data);
         };
     });
-
     const disconnectSocket = () => {
         ws.current.close();
     };
-
     const send = useCallback((word) => {
         //웹소켓으로 메세지 전송
         if (!chkLog) {

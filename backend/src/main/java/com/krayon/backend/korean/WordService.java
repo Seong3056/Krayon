@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Element;
@@ -23,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
-@Service
+@Component
 @Slf4j
 public class WordService {
 	private final String SEARCH_URL = "https://opendict.korean.go.kr/api/search";
@@ -33,7 +34,7 @@ public class WordService {
 
 	public List<Map<String, String>> findWord(String searchWord) throws  IOException,  JSONException {
 		List<Map<String, String>> wordList = new ArrayList<>();
-
+		log.info("findWord 동작");
 
 		String encodedSearchWord = URLEncoder.encode(searchWord, StandardCharsets.UTF_8);
 		String requestUrl = SEARCH_URL + "?key=" + key + "&req_type=json" + "&q=" + encodedSearchWord;
@@ -50,7 +51,7 @@ public class WordService {
 			}
 		}
 
-		log.info(sb.toString());
+//		log.info(sb.toString());
 
 		JSONObject json = new JSONObject(sb.toString());
 		JSONObject channelObject = json.getJSONObject("channel");
@@ -77,7 +78,7 @@ public class WordService {
 				definition = definition.replace("^", " ").replace("_", " ");
 				wordValue = wordValue.replace("^", " ").replace("_", " ");
 
-				log.info("            " + definition);
+//				log.info("            " + definition);
 				wordMap.put("definition", definition);
 				wordMap.put("word", wordValue);
 				wordMap.put("pos",pos);

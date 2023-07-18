@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { json } from 'react-router-dom';
 
 function Copy({ send, sendChar, data }) {
     const [currentWord, setCurrentWord] = useState('');
     const [previousWord, setPreviousWord] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [gameStarted, setGameStarted] = useState(false);
+    const [definition, setDefinition] = useState('');
 
     const API = 'http://localhost:8181/api/followWord';
 
@@ -25,15 +27,28 @@ function Copy({ send, sendChar, data }) {
     useEffect(() => {
         console.log(data.msg);
         console.log(data.char);
-        if (data.word !== undefined) setPreviousWord(data.word);
-        else setCurrentWord(data.char);
+        if (data.wordInfo !== undefined) {
+            console.log('단어' + data.wordInfo.pos);
+            if (data.wordInfo.isVaild) {
+                setPreviousWord(data.wordInfo.word);
+                // alert('단어뜻: ' + data.wordInfo.definition);
+
+                if (data.wordInfo.definition.length)
+                    setDefinition(data.wordInfo.definition);
+                console.log(data.wordInfo.definition.length);
+                setCurrentWord('');
+            } else alert('없는단어');
+        } else setCurrentWord(data.char);
     }, [data]);
 
     return (
         <div className="in-game">
             <h1>끝말잇기 게임</h1>
-            <p className="prev">이전 단어: {previousWord}</p>
-            <p className="current">현재 단어: {currentWord}</p>
+            <p className="prev">
+                {previousWord} : <br />
+                {definition}
+            </p>
+            <p className="current">{currentWord}</p>
             <input
                 type="text"
                 // value={inputValue}

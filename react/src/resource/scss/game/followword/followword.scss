@@ -2,19 +2,20 @@
     display: flex;
     .prev{
         display: flex;
-        width: 200px;
+        width: 25%;
         height: 300px;
         margin-right: 30px;
         color: #888;
         border: 1px solid #000;
         align-items: center;
+        font-size: 40px;
     }
     .current{
         display: flex;
-        width: 200px;
+        width: 25%;
         height: 300px;
         margin-right: 30px;
-        
+        font-size: 40px;
         border: 1px solid #000;
         align-items: center;
     }

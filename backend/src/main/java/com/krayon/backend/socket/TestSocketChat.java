@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.springframework.stereotype.Service;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
@@ -20,24 +17,34 @@ import java.util.*;
 @Service
 @Slf4j
 
-//@ServerEndpoint("/api/game/followword")
-@RequiredArgsConstructor
-public class FollowWordSocketChat {
+@ServerEndpoint("/api/game/followword")
+
+public class TestSocketChat {
     //이페이지에 접속해있는 유저 세션을 담은 리스트 (Set)
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     //데이터값을 JSON 형태로 변환해주는 클래스 선언
     ConversionJson c = new ConversionJson();
-    private final WordService wordService;
+    WordService wordService = new WordService();
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
         String id = res.get("id").get(0);
-        log.info("끝말잇기 소켓on");
+        log.info("시작");
 
-
+//        log.info(session.getId());
+//        log.info(session.getContainer().toString());
+//        log.info(session.getOpenSessions().toString());
+//        log.info("메세지 핸들러"+session.getMessageHandlers().toString());
+//
+//
+//        log.info(session.getUserProperties().toString());
+//        log.info(session.getRequestURI().toString());
+//        log.info(session.getPathParameters().toString());
+//        log.info(session.getId());
+//        log.info(session.getId());
         if(!clients.contains(session)) {
             clients.add(session);
             log.info("session open : {}", session);
@@ -60,11 +67,12 @@ public class FollowWordSocketChat {
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
+    public void onMessage(String message, Session session) throws IOException, JSONException {
         log.info("receive message : {}", message);
         ObjectMapper json = new ObjectMapper();
-        Map<String, String> map = json.readValue((String) message, new TypeReference<Map<String, String>>() {
-        });
+        Map<String, String > map = json.readValue((String) message, new TypeReference<Map<String, String>>() {});
+        String id = map.get("name");
+        String date = map.get("date");
 
 
         if (map.containsKey("msg")) { //입력값이 msg 일때
@@ -78,20 +86,25 @@ public class FollowWordSocketChat {
             }
         }
         else if (map.containsKey("word")) { // 입력값이 word일때
+
             String word = map.get("word");
-            try {
-                List<Map<String, String>> result = wordService.findWord(word);
-                if(result.size() == 0){
-                    log.info("단어가 없음");
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+            log.info(message);
+            List<Map<String, String>> result = wordService.findWord(word);
+
+
+            if(result == null){
+                message = c.conversionWord(id,date,false);
+            } else{
+                String definition = result.get(0).get("definition");
+                String pos = result.get(0).get("pos");
+                message = c.conversionWord(id,date,word,definition,pos,true);
             }
             for (Session s : clients) {
                 s.getBasicRemote().sendText(message);
             }
         }
     }
+
 
 
 
@@ -114,5 +127,9 @@ public class FollowWordSocketChat {
                 throw new RuntimeException(e);
             }
         }
+    }
+//    @OnError
+    public void onError(Session session, Throwable thr) {
+        log.info("소켓에러");
     }
 }

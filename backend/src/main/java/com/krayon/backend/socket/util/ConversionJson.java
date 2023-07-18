@@ -3,6 +3,7 @@ package com.krayon.backend.socket.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.lang.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import javax.websocket.Session;
@@ -13,7 +14,7 @@ import java.util.*;
 @Component
 public class ConversionJson {
 
-	public String conversion(String state, Set<Session> clients, String ...field){
+	public String conversion(String state, Set<Session> clients,  String ...field){
 		StringBuilder sb = new StringBuilder();
 		Map<String,Object> map = new HashMap<>();
 
@@ -25,8 +26,8 @@ public class ConversionJson {
 			 idList.add(id);
 
 		 });
-		map.put("name",field[0]);
-		map.put("date",field[1]);
+		map.put("name",field[0]); //아이디
+		map.put("date",field[1]); //날짜
 		map.put("list",idList);
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -48,6 +49,9 @@ public class ConversionJson {
 			case "close":
 				map.put("msg",field[0]+"님이 나갔습니다.");
 				break;
+			case "word":
+				map.put("word",field[2]);
+				break;
 		}
 		String json = "";
 		try {
@@ -56,6 +60,63 @@ public class ConversionJson {
 			throw new RuntimeException(e);
 		}
 		log.info(sb.toString());
+		return json;
+	}
+	public String conversionWord (String id, String date,@Nullable String word,@Nullable String definition, @Nullable String pos,boolean flag){
+		Map<String,Object> map = new HashMap<>();
+
+		map.put("name",id);
+		map.put("date",date);
+
+
+		Map<String,Object> wordMap = new HashMap<>(); // word 객체 생성
+		wordMap.put("word",word);
+		wordMap.put("definition",definition);
+		wordMap.put("pos",pos);
+		wordMap.put("isVaild",flag);
+
+
+
+		String json = "";
+		String inJson = "";
+		ObjectMapper mapper = new ObjectMapper();
+
+		try {
+			inJson = mapper.writeValueAsString(wordMap);
+			map.put("wordInfo",wordMap);
+			json = mapper.writeValueAsString(map);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
+		return json;
+	}
+
+	public String conversionWord(String id, String date, boolean flag) {
+		Map<String,Object> map = new HashMap<>();
+
+		map.put("name",id);
+		map.put("date",date);
+
+
+		Map<String,Object> wordMap = new HashMap<>(); // word 객체 생성
+
+		wordMap.put("isVaild",flag);
+
+
+
+		String json = "";
+		String inJson = "";
+		ObjectMapper mapper = new ObjectMapper();
+
+		try {
+			inJson = mapper.writeValueAsString(wordMap);
+			map.put("wordInfo",wordMap);
+			json = mapper.writeValueAsString(map);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
 		return json;
 	}
 }

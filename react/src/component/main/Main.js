@@ -10,10 +10,11 @@ import Chat from './Chat';
 
 const Main = () => {
     const ws = useRef(null);
+    const oldWs = useRef(null);
     const [socketData, setSocketData] = useState('');
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
-    const [roomId, setRoomId] = useState(1);
+
     // const [msg, setMsg] = useState('');
     const id = localStorage.getItem('id');
     const ip = '175.114.130.19';
@@ -23,6 +24,15 @@ const Main = () => {
     };
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
+        if (!!sessionStorage.getItem('socketURL')) {
+            const socketURL = sessionStorage.getItem('socketURL');
+            if (socketURL !== URL) {
+                oldWs.current = new WebSocket(socketURL);
+                console.log('oldURL', oldWs.current);
+                oldWs.current.close();
+            }
+        }
+        sessionStorage.setItem('socketURL', URL);
         if (ws.current.readyState === 1) ws.current.close();
         console.log('웹소켓 접속11');
         ws.current.onmessage = (message) => {
@@ -131,7 +141,7 @@ const Main = () => {
             </div>
 
             <div class="bottom">
-                <UserInfo />
+                <UserInfo id={id} />
                 <Chat send={send} ws={ws.current} textData={socketData} />
             </div>
         </>
