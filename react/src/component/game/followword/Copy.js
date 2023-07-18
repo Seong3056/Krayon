@@ -24,6 +24,10 @@ function Copy({ send, sendChar, data }) {
         }
         return value;
     };
+    const CheckWord = () => {
+        const prev = previousWord.split('');
+        console.log(prev[prev.length - 1]);
+    };
     useEffect(() => {
         console.log(data.msg);
         console.log(data.char);
@@ -57,6 +61,7 @@ function Copy({ send, sendChar, data }) {
                 onKeyDown={(e) => {
                     if (e.keyCode === 13) {
                         send(inputValue);
+                        CheckWord();
                         document.getElementById('input').value = '';
                     }
                 }}
