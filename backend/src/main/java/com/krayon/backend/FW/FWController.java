@@ -39,13 +39,6 @@ public class FWController {
 //        } else {
 //            return ResponseEntity.badRequest().body("Error");
 //        }
-    public ResponseEntity<?> checkDict(@RequestBody String searchWord){
 
-        int result = fwService.checkWord(searchWord);
-        if (result == 1) {
-            return ResponseEntity.ok("OK");
-        } else {
-            return ResponseEntity.badRequest().body("Error");
-        }
     }
 }

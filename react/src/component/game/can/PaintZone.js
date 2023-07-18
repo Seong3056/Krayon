@@ -1,16 +1,14 @@
-// react
 import React, { useRef, useEffect, useState, useCallback } from "react";
 // style
 // import { CanvasStyle } from "./style/canvas";
 // import UserInfo from '../main/UserInfo';
 // import Chatting from '../main/Chatting';
 // import UserList from '../main/UserList';
-import Send from "./Send";
 import { CanvasStyle } from "./style/canvas";
 
 const API = "http://localhost:8181/api/catch";
 
-export default function PaintZone() {
+export default function PaintZone({data, sendImg, setDrawer}) {
   // useRef
   const canvasRef = useRef(null);
   const canvasRef2 = useRef(null);
@@ -28,51 +26,55 @@ export default function PaintZone() {
 
   const [getPic, setgetPic] = useState();
 
-  //데이터 보내는 소켓
-  const [img, setImg] = useState(""); //메세지
-  const [name, setName] = useState(""); //전송자
-  const [chatt, setChatt] = useState([]); //웹소켓 수신 데이터들 [] 배열
-  const [chkLog, setChkLog] = useState(false); //웹소켓 접속 여부
-  const [socketData, setSocketData] = useState(); //웹소켓 수신 메세지 {name, msg, date}
-  const [getImg, getGetImg] = useState(""); //받아서 그림 변경하기
-  const ws = useRef(null); //webSocket을 담는 변수,
-  //컴포넌트가 변경될 때 객체가 유지되어야하므로 'ref'로 저장
+  // //데이터 보내는 소켓
+  // const [img, setImg] = useState(""); //메세지
+  // const [name, setName] = useState(""); //전송자
+  // const [chatt, setChatt] = useState([]); //웹소켓 수신 데이터들 [] 배열
+  // const [chkLog, setChkLog] = useState(false); //웹소켓 접속 여부
+  // const [socketData, setSocketData] = useState(); //웹소켓 수신 메세지 {name, msg, date}
+  // const [getImg, getGetImg] = useState(""); //받아서 그림 변경하기
+  // const ws = useRef(null); //webSocket을 담는 변수,
+  // //컴포넌트가 변경될 때 객체가 유지되어야하므로 'ref'로 저장
 
-  const webSocketLogin = useCallback(() => {
-    ws.current = new WebSocket("ws://114.207.167.85:8181/socket/game");
-    console.log("웹소켓 접속");
+  // const webSocketLogin = useCallback(() => {
+  //   ws.current = new WebSocket("ws://114.207.167.85:8181/socket/game");
+  //   console.log("웹소켓 접속");
 
-    ws.current.onmessage = (message) => {
-      //웹소켓에서 전송한 데이터를 수신 및 객체 저장
-      console.log("웹소켓 수신 데이터: " + message);      
-      const dataSet = JSON.parse(message.data);
-      const data = {
-        name: dataSet.name,
-        img: dataSet.img,
-        date: dataSet.date
-      }
-      console.log("----------------"+data.img);
-      setSocketData(dataSet);
-      getGetImg(data.img);
+  //   ws.current.onmessage = (message) => {
+  //     //웹소켓에서 전송한 데이터를 수신 및 객체 저장
+  //     console.log("웹소켓 수신 데이터: " + message);      
+  //     const dataSet = JSON.parse(message.data);
+  //     const data = {
+  //       name: dataSet.name,
+  //       img: dataSet.img,
+  //       date: dataSet.date
+  //     }
+  //     console.log("----------------"+data.img);
+  //     setSocketData(dataSet);
+  //     getGetImg(data.img);
       
       
-    };
-  });
+  //   };
+  // });
 
   //데이터 바뀔때마다 전송
-  useEffect(() => {
-    // console.log(socketData);
-    // const uurl = URL.createObjectURL(new Blob([socketData]));
-    // console.log("------------------"+uurl);
-    // document.getElementById('test').src = uurl;
-    // setImg(socketData.img);
-    if (socketData !== undefined) {
-      // const tempData = chatt.concat(socketData);
-      // console.log(tempData);
-      // setChatt(tempData);
-      // console.log("----------------------------------------------dataUrl"+dataURL.length);
-    }
-  }, [socketData]); //socketData가 바뀔때마다
+  // useEffect(() => {
+  //   // console.log(socketData);
+  //   // const uurl = URL.createObjectURL(new Blob([socketData]));
+  //   // console.log("------------------"+uurl);
+  //   // document.getElementById('test').src = uurl;
+  //   // setImg(socketData.img);
+  //   if (socketData !== undefined) {
+  //     // const tempData = chatt.concat(socketData);
+  //     // console.log(tempData);
+  //     // setChatt(tempData);
+  //     // console.log("----------------------------------------------dataUrl"+dataURL.length);
+  //   }
+  // }, [socketData]); //socketData가 바뀔때마다
+
+  //그리미 검증
+  let check = setDrawer();
+  // console.log(check);
 
   useEffect(() => {
     // canvas useRef
@@ -166,97 +168,41 @@ export default function PaintZone() {
   
 
   const sendCanvasData = async () => {
-    const canvas = canvasRef.current;
-    const dataURL = canvas.toDataURL();
-    setImg(dataURL);
-    setgetPic(dataURL);
-    // console.log(getPic);
-
+    // const canvas = canvasRef.current;
+    // const dataURL = canvas.toDataURL();
     const smallCanvas = canvasRef2.current;
     const dataURLSmall = smallCanvas.toDataURL();
-    // console.log(dataURLSmall);
-    
-    // const blob = await (await fetch(dataURLSmall)).blob();
-    // const file = new File([blob], "image.png", { type: "image/png" });
-    // var formdata = new FormData(); // formData 생성
-    // formdata.append("file", file); // file data 추가
-
-    // console.log(typeof(dataURL));
-
-    
 
     //소켓으로 데이터 보내기
-    //웹소켓으로 메세지 전송
-    
-    if (!chkLog) {
-      //웹소켓 로그인안됬을경우 (!false)
+    //웹소켓으로 이미지 전송
+    sendImg(dataURLSmall);
 
-      webSocketLogin();
-      setChkLog(true);
-    }
-    const date =
-      (new Date().getHours() < 10
-        ? "0" + new Date().getHours()
-        : new Date().getHours()) +
-      ":" +
-      (new Date().getMinutes() < 10
-        ? "0" + new Date().getMinutes()
-        : new Date().getMinutes());
-
-    if (img !== '') {
-            //메세지를 data에 담아 백엔드로 JSON 객체 전송
-            const data = {
-                name,
-                img: dataURLSmall,
-                date: date,
-            }; //전송 데이터(JSON)
-
-            const temp = JSON.stringify(data);
-
-            if (ws.current.readyState === 0) {
-                //readyState는 웹 소켓 연결 상태를 나타냄
-                ws.current.onopen = () => {
-                    //webSocket이 맺어지고 난 후, 실행
-                    console.log(ws.current.readyState);
-                    ws.current.send(temp);
-                };
-            } else {
-                ws.current.send(temp);
-            }
-        } else {
-            // 입력창이 공란일경우 안내창
-            // alert('메세지를 입력하세요.');
-            // document.getElementById('chat').focus();
-            // return;
-            console.log('데이터 없음');
-        }
-        
-        
   };
+  
+
+  //그림받아오기
+  useEffect(() => {
+    if (data.img !== undefined) {
+        console.log('그림' + data.img);
+        setgetPic(data.img)
+        
+    };
+}, [data]);
 
   useEffect(() => {
     console.log("이미지 src 바뀜");
-    // console.log(ws.current.readyState);
-  }, [img]);
-  // if (window.location.reload()) console.log("페이지새로고침");
+  }, []);
+
   window.onload = () => {
     console.log("페이지새로고침");
   };
-  const joinWebSocket = () => {
-    if (!chkLog) {
-      webSocketLogin();
-      setChkLog(true);
-    }
-  };
-
-  // let i = document.getElementById('test').style.width
-  // i.style.width = '160px';
-  // i.style.height = '108px';
+  
   return (
     <>
       <CanvasStyle>
         <div className="view">
           <div className="sectionMyPage">
+            {!check ? (
             <div className="paintZone">
               <div className="canvasWrap" onClick={sendCanvasData}>
                 <canvas
@@ -269,11 +215,13 @@ export default function PaintZone() {
                   id="canvasDraw"
                 />
               </div>
+
+              
               
               <div className="canvasTools">
-              <button id="joinWebSocketBtn" onClick={joinWebSocket}>
-          웹소켓 참가하기
-        </button>
+              {/* <button id="joinWebSocketBtn" onClick={joinWebSocket}>
+                웹소켓 참가하기
+              </button> */}
                 <button id="resetBtn" onClick={resetCanvas}>
                   전체지우기
                 </button>
@@ -340,6 +288,13 @@ export default function PaintZone() {
                 ></button>
               </div>
             </div>
+            
+              ):(
+            <div>
+                <img src={getPic} id='test' alt="" style={{width: 800, height: 540,backgroundColor: "white"}}/>
+            </div>
+              )
+            }
           </div>
           {/*sectionleft*/}
         </div>
@@ -349,9 +304,7 @@ export default function PaintZone() {
           <canvas ref={canvasRef2} alt="" id="test1" width='400' height='270' />
         </div>
 
-        <div>
-          <img src={getImg} id='test' alt="" style={{width: 800, height: 540,backgroundColor: "white"}}/>
-        </div>
+        
       </CanvasStyle>
     </>
   );
