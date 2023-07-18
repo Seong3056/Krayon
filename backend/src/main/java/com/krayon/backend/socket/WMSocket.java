@@ -1,5 +1,7 @@
 package com.krayon.backend.socket;
 
+import com.krayon.backend.korean.WordService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -9,33 +11,33 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.*;
 
 @Service
 @Slf4j
-@ServerEndpoint("/socket/game")
-public class OtherSocketChat {
+@ServerEndpoint("/api/game/WM")
+@RequiredArgsConstructor
+public class WMSocket {
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
-
+    private final WordService wordService;
     @OnOpen
     public void onOpen(Session session) {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
         log.info("res={}", res);
 
+
         if(!clients.contains(session)) {
             clients.add(session);
-            log.info("session open : {}", session);
+            log.info("WM session open : {}", session);
         }else{
             log.info("이미 연결된 session");
         }
     }
 
-    @OnMessage(maxMessageSize = 100000)
-    public void onMessage(String  message, Session session) throws IOException {
+    @OnMessage
+    public void onMessage(String message, Session session) throws IOException {
         log.info("receive message : {}", message);
-//        ByteBuffer buffer = ByteBuffer.wrap(message);
 
         for (Session s : clients) {
             log.info("send data : {}", message);

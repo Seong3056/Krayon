@@ -5,7 +5,7 @@ const Tab = () => {
     return (
         <>
             <div className="title">Krayon</div>
-            <div className="tab">
+            <div className="tab" aria-disabled="true">
                 <Link to="/" className="d tab-main">
                     메인
                 </Link>
