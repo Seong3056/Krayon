@@ -1,22 +1,49 @@
 .in-game{
+    margin: 50px auto;
+    width: 80%;
     display: flex;
-    .prev{
-        display: flex;
-        width: 25%;
-        height: 300px;
-        margin-right: 30px;
-        color: #888;
-        border: 1px solid #000;
-        align-items: center;
-        font-size: 40px;
+    flex-direction: column;
+    align-items: center;
+    .definition {
+        font-size: 30px;
+        height: 30px;
     }
-    .current{
+    .preview{
         display: flex;
-        width: 25%;
-        height: 300px;
-        margin-right: 30px;
-        font-size: 40px;
-        border: 1px solid #000;
-        align-items: center;
+        flex-direction: row;
+        width: 80%;
+        height: 200px;
+        justify-content: center;
+        .prev{
+            display: flex;
+            
+            
+            margin-right: 30px;
+            color: #888;
+            // background-color: red;
+            align-items: center;
+            font-size: 40px;
+            .last-char{
+                color: #555;
+            }
+        }
+        .current{
+            display: flex;
+            
+            width: 25%;
+            
+            margin-right: 30px;
+            font-size: 40px;
+            align-items: center;
+            
+        }
+
     }
+    
+}
+#input {
+    width: 50%;
+    height: 100px;
+    font-size: 35px;
+    
 }
