@@ -6,6 +6,7 @@ import com.krayon.backend.korean.WordService;
 import com.krayon.backend.socket.util.ConversionJson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.OnClose;
@@ -19,34 +20,24 @@ import java.util.*;
 @Service
 @Slf4j
 
-@ServerEndpoint("/api/chatt")
-
-public class WebSocketChat {
+//@ServerEndpoint("/api/game/followword")
+@RequiredArgsConstructor
+public class FollowWordSocketChat {
     //이페이지에 접속해있는 유저 세션을 담은 리스트 (Set)
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     //데이터값을 JSON 형태로 변환해주는 클래스 선언
     ConversionJson c = new ConversionJson();
-    public WordService wordService;
+    private final WordService wordService;
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
         String id = res.get("id").get(0);
-        log.info("시작");
+        log.info("끝말잇기 소켓on");
 
-//        log.info(session.getId());
-//        log.info(session.getContainer().toString());
-//        log.info(session.getOpenSessions().toString());
-//        log.info("메세지 핸들러"+session.getMessageHandlers().toString());
-//
-//
-//        log.info(session.getUserProperties().toString());
-//        log.info(session.getRequestURI().toString());
-//        log.info(session.getPathParameters().toString());
-//        log.info(session.getId());
-//        log.info(session.getId());
+
         if(!clients.contains(session)) {
             clients.add(session);
             log.info("session open : {}", session);
@@ -72,22 +63,35 @@ public class WebSocketChat {
     public void onMessage(String message, Session session) throws IOException {
         log.info("receive message : {}", message);
         ObjectMapper json = new ObjectMapper();
-        Map<String, String > map = json.readValue((String) message, new TypeReference<Map<String, String>>() {});
+        Map<String, String> map = json.readValue((String) message, new TypeReference<Map<String, String>>() {
+        });
 
 
-        if(map.containsKey("msg")) {
+        if (map.containsKey("msg")) { //입력값이 msg 일때
             for (Session s : clients) {
-            log.info("send data : {}", message);
-            s.getBasicRemote().sendText((String) message);
-
+                log.info("send data : {}", message);
+                s.getBasicRemote().sendText(message);
             }
-        } else if(map.containsKey("room")){
-            for(Session s: clients){
-//                s.getBasicRemote().sendBinary();
+        } else if (map.containsKey("char")) { // 입력값이 char일때 char : 모음단위의 문자열
+            for (Session s : clients) {
+                s.getBasicRemote().sendText(message);
+            }
+        }
+        else if (map.containsKey("word")) { // 입력값이 word일때
+            String word = map.get("word");
+            try {
+                List<Map<String, String>> result = wordService.findWord(word);
+                if(result.size() == 0){
+                    log.info("단어가 없음");
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            for (Session s : clients) {
+                s.getBasicRemote().sendText(message);
             }
         }
     }
-
 
 
 

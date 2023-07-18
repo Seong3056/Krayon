@@ -1,4 +1,4 @@
-package com.krayon.backend.socket;
+package com.krayon.backend.socket.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
