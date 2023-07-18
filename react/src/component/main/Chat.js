@@ -50,7 +50,7 @@ const Chat = ({ userList }) => {
     const webSocketLogin = useCallback(() => {
         const id = document.getElementById('id').value;
         ws.current = new WebSocket(
-            'ws://118.217.203.40:8181/socket/chatt?id=' + id
+            'ws://localhost:8181/socket/chatt?id=' + id
         );
         console.log('웹소켓 접속');
 

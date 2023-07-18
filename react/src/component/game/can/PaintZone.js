@@ -34,12 +34,12 @@ export default function PaintZone() {
   const [chatt, setChatt] = useState([]); //웹소켓 수신 데이터들 [] 배열
   const [chkLog, setChkLog] = useState(false); //웹소켓 접속 여부
   const [socketData, setSocketData] = useState(); //웹소켓 수신 메세지 {name, msg, date}
+  const [getImg, getGetImg] = useState(""); //받아서 그림 변경하기
   const ws = useRef(null); //webSocket을 담는 변수,
   //컴포넌트가 변경될 때 객체가 유지되어야하므로 'ref'로 저장
 
-  let picData = "";
   const webSocketLogin = useCallback(() => {
-    ws.current = new WebSocket("ws://localhost:8181/socket/game");
+    ws.current = new WebSocket("ws://114.207.167.85:8181/socket/game");
     console.log("웹소켓 접속");
 
     ws.current.onmessage = (message) => {
@@ -51,8 +51,9 @@ export default function PaintZone() {
         img: dataSet.img,
         date: dataSet.date
       }
-      console.log("----------------"+data);
-      setSocketData(data);
+      console.log("----------------"+data.img);
+      setSocketData(dataSet);
+      getGetImg(data.img);
       
       
     };
@@ -60,7 +61,7 @@ export default function PaintZone() {
 
   //데이터 바뀔때마다 전송
   useEffect(() => {
-    console.log(socketData);
+    // console.log(socketData);
     // const uurl = URL.createObjectURL(new Blob([socketData]));
     // console.log("------------------"+uurl);
     // document.getElementById('test').src = uurl;
@@ -125,17 +126,27 @@ export default function PaintZone() {
     ctx.strokeStyle = penColor;
   };
 
+  //getCtx 초기화를 위한 useEffect
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = "#000000";
+    setGetCtx(ctx);
+  }, []);
+
   const drawFn = (e) => {
     // mouse position
     const mouseX = e.nativeEvent.offsetX;
     const mouseY = e.nativeEvent.offsetY;
     // drawing
     if (!painting) {
-      getCtx.beginPath();
       getCtx.moveTo(mouseX, mouseY);
+      getCtx.beginPath();
     } else {
       getCtx.lineTo(mouseX, mouseY);
-      getCtx.strike();
+      getCtx.stroke();
     }
 
     const smallCanvas = canvasRef2.current;
@@ -157,16 +168,16 @@ export default function PaintZone() {
   const sendCanvasData = async () => {
     const canvas = canvasRef.current;
     const dataURL = canvas.toDataURL();
-    // setImg(dataURL);
+    setImg(dataURL);
     setgetPic(dataURL);
     // console.log(getPic);
 
     const smallCanvas = canvasRef2.current;
     const dataURLSmall = smallCanvas.toDataURL();
-    console.log(dataURLSmall);
+    // console.log(dataURLSmall);
     
-    const blob = await (await fetch(dataURLSmall)).blob();
-    const file = new File([blob], "image.png", { type: "image/png" });
+    // const blob = await (await fetch(dataURLSmall)).blob();
+    // const file = new File([blob], "image.png", { type: "image/png" });
     // var formdata = new FormData(); // formData 생성
     // formdata.append("file", file); // file data 추가
 
@@ -176,6 +187,7 @@ export default function PaintZone() {
 
     //소켓으로 데이터 보내기
     //웹소켓으로 메세지 전송
+    
     if (!chkLog) {
       //웹소켓 로그인안됬을경우 (!false)
 
@@ -216,6 +228,7 @@ export default function PaintZone() {
             // alert('메세지를 입력하세요.');
             // document.getElementById('chat').focus();
             // return;
+            console.log('데이터 없음');
         }
         
         
@@ -228,6 +241,12 @@ export default function PaintZone() {
   // if (window.location.reload()) console.log("페이지새로고침");
   window.onload = () => {
     console.log("페이지새로고침");
+  };
+  const joinWebSocket = () => {
+    if (!chkLog) {
+      webSocketLogin();
+      setChkLog(true);
+    }
   };
 
   // let i = document.getElementById('test').style.width
@@ -250,7 +269,11 @@ export default function PaintZone() {
                   id="canvasDraw"
                 />
               </div>
+              
               <div className="canvasTools">
+              <button id="joinWebSocketBtn" onClick={joinWebSocket}>
+          웹소켓 참가하기
+        </button>
                 <button id="resetBtn" onClick={resetCanvas}>
                   전체지우기
                 </button>
@@ -327,7 +350,7 @@ export default function PaintZone() {
         </div>
 
         <div>
-          <img src={img} id='test' alt="" style={{width: 800, height: 540,backgroundColor: "white"}}/>
+          <img src={getImg} id='test' alt="" style={{width: 800, height: 540,backgroundColor: "white"}}/>
         </div>
       </CanvasStyle>
     </>
