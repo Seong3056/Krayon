@@ -1,35 +1,21 @@
-import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import {TypeHangul} from 'type-hangul';
+import React, { useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { TypeHangul } from "type-hangul";
 
 const Hangul = () => {
-  
-
   return (
     <div>
-     <script src="https://unpkg.com/hangul-js"></script>
-<script src="https://unpkg.com/type-hangul@latest/dist/type-hangul.min.js"></script>
-<script src="https://unpkg.com/type-hangul"></script>
+      <script src="https://unpkg.com/hangul-js"></script>
+      <script src="https://unpkg.com/type-hangul@latest/dist/type-hangul.min.js"></script>
+      <script src="https://unpkg.com/type-hangul"></script>
 
-
-      
-      <div id='aaa'>한글 컴포넌트</div>
+      <div id="aaa">한글 컴포넌트</div>
       {/* 이 컴포넌트의 나머지 내용 */}
     </div>
   );
 };
 
 export default Hangul;
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useEffect } from 'react';
 
