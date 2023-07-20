@@ -21,13 +21,14 @@ public class ConversionJson {
 		Set<String> idList = new HashSet<>();
 //		JSONPObject json = new JSONPObject(idList);
 				clients.forEach(a -> {
-			 String id = a.getRequestParameterMap().get("id").get(0);
-			 idList.add(id);
+			 String name = a.getRequestParameterMap().get("name").get(0);
+			 log.error("유저들+"+name);
+			 idList.add(name);
 
 		 });
 		map.put("name",field[0]); //아이디
 		map.put("date",field[1]); //날짜
-		map.put("startWord",currentWordMap);
+		if(currentWordMap != null)		map.put("wordInfo",currentWordMap);
 		map.put("list",idList);
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -49,9 +50,6 @@ public class ConversionJson {
 			case "close":
 				map.put("msg",field[0]+"님이 나갔습니다.");
 				break;
-			case "word":
-				map.put("word",field[2]);
-				break;
 		}
 		String json = "";
 		try {
@@ -67,13 +65,14 @@ public class ConversionJson {
 
 		map.put("name",objMap.get("name"));
 		map.put("date",objMap.get("date"));
-		map.put("turn",objMap.get("turn"));
+		if(objMap.containsKey("turn"))map.put("turn",objMap.get("turn"));
 
 
 		Map<String,Object> wordMap = new HashMap<>(); // word 객체 생성
-		wordMap.put("word",objMap.get("word"));
-		wordMap.put("definition",objMap.get("definition"));
-		wordMap.put("pos",objMap.get("pos"));
+		if(objMap.containsKey("word")) wordMap.put("word",objMap.get("word"));
+		if(objMap.containsKey("definition")) wordMap.put("definition",objMap.get("definition"));
+		if(objMap.containsKey("pos")) wordMap.put("pos",objMap.get("pos"));
+
 		wordMap.put("isVaild",flag);
 
 

@@ -24,15 +24,7 @@ const Main = () => {
     };
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
-        if (!!sessionStorage.getItem('socketURL')) {
-            const socketURL = sessionStorage.getItem('socketURL');
-            if (socketURL !== URL) {
-                oldWs.current = new WebSocket(socketURL);
-                console.log('oldURL', oldWs.current);
-                oldWs.current.close();
-            }
-        }
-        sessionStorage.setItem('socketURL', URL);
+
         if (ws.current.readyState === 1) ws.current.close();
         console.log('웹소켓 접속11');
         ws.current.onmessage = (message) => {

@@ -3,11 +3,11 @@ import { json } from 'react-router-dom';
 
 function Copy({ send, sendChar, data, list, startWord }) {
     const [currentWord, setCurrentWord] = useState('');
-    const [previousWord, setPreviousWord] = useState('아이');
+    const [previousWord, setPreviousWord] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [gameStarted, setGameStarted] = useState(false);
-    const [definition, setDefinition] = useState('');
-    const [userTurn, setUserTurn] = useState(true);
+    const [definition, setDefinition] = useState('게임시작을 눌러주세요!');
+    const [userTurn, setUserTurn] = useState(false);
     const API = 'http://localhost:8181/api/followWord';
 
     const handleInputChange = (event) => {
@@ -43,14 +43,18 @@ function Copy({ send, sendChar, data, list, startWord }) {
         }
     };
     useEffect(() => {
-        if (!!startWord) setPreviousWord(startWord);
+        if (!!startWord) {
+            setPreviousWord(startWord.word);
+            setDefinition(startWord.definition);
+        }
+        console.log(data.wordInfo);
         if (data.wordInfo !== undefined) {
             // setPreviousWord(data.wordInfo.word);
             // setDefinition(data.wordInfo.definition);
-            console.log('단어' + data.wordInfo.pos);
-            if (data.wordInfo.isVaild) {
+            // console.log('단어' + data.wordInfo.pos);
+            if (data.wordInfo.word !== undefined) {
                 setPreviousWord(data.wordInfo.word);
-                // alert('단어뜻: ' + data.wordInfo.definition);
+                alert('단어뜻: ' + data.wordInfo.definition);
 
                 if (data.wordInfo.definition.length > 50)
                     setDefinition(
@@ -78,9 +82,13 @@ function Copy({ send, sendChar, data, list, startWord }) {
             <div className="definition">{definition}</div>
             <div className="preview">
                 <div className="prev">
-                    {previousWord.substring(0, previousWord.length - 1)}
+                    {!!previousWord
+                        ? previousWord.substring(0, previousWord.length - 1)
+                        : ''}
                     <span className="last-char">
-                        {previousWord.substring(previousWord.length - 1)}
+                        {!!previousWord
+                            ? previousWord.substring(previousWord.length - 1)
+                            : ''}
                     </span>
                 </div>
 
@@ -88,7 +96,7 @@ function Copy({ send, sendChar, data, list, startWord }) {
                 {/* {definition} */}
             </div>
             <input
-                disabled={!userTurn}
+                // disabled={!userTurn}
                 type="text"
                 // value={inputValue}
                 id="input"
