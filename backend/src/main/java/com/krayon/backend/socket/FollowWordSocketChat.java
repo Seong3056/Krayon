@@ -47,7 +47,7 @@
 //        log.info("res={}", res);
 //        log.info(Arrays.toString(clients.toArray()));
 //        System.out.println("id = " + id);
-//        String conversion = c.conversion("open",clients,id,"시스템");
+//        String conversion = c.conversion("open",clients,id,currentWordMap,"시스템");
 //
 //
 //
@@ -66,14 +66,13 @@
 //        Map<String, String> map = json.readValue((String) message, new TypeReference<Map<String, String>>() {
 //        });
 //
-//    log.info(message);
+//
 //        if (map.containsKey("msg")) { //입력값이 msg 일때
 //            for (Session s : clients) {
 //                log.info("send data : {}", message);
 //                s.getBasicRemote().sendText(message);
 //            }
-//        } else if (map.containsKey("img")) { // 입력값이 char일때 char : 모음단위의 문자열
-//            log.info("접근");
+//        } else if (map.containsKey("char")) { // 입력값이 char일때 char : 모음단위의 문자열
 //            for (Session s : clients) {
 //                s.getBasicRemote().sendText(message);
 //            }

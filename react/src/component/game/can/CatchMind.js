@@ -18,6 +18,8 @@ const CatchMind = () => {
     const [socketData, setSocketData] = useState('');//수신한 데이터 저장
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
+    const [startWord, setStartWord] = useState('');
+    const [turn, setTurn] = useState(true);
 
     const id = localStorage.getItem('id');
     const ip = '114.207.167.85';
@@ -45,9 +47,10 @@ const CatchMind = () => {
             const data = {
                 name: dataSet.name,
                 img: dataSet.img,
-                date: dataSet.date
+                date: dataSet.date,
+                turn: dataSet.turn
             };
-
+            console.log(dataSet);//내가 누구고 여기 누가 있는지 그림데이터는 뭔지 확인
             if (dataSet.list !== undefined) {
                 console.log('메인에서 캐치마인드진입');
                 console.log(dataSet.list);
@@ -55,21 +58,14 @@ const CatchMind = () => {
             }
             // console.log(dataSet.img);
             setSocketData(data);
+
+            if (!!dataSet.startWord) {
+                setStartWord(dataSet.startWord.word);
+                console.log(dataSet.startWord);
+            }
         };
     });
 
-    useEffect(() => {
-        console.log(list); // list 업데이트
-      }, [list]);
-
-    // 사용자 중 그리미 뽑기
-    const setDrawer = () =>{
-        console.log(list[0]);
-        if(list[0]===id){
-            return true;
-        }
-        else return false;
-    };
 
     const disconnectSocket = () => {
         ws.current.close();
@@ -106,31 +102,63 @@ const CatchMind = () => {
             const temp = JSON.stringify(data);
 
             ws.current.send(temp);
-            console.log("데이터 발신---"+img);
+            // console.log("데이터 발신---"+img);
         } else {
             return;
         }
         // setMsg('');
     });
 
+    const gameStart = useCallback(() => {
+        //웹소켓으로 메세지 전송
+
+        const date =
+            (new Date().getHours() < 10
+                ? '0' + new Date().getHours()
+                : new Date().getHours()) +
+            ':' +
+            (new Date().getMinutes() < 10
+                ? '0' + new Date().getMinutes()
+                : new Date().getMinutes());
+
+        //메세지를 data에 담아 백엔드로 JSON 객체 전송
+        const data = {
+            name: id,
+            start: true,
+            date: date,
+        }; //전송 데이터(JSON)
+        const temp = JSON.stringify(data);
+        ws.current.send(temp);
+    });
+    const handleBeforeUnload = (e) => {
+        e.preventDefault();
+        console.log('페이지이동이 감지됨');
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
   return (
     <>
     <div className='view'>
         <div class="sectionMypage">
-            <PaintZone data={socketData} sendImg={sendImg} setDrawer={setDrawer}/>
+            <PaintZone data={socketData} sendImg={sendImg} startWord={startWord} list={list}/>
         </div>
         <div class="can-bottom">
-            <Chatting className = "canChat"/>
-            <GetQuiz className = "getQuiz"/>
+            {/* <Chatting className = "canChat"/> */}
+            {/* <GetQuiz className = "getQuiz"/> */}
         </div>
     </div>
+        <button onClick={gameStart}>게임시작</button>
         <div className="sectionUserList">
             <UserInfo className = "userInfo"/>
-            <UserList className = "userList"/>
+            {/* <UserList className = "userList"/> */}
             <Link to="/" onClick={disconnectSocket}>
                 나가기
             </Link>
         </div>
+
+        {list.map((e) => (
+                <div>{e}</div>
+            ))}
         
     </>
   )

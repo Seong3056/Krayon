@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { json } from 'react-router-dom';
 
-function Copy({ send, sendChar, data }) {
+function Copy({ send, sendChar, data, list, startWord }) {
     const [currentWord, setCurrentWord] = useState('');
-    const [previousWord, setPreviousWord] = useState('');
+    const [previousWord, setPreviousWord] = useState('아이');
     const [inputValue, setInputValue] = useState('');
     const [gameStarted, setGameStarted] = useState(false);
     const [definition, setDefinition] = useState('');
-
+    const [userTurn, setUserTurn] = useState(true);
     const API = 'http://localhost:8181/api/followWord';
 
     const handleInputChange = (event) => {
@@ -25,42 +25,76 @@ function Copy({ send, sendChar, data }) {
         return value;
     };
     const CheckWord = () => {
-        const prev = previousWord.split('');
-        console.log(prev[prev.length - 1]);
+        const prev = previousWord.split(''); //이전단어 배열화
+        const prevChar = prev[prev.length - 1]; //마지막 글자
+        const crtChar = currentWord.split('')[0]; //입력단어 첫글자
+
+        if (currentWord.length <= 1) {
+            console.log('2글자이상 입력');
+            return;
+        } //입력단어가 2글자 미만이라면 리턴
+        if (prevChar === crtChar) {
+            console.log('단어가 일치');
+            send(inputValue);
+        } else {
+            console.log('일치하지 않음');
+            setCurrentWord('');
+            return;
+        }
     };
     useEffect(() => {
-        console.log(data.msg);
-        console.log(data.char);
+        if (!!startWord) setPreviousWord(startWord);
         if (data.wordInfo !== undefined) {
+            // setPreviousWord(data.wordInfo.word);
+            // setDefinition(data.wordInfo.definition);
             console.log('단어' + data.wordInfo.pos);
             if (data.wordInfo.isVaild) {
                 setPreviousWord(data.wordInfo.word);
                 // alert('단어뜻: ' + data.wordInfo.definition);
 
-                if (data.wordInfo.definition.length)
-                    setDefinition(data.wordInfo.definition);
+                if (data.wordInfo.definition.length > 50)
+                    setDefinition(
+                        data.wordInfo.definition.substring(0, 50).concat('...')
+                    );
+                else setDefinition(data.wordInfo.definition);
                 console.log(data.wordInfo.definition.length);
+                console.log('접속유저 리스트' + list);
                 setCurrentWord('');
-            } else alert('없는단어');
+            } else {
+                // 단어가 없을때 없는 단어
+
+                setCurrentWord('');
+            }
         } else setCurrentWord(data.char);
+        console.log('!!!!!!!!!!!!!!!' + data.turn);
+        if (data.turn !== undefined) {
+            setUserTurn(data.turn);
+            console.log('turn에 접근');
+        }
     }, [data]);
 
     return (
         <div className="in-game">
-            <h1>끝말잇기 게임</h1>
-            <p className="prev">
-                {previousWord} : <br />
-                {definition}
-            </p>
-            <p className="current">{currentWord}</p>
+            <div className="definition">{definition}</div>
+            <div className="preview">
+                <div className="prev">
+                    {previousWord.substring(0, previousWord.length - 1)}
+                    <span className="last-char">
+                        {previousWord.substring(previousWord.length - 1)}
+                    </span>
+                </div>
+
+                <div className="current">{currentWord}</div>
+                {/* {definition} */}
+            </div>
             <input
+                disabled={!userTurn}
                 type="text"
                 // value={inputValue}
                 id="input"
                 onChange={(e) => sendChar(handleInputChange(e))}
                 onKeyDown={(e) => {
                     if (e.keyCode === 13) {
-                        send(inputValue);
                         CheckWord();
                         document.getElementById('input').value = '';
                     }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krayon.backend.korean.WordService;
 import com.krayon.backend.socket.util.ConversionJson;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +56,7 @@ public class WebSocketChat {
         log.info("res={}", res);
         log.info(Arrays.toString(clients.toArray()));
         System.out.println("id = " + id);
-        String conversion = c.conversion("open",clients,id,"시스템");
+        String conversion = c.conversion("open",clients,  id,"시스템");
 
 
 

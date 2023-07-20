@@ -37,7 +37,7 @@ public class WordService {
 		log.info("findWord 동작");
 
 		String encodedSearchWord = URLEncoder.encode(searchWord, StandardCharsets.UTF_8);
-		String requestUrl = SEARCH_URL + "?key=" + key + "&req_type=json" + "&q=" + encodedSearchWord;
+		String requestUrl = SEARCH_URL + "?key=" + key + "&req_type=json" + "&q=" + encodedSearchWord+"&advanced=y" +"&pos="+1;
 		log.info(requestUrl);
 		URLConnection connection = new URL(requestUrl).openConnection();
 		connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
@@ -51,10 +51,12 @@ public class WordService {
 			}
 		}
 
-//		log.info(sb.toString());
+		log.info(sb.toString());
 
 		JSONObject json = new JSONObject(sb.toString());
 		JSONObject channelObject = json.getJSONObject("channel");
+		String total = channelObject.getString("total");
+		if(total.equals("0")) return null;
 		JSONArray itemArray = null;
 		try {
 			itemArray = channelObject.getJSONArray("item");
@@ -134,6 +136,52 @@ public class WordService {
 		word.put("word",replaceWord);
 		word.put("definition",definition);
 		return word;
+	}
+
+	public  String randomWord(String pos)  {
+		Random random = new Random();
+		int r = (int) Math.floor(random.nextInt(100000) +1);
+
+		String requestUrl = VIEW_URL + "?key=" + key +"&method=target_code"+ "&q="+r;
+		log.info(requestUrl);
+		StringBuilder sb = null;
+		try {
+			URLConnection connection = new URL(requestUrl).openConnection();
+			connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
+			connection.connect();
+
+			sb = new StringBuilder();
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line);
+				}
+			}
+		} catch (IOException e) {
+			return null;
+		}
+
+//		log.info(sb.toString());
+		String replaceWord = null;
+		String definition = null;
+		try {
+			JSONObject json = XML.toJSONObject(sb.toString());
+			JSONObject channelObject = json.getJSONObject("channel");
+			JSONObject item = channelObject.getJSONObject("item");
+
+			JSONObject wordInfo = item.getJSONObject("wordInfo");
+			String findWord = wordInfo.getString("word");
+			replaceWord = findWord.replace("^"," ").replace("-"," ").replace("_"," ");
+
+
+
+		} catch (JSONException e) {
+			return null;
+		}
+
+
+
+		return replaceWord;
 	}
 	public static String getTagValue(String tag, Element eElement) {
 		// 결과를 저장할 result 변수 선언
