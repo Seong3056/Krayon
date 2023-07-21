@@ -22,9 +22,9 @@ const CatchMind = ({history}) => {
     const [start, setStart] = useState(false);
     const [turn, setTurn] = useState(true);
 
-    const id = localStorage.getItem('id');
-    const ip = '114.207.167.85';
-    const URL = 'ws://' + ip + ':8181/api/game/catch?id=' + id + "&turn=" +(turn ? 'turn' : 'notturn');
+    const id = sessionStorage.getItem('id');
+    const ip = 'localhost';
+    const URL = 'ws://' + ip + ':8181/api/game/catch?name=' + id ;
 
     useEffect(() => {
         // const leave = history.block('페이지를 나가실건가요?');
@@ -33,7 +33,10 @@ const CatchMind = ({history}) => {
             // ws.current.close();
         };
     }, [history]);
-
+    useEffect(() => {
+      webSocketLogin();
+    }, [])
+    
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
         sessionStorage.setItem('socketURL', URL);
@@ -111,7 +114,7 @@ const CatchMind = ({history}) => {
 
     const gameStart = useCallback(() => {
         //웹소켓으로 메세지 전송
-
+            console.log(URL);
         const date =
             (new Date().getHours() < 10
                 ? '0' + new Date().getHours()

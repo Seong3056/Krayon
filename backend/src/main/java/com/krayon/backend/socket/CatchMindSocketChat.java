@@ -38,7 +38,7 @@ public class CatchMindSocketChat {
     public void onOpen(Session session) throws IOException {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
-        String id = res.get("id").get(0);
+        String name = res.get("name").get(0);
 //        String conversion = c.conversion("open",clients,currentWordMap,id,"시스템");
         log.info("시작");
 
@@ -61,8 +61,8 @@ public class CatchMindSocketChat {
         }
         log.info("res={}", res);
         log.info(Arrays.toString(clients.toArray()));
-        System.out.println("id = " + id);
-        String conversion = c.conversion("open",clients,id,"시스템");
+        System.out.println("id = " + name);
+        String conversion = c.conversion("open",clients,name,"시스템");
         log.info(conversion);
         System.out.println("currentWordMap = " + currentWordMap);
 
@@ -88,7 +88,7 @@ public class CatchMindSocketChat {
         objMap.put("date",date);
 
         log.info("userList"+ Arrays.toString(clients.toArray()));
-        if(sessionTurn != null) log.info("현재 턴:"+sessionTurn.getRequestParameterMap().get("name").get(0) );
+        if(sessionTurn != null) log.info("현재 턴:"+ sessionTurn.getRequestParameterMap().get("name").get(0));
         Object[] clientsArray = clients.toArray();
         int index = Arrays.asList(clientsArray).indexOf(session);
 
@@ -96,42 +96,10 @@ public class CatchMindSocketChat {
         if (map.containsKey("img")) { //입력값이 msg 일때
             log.info("메세지엔 접근했는데");
             if(sessionTurn == session) {
-                log.info("메세지엔 접근했는데");
-                log.info(map.get("img"));
-                List<Map<String, String>> result = wordService.findWord(map.get("img"));
-                if(result == null || correct.contains(map.get("img"))){
-                    objMap.put("word",currentWordMap.get("word"));
-                    objMap.put("pos",currentWordMap.get("pos"));
-                    message=c.conversionWord(objMap, false);
+
                     for (Session s : clients) {
-                        log.info("send data : {}", message);
                         s.getBasicRemote().sendText(message);
                     }
-                    return;
-                } else {
-                    String word = map.get("img");
-                    String definition = result.get(0).get("definition");
-                    String pos = result.get(0).get("pos");
-                    objMap.put("word",word);
-                    objMap.put("pos",pos);
-                    objMap.put("msg",word);
-
-                    currentWordMap.replace("word",word);
-                    currentWordMap.replace("pos",pos);
-
-                    correct.add(word);
-                    objMap.put("turn",false);
-
-                }
-                for(int i =0;i<clients.size();i++){
-                    if((Session)clientsArray[i] == clientsArray[(index+1)%clientsArray.length]) {
-                        sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
-                        objMap.replace("turn",true);
-                    }
-                    message=c.conversionWord(objMap, true);
-                    log.info("session:{} send data : {}",clientsArray[i], message);
-                    ((Session)clientsArray[i]).getBasicRemote().sendText(message);
-                }
         }
             else {
                 for (Session s : clients) {
@@ -143,13 +111,11 @@ public class CatchMindSocketChat {
             String word = map.get("word");
             log.info(message);
             List<Map<String, String>> result = wordService.findWord(word);
-//            Map<String, String> result = wordService.randomWord();
-
 
             if(result == null){
                 message = c.conversionWord(name,date,false);
             } else{
-                String definition = result.get(0).get("definition");
+//                String definition = result.get(0).get("definition");
                 String pos = result.get(0).get("pos");
                 //여기서 obj에 값 put
                 objMap.put("word",word);
@@ -204,7 +170,7 @@ public class CatchMindSocketChat {
 //        clients.
         Map<String, List<String>> map = session.getRequestParameterMap();
         String id = map.get("name").get(0); //파라미터값
-        String turn = map.get("turn").get(0); //파라미터값
+//        String turn = map.get("turn").get(0); //파라미터값
 
         Object[] clientsArray = clients.toArray(); //접속종료전 세션list
         int index = (Arrays.asList(clientsArray).indexOf(session) + 1)%clientsArray.length; //접속종료유저의 세션list의 인덱스

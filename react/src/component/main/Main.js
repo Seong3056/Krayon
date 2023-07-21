@@ -17,7 +17,7 @@ const Main = () => {
 
     // const [msg, setMsg] = useState('');
 
-    const id = localStorage.getItem('id');
+    const id = sessionStorage.getItem('id');
     const ip = '114.207.167.85';
 
     const URL = 'ws://' + ip + ':8181/api/chatt?id=' + id + '&room=1';

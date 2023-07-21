@@ -71,21 +71,21 @@ public class WordService {
 			// 수정: definition 필드가 없는 경우에 대한 처리
 			JSONArray sense = itemObject.getJSONArray("sense");
 
-				JSONObject senseObject = sense.getJSONObject(0);
+			JSONObject senseObject = sense.getJSONObject(0);
 
-				String definition = senseObject.optString("definition");
-				String wordValue = itemObject.optString("word", "");
-				String pos = senseObject.optString("pos");
+			String definition = senseObject.optString("definition");
+			String wordValue = itemObject.optString("word", "");
+			String pos = senseObject.optString("pos");
 
-				definition = definition.replace("^", " ").replace("_", " ");
-				wordValue = wordValue.replace("^", " ").replace("_", " ");
+			definition = definition.replace("^", " ").replace("_", " ");
+			wordValue = wordValue.replace("^", " ").replace("_", " ");
 
 //				log.info("            " + definition);
-				wordMap.put("definition", definition);
-				wordMap.put("word", wordValue);
-				wordMap.put("pos",pos);
-				
-				wordList.add(wordMap);
+			wordMap.put("definition", definition);
+			wordMap.put("word", wordValue);
+			wordMap.put("pos",pos);
+
+			wordList.add(wordMap);
 		}
 		//생성된 단어리스트를 리턴
 		return wordList;
@@ -177,9 +177,15 @@ public class WordService {
 				String findWord = wordInfo.getString("word");
 				JSONObject senseInfo = item.getJSONObject("senseInfo");
 				definition = senseInfo.getString("definition");
+
 				String findWordPos = senseInfo.getString("pos");
-				log.warn(findWord+findWordPos);
-				if(!findWordPos.equals(pos)) {log.info("다시실행"); continue; }
+				System.out.println("findWordPos = " + findWordPos);
+
+				String findWordType = senseInfo.getString("type");
+				System.out.println("findWordType = " + findWordType);
+
+//				log.warn(findWord+findWordPos);
+				if(findWordPos == null || !findWordPos.contains(pos) || findWord.length()<2) { log.info("다시실행"); continue; }
 				else {
 					replaceWord = findWord.replace("^", " ").replace("-", " ").replace("_", " ");
 					map.put("word", replaceWord);
@@ -214,7 +220,7 @@ public class WordService {
 
 
 
-	// JSON 형식 유효성 검사 함수
+// JSON 형식 유효성 검사 함수
 //	private boolean isValidJson(String jsonStr) {
 //		try {
 //			new JSONObject(jsonStr);
