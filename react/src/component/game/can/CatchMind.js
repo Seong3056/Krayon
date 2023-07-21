@@ -56,8 +56,9 @@ const CatchMind = () => {
                 console.log(dataSet.list);
                 setList(dataSet.list);
             }
-            // console.log(dataSet.img);
+            // console.log(dataSet.turn);
             setSocketData(data);
+            setTurn(dataSet.turn)
 
             if (!!dataSet.startWord) {
                 setStartWord(dataSet.startWord.word);
@@ -139,15 +140,18 @@ const CatchMind = () => {
   return (
     <>
     <div className='view'>
-        <div class="sectionMypage">
-            <PaintZone data={socketData} sendImg={sendImg} startWord={startWord} list={list}/>
+        <div class="sectionMypage" >
+            <PaintZone data={socketData} sendImg={sendImg} startWord={startWord} list={list} />
         </div>
         <div class="can-bottom">
             {/* <Chatting className = "canChat"/> */}
             {/* <GetQuiz className = "getQuiz"/> */}
         </div>
     </div>
+
         <button onClick={gameStart}>게임시작</button>
+        
+        
         <div className="sectionUserList">
             <UserInfo className = "userInfo"/>
             {/* <UserList className = "userList"/> */}

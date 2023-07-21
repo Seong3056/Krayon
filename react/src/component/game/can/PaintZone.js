@@ -140,95 +140,97 @@ export default function PaintZone({ data, sendImg, startWord, list }) {
         <div className="view">
           <div className="sectionMyPage">
             {!userTurn ? (
-              <div className="paintZone">
-                <div className="canvasWrap" onClick={sendCanvasData}>
-                  <canvas
-                    className="canvas"
-                    ref={canvasRef}
-                    onMouseDown={() => setPainting(true)}
-                    onMouseUp={() => setPainting(false)}
-                    onMouseMove={(e) => drawFn(e)}
-                    onMouseLeave={() => setPainting(false)}
-                    id="canvasDraw"
-                  />
-                </div>
-
-                <div className="canvasTools">
-                  <button id="resetBtn" onClick={resetCanvas}>
-                    전체 지우기
-                  </button>
-                  <button id="eraserBtn" onClick={eraseMode}>
-                    지우개
-                  </button>
-                  <button id="penBtn" onClick={penMode}>
-                    펜
-                  </button>
-                  <input
-                    className="boldBar"
-                    type="range"
-                    min="1"
-                    max="30"
-                    step="0.5"
-                    value={lineWidth}
-                    onChange={handleChangeLineWidth}
-                  />
-
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "red" }}
-                    onClick={() => handlePenColorChange("red")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "orange" }}
-                    onClick={() => handlePenColorChange("orange")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "yellow" }}
-                    onClick={() => handlePenColorChange("yellow")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "green" }}
-                    onClick={() => handlePenColorChange("green")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "blue" }}
-                    onClick={() => handlePenColorChange("blue")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "indigo" }}
-                    onClick={() => handlePenColorChange("indigo")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "purple" }}
-                    onClick={() => handlePenColorChange("purple")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "brown" }}
-                    onClick={() => handlePenColorChange("brown")}
-                  ></button>
-                  <button
-                    className="paint"
-                    style={{ backgroundColor: "black" }}
-                    onClick={() => handlePenColorChange("black")}
-                  ></button>
-                </div>
-              </div>
-            ) : (
               <div>
-                <img
-                  src={getPic}
-                  id="test"
-                  alt=""
-                  style={{ width: 800, height: 540, backgroundColor: "white" }}
+              <img
+                src={getPic}
+                id="test"
+                alt=""
+                style={{ width: 800, height: 540, backgroundColor: "white" }}
+              />
+            </div>
+              
+            ) : (
+              
+              <div className="paintZone">
+              <div className="canvasWrap" onClick={sendCanvasData}>
+                <canvas
+                  className="canvas"
+                  ref={canvasRef}
+                  onMouseDown={() => setPainting(true)}
+                  onMouseUp={() => setPainting(false)}
+                  onMouseMove={(e) => drawFn(e)}
+                  onMouseLeave={() => setPainting(false)}
+                  id="canvasDraw"
                 />
               </div>
+
+              <div className="canvasTools">
+                <button id="resetBtn" onClick={resetCanvas}>
+                  전체 지우기
+                </button>
+                <button id="eraserBtn" onClick={eraseMode}>
+                  지우개
+                </button>
+                <button id="penBtn" onClick={penMode}>
+                  펜
+                </button>
+                <input
+                  className="boldBar"
+                  type="range"
+                  min="1"
+                  max="30"
+                  step="0.5"
+                  value={lineWidth}
+                  onChange={handleChangeLineWidth}
+                />
+
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "red" }}
+                  onClick={() => handlePenColorChange("red")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "orange" }}
+                  onClick={() => handlePenColorChange("orange")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "yellow" }}
+                  onClick={() => handlePenColorChange("yellow")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "green" }}
+                  onClick={() => handlePenColorChange("green")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "blue" }}
+                  onClick={() => handlePenColorChange("blue")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "indigo" }}
+                  onClick={() => handlePenColorChange("indigo")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "purple" }}
+                  onClick={() => handlePenColorChange("purple")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "brown" }}
+                  onClick={() => handlePenColorChange("brown")}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: "black" }}
+                  onClick={() => handlePenColorChange("black")}
+                ></button>
+              </div>
+            </div>
             )}
           </div>
         </div>
