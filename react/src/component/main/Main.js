@@ -7,7 +7,7 @@ import UserInfo from './UserInfo';
 
 import '../../resource/scss/main/Main.scss';
 import Chat from './Chat';
-
+import TypeHangul from '../../../node_modules/type-hangul/src/index';
 const Main = () => {
     const ws = useRef(null);
     const oldWs = useRef(null);
@@ -16,7 +16,7 @@ const Main = () => {
     const [chkLog, setChkLog] = useState(false);
 
     // const [msg, setMsg] = useState('');
-    const id = localStorage.getItem('id');
+    const id = sessionStorage.getItem('id');
     const ip = '175.114.130.19';
     const URL = 'ws://' + ip + ':8181/api/chatt?id=' + id + '&room=1';
     const socketClose = () => {
@@ -115,18 +115,27 @@ const Main = () => {
     //     webSocketLogin();
     // };
     const disconnectSocket = () => {
-        ws.current.close();
+        //     ws.current.close();
     };
     useEffect(() => {
         console.log(list);
     }, [list]);
-    useEffect(() => {
+    useEffect(() => {}, [window.location.pathname]);
+
+    window.onload = () => {
         webSocketLogin();
-    }, []);
+    };
+    function test() {
+        const $test = document.getElementById('test');
+
+        TypeHangul.type('#test');
+    }
 
     return (
         <>
             <div class="top">
+                {/* <div id="test">한글타이핑 테스트내용입니다.</div>
+                <button onClick={test}>실행</button> */}
                 <Rooms id={id} dis={disconnectSocket} />
                 <UserList userList={list} />
                 {/* <Socket wss={ws} id={id} /> */}

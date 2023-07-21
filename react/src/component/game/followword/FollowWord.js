@@ -13,7 +13,7 @@ const FollowWord = ({ history }) => {
     const [start, setStart] = useState(false);
     const [turn, setTurn] = useState(true);
     // const [msg, setMsg] = useState('');
-    const id = localStorage.getItem('id');
+    const id = sessionStorage.getItem('id');
     const ip = '175.114.130.19';
     const URL =
         'ws://' +
@@ -32,7 +32,7 @@ const FollowWord = ({ history }) => {
         // const leave = history.block('페이지를 나가실건가요?');
         return () => {
             console.log('웹소켓로그아웃한다아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ');
-            ws.current.close();
+            // ws.current.close();
         };
     }, [history]);
 
@@ -50,6 +50,7 @@ const FollowWord = ({ history }) => {
                 msg: dataSet.msg,
                 wordInfo: dataSet.wordInfo,
                 char: dataSet.char,
+                turn: dataSet.turn,
             };
             console.log(dataSet);
             // console.log('11111111111 ' + dataSet.list);
@@ -181,6 +182,7 @@ const FollowWord = ({ history }) => {
 
     return (
         <>
+            <div>{id}</div>
             <Copy
                 list={list}
                 data={socketData}

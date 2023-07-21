@@ -12,8 +12,9 @@ import java.util.*;
 @Slf4j
 @Component
 public class ConversionJson {
-	private  Map<String,Object> map = new HashMap<>();
+
 	public String conversion(String state, Set<Session> clients, Map<String, String> currentWordMap, String ...field){
+		Map<String,Object> map = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
 
 
@@ -61,7 +62,7 @@ public class ConversionJson {
 		return json;
 	}
 	public String conversionWord (Map<String, Object> objMap, boolean flag){
-
+		Map<String,Object> map = new HashMap<>();
 
 		map.put("name",objMap.get("name"));
 		map.put("date",objMap.get("date"));
@@ -88,12 +89,12 @@ public class ConversionJson {
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
-
+		log.info("워드서비스의 제이슨ㄴㄴ"+json);
 		return json;
 	}
 
 	public String conversionWord(String id, String date, boolean flag) {
-
+		Map<String,Object> map = new HashMap<>();
 
 		map.put("name",id);
 		map.put("date",date);
@@ -121,7 +122,7 @@ public class ConversionJson {
 	}
 
 	public String conversion(String state, Set<Session> clients, String ...field) {
-
+		Map<String,Object> map = new HashMap<>();
 
 
 		//접속중인 유저들을 리스트에 담는다.

@@ -54,7 +54,7 @@ function Copy({ send, sendChar, data, list, startWord }) {
             // console.log('단어' + data.wordInfo.pos);
             if (data.wordInfo.word !== undefined) {
                 setPreviousWord(data.wordInfo.word);
-                alert('단어뜻: ' + data.wordInfo.definition);
+                // alert('단어뜻: ' + data.wordInfo.definition);
 
                 if (data.wordInfo.definition.length > 50)
                     setDefinition(
@@ -73,7 +73,7 @@ function Copy({ send, sendChar, data, list, startWord }) {
         console.log('!!!!!!!!!!!!!!!' + data.turn);
         if (data.turn !== undefined) {
             setUserTurn(data.turn);
-            console.log('turn에 접근');
+            console.log('turn에 접근' + data.turn);
         }
     }, [data]);
 

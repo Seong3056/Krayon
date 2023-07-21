@@ -22,6 +22,7 @@ public class TestSocketChat {
     //이페이지에 접속해있는 유저 세션을 담은 리스트 (Set)
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
     private static Map<String,String> currentWordMap = new HashMap<>();
+    private static HashSet<String> correct = new HashSet<>();
 
     private Map<String ,Object > objMap = new HashMap<>();
     private static Session sessionTurn = null;
@@ -82,7 +83,7 @@ public class TestSocketChat {
         objMap.put("date",date);
 
         log.info("userList"+ Arrays.toString(clients.toArray()));
-        if(sessionTurn != null) log.info("현재 턴:"+session.getRequestParameterMap().get("name").get(0) );
+        if(sessionTurn != null) log.info("현재 턴:"+sessionTurn.getRequestParameterMap().get("name").get(0) );
         Object[] clientsArray = clients.toArray();
         int index = Arrays.asList(clientsArray).indexOf(session);
 
@@ -93,7 +94,7 @@ public class TestSocketChat {
                 log.info("메세지엔 접근했는데");
                 log.info(map.get("msg"));
                 List<Map<String, String>> result = wordService.findWord(map.get("msg"));
-                if(result == null){
+                if(result == null || correct.contains(map.get("msg"))){
                     objMap.put("word",currentWordMap.get("word"));
                     objMap.put("definition",currentWordMap.get("definition"));
                     objMap.put("pos",currentWordMap.get("pos"));
@@ -110,21 +111,23 @@ public class TestSocketChat {
                     objMap.put("word",word);
                     objMap.put("definition",definition);
                     objMap.put("pos",pos);
+                    objMap.put("msg",word);
 
                     currentWordMap.replace("word",word);
                     currentWordMap.replace("definition",definition);
                     currentWordMap.replace("pos",pos);
 
+                    correct.add(word);
                     objMap.put("turn",false);
 
                 }
               for(int i =0;i<clients.size();i++){
-                  if((Session)clientsArray[i] == session) {
-                      sessionTurn = (Session) clientsArray[(i + 1) % clientsArray.length];
-
-                      message=c.conversionWord(objMap, true);
+                  if((Session)clientsArray[i] == clientsArray[(index+1)%clientsArray.length]) {
+                      sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
+                      objMap.replace("turn",true);
                   }
-                  log.info("send data : {}", message);
+                  message=c.conversionWord(objMap, true);
+                  log.info("session:{} send data : {}",clientsArray[i], message);
                   ((Session)clientsArray[i]).getBasicRemote().sendText(message);
               }
             } else {
@@ -208,11 +211,12 @@ public class TestSocketChat {
         String turn = map.get("turn").get(0); //파라미터값
 
         Object[] clientsArray = clients.toArray(); //접속종료전 세션list
-        int index = Arrays.asList(clientsArray).indexOf(session); //접속종료유저의 세션list의 인덱스
+        int index = (Arrays.asList(clientsArray).indexOf(session) + 1)%clientsArray.length; //접속종료유저의 세션list의 인덱스
 
         log.error("삭제전"+clientsArray.toString());
         clients.remove(session); //세션list에서 해당유저 삭제
         clientsArray = clients.toArray(); //해당유저가 삭제된 세션list 재호출
+        sessionTurn = (Session) clientsArray[index];
         log.error("삭제후"+clientsArray.toString());
 
         log.info(clients.toString());
@@ -220,14 +224,16 @@ public class TestSocketChat {
             currentWordMap.clear();
         }
         String message = c.conversion("close",clients, currentWordMap, id, "시스템");
-
-        for(int i =0;i<clients.size();i++){
-            objMap.put("turn",false);
-            log.info("i: "+i+"다음사람:"+(index+1)%clients.size());
-            if(i == (index)%clients.size()) objMap.replace("turn",true);
-            message = c.conversionWord(objMap,true);
-            ((Session)clientsArray[i]) .getBasicRemote().sendText(message);
+        for (Session s : clients) {
+            s.getBasicRemote().sendText(message);
         }
+//        for(int i =0;i<clients.size();i++){
+//            objMap.put("turn",false);
+//            log.info("i: "+i+"다음사람:"+(index+1)%clients.size());
+//            if(i == (index)%clients.size()) objMap.replace("turn",true);
+//            message = c.conversionWord(objMap,true);
+//            ((Session)clientsArray[i]) .getBasicRemote().sendText(message);
+//        }
 //        for (Session s : clients) {
 ////            log.info("send data : {}", session.get);
 //
