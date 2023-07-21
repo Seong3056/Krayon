@@ -11,7 +11,7 @@ import UserList from '../../main/UserList'
 import GetQuiz from './style/GetQuiz'
 import { Link } from 'react-router-dom'
 
-const CatchMind = () => {
+const CatchMind = ({history}) => {
     //웹소켓 객체저장, 유저리스트
     const ws = useRef(null);
     const oldWs = useRef(null);
@@ -19,25 +19,23 @@ const CatchMind = () => {
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
     const [startWord, setStartWord] = useState('');
+    const [start, setStart] = useState(false);
     const [turn, setTurn] = useState(true);
 
     const id = localStorage.getItem('id');
     const ip = '114.207.167.85';
-    const URL = 'ws://' + ip + ':8181/api/game/catch?id=' + id;
+    const URL = 'ws://' + ip + ':8181/api/game/catch?id=' + id + "&turn=" +(turn ? 'turn' : 'notturn');
 
     useEffect(() => {
-        webSocketLogin();
-    }, []);
+        // const leave = history.block('페이지를 나가실건가요?');
+        return () => {
+            console.log('웹소켓로그아웃');
+            // ws.current.close();
+        };
+    }, [history]);
 
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
-        if (!!sessionStorage.getItem('socketURL')) {
-            const socketURL = sessionStorage.getItem('socketURL');
-            if (socketURL !== URL) {
-                oldWs.current = new WebSocket(socketURL);
-                oldWs.current.close();
-            }
-        }
         sessionStorage.setItem('socketURL', URL);
         console.log('웹소켓 접속');
         ws.current.onmessage = (message) => {
@@ -63,6 +61,7 @@ const CatchMind = () => {
             if (!!dataSet.startWord) {
                 setStartWord(dataSet.startWord.word);
                 console.log(dataSet.startWord);
+                
             }
         };
     });
@@ -130,6 +129,7 @@ const CatchMind = () => {
         }; //전송 데이터(JSON)
         const temp = JSON.stringify(data);
         ws.current.send(temp);
+        setStart(true);
     });
     const handleBeforeUnload = (e) => {
         e.preventDefault();
@@ -139,6 +139,7 @@ const CatchMind = () => {
 
   return (
     <>
+    <div>{id}</div>
     <div className='view'>
         <div class="sectionMypage" >
             <PaintZone data={socketData} sendImg={sendImg} startWord={startWord} list={list} />

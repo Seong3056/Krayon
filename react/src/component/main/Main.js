@@ -7,7 +7,7 @@ import UserInfo from './UserInfo';
 
 import '../../resource/scss/main/Main.scss';
 import Chat from './Chat';
-
+import TypeHangul from '../../../node_modules/type-hangul/src/index';
 const Main = () => {
     const ws = useRef(null);
     const oldWs = useRef(null);
@@ -16,23 +16,17 @@ const Main = () => {
     const [chkLog, setChkLog] = useState(false);
 
     // const [msg, setMsg] = useState('');
+
     const id = localStorage.getItem('id');
     const ip = '114.207.167.85';
+
     const URL = 'ws://' + ip + ':8181/api/chatt?id=' + id + '&room=1';
     const socketClose = () => {
         if (ws.current.readyState === 1) ws.current.close();
     };
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
-        if (!!sessionStorage.getItem('socketURL')) {
-            const socketURL = sessionStorage.getItem('socketURL');
-            if (socketURL !== URL) {
-                oldWs.current = new WebSocket(socketURL);
-                console.log('oldURL', oldWs.current);
-                oldWs.current.close();
-            }
-        }
-        sessionStorage.setItem('socketURL', URL);
+
         if (ws.current.readyState === 1) ws.current.close();
         console.log('웹소켓 접속11');
         ws.current.onmessage = (message) => {
@@ -123,18 +117,27 @@ const Main = () => {
     //     webSocketLogin();
     // };
     const disconnectSocket = () => {
-        ws.current.close();
+        //     ws.current.close();
     };
     useEffect(() => {
         console.log(list);
     }, [list]);
-    useEffect(() => {
+    useEffect(() => {}, [window.location.pathname]);
+
+    window.onload = () => {
         webSocketLogin();
-    }, []);
+    };
+    function test() {
+        const $test = document.getElementById('test');
+
+        TypeHangul.type('#test');
+    }
 
     return (
         <>
             <div class="top">
+                {/* <div id="test">한글타이핑 테스트내용입니다.</div>
+                <button onClick={test}>실행</button> */}
                 <Rooms id={id} dis={disconnectSocket} />
                 <UserList userList={list} />
                 {/* <Socket wss={ws} id={id} /> */}

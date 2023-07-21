@@ -11,7 +11,7 @@ const Login = () => {
                 style={{ margin: '50px, auto', width: 100, height: 50 }}
                 onKeyDown={(e) => {
                     if (e.keyCode === 13) {
-                        localStorage.setItem(
+                        sessionStorage.setItem(
                             'id',
                             document.getElementById('id').value
                         );

@@ -138,50 +138,64 @@ public class WordService {
 		return word;
 	}
 
-	public  String randomWord(String pos)  {
+	public  Map<String,String> randomWord(String pos)  {
+		Map<String,String > map = new HashMap<>();
 		Random random = new Random();
-		int r = (int) Math.floor(random.nextInt(100000) +1);
+		String replaceWord = "";
+		String definition = "";
 
-		String requestUrl = VIEW_URL + "?key=" + key +"&method=target_code"+ "&q="+r;
-		log.info(requestUrl);
-		StringBuilder sb = null;
-		try {
-			URLConnection connection = new URL(requestUrl).openConnection();
-			connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
-			connection.connect();
+		while (true){
+			int r = (int) Math.floor(random.nextInt(100000) +1);
+			log.info(String.valueOf(r));
+			String requestUrl = VIEW_URL + "?key=" + key +"&method=target_code"+ "&q="+r;
+			log.info(requestUrl);
+			StringBuilder sb = null;
+			try {
+				URLConnection connection = new URL(requestUrl).openConnection();
+				connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
+				connection.connect();
 
-			sb = new StringBuilder();
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					sb.append(line);
+				sb = new StringBuilder();
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+					String line;
+					while ((line = reader.readLine()) != null) {
+						sb.append(line);
+					}
 				}
+			} catch (IOException e) {
+				return null;
 			}
-		} catch (IOException e) {
-			return null;
-		}
 
 //		log.info(sb.toString());
-		String replaceWord = null;
-		String definition = null;
-		try {
-			JSONObject json = XML.toJSONObject(sb.toString());
-			JSONObject channelObject = json.getJSONObject("channel");
-			JSONObject item = channelObject.getJSONObject("item");
 
-			JSONObject wordInfo = item.getJSONObject("wordInfo");
-			String findWord = wordInfo.getString("word");
-			replaceWord = findWord.replace("^"," ").replace("-"," ").replace("_"," ");
+			try {
+				JSONObject json = XML.toJSONObject(sb.toString());
+				JSONObject channelObject = json.getJSONObject("channel");
+				JSONObject item = channelObject.getJSONObject("item");
 
+				JSONObject wordInfo = item.getJSONObject("wordInfo");
+				String findWord = wordInfo.getString("word");
+				JSONObject senseInfo = item.getJSONObject("senseInfo");
+				definition = senseInfo.getString("definition");
+				String findWordPos = senseInfo.getString("pos");
+				log.warn(findWord+findWordPos);
+				if(!findWordPos.equals(pos)) {log.info("다시실행"); continue; }
+				else {
+					replaceWord = findWord.replace("^", " ").replace("-", " ").replace("_", " ");
+					map.put("word", replaceWord);
+					map.put("definition", definition);
+					log.info(map.toString());
+					break;
+				}
 
-
-		} catch (JSONException e) {
-			return null;
+			} catch (JSONException e) {
+				return null;
+			}
 		}
 
 
 
-		return replaceWord;
+		return map;
 	}
 	public static String getTagValue(String tag, Element eElement) {
 		// 결과를 저장할 result 변수 선언
