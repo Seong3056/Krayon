@@ -3,36 +3,71 @@ import CheckWord from './CheckWord';
 import Copy from './Copy';
 import '../../../resource/scss/game/followword/followword.scss';
 import { Link } from 'react-router-dom';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 const FollowWord = ({ history }) => {
     const ws = useRef(null);
-    const oldWs = useRef(null);
+
     const [socketData, setSocketData] = useState('');
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
     const [startWord, setStartWord] = useState('');
     const [start, setStart] = useState(false);
     const [turn, setTurn] = useState(true);
+    const [timer, setTimer] = useState(120);
+    const [userTimer, setUserTimer] = useState(10);
+
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = '175.114.130.19';
-    const URL =
-        'ws://' +
-        ip +
-        ':8181/api/game/followword?name=' +
-        id +
-        '&turn=' +
-        (turn ? 'turn' : 'notturn');
+    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + id;
 
     useEffect(() => {
         webSocketLogin();
 
         console.log('1111111111111111웹소켓로그인');
     }, []);
+
+    // useEffect(() => {
+    //     const limitTime = setInterval(() => {
+    //         setTimer((e) => e - 1);
+    //     }, 1000);
+    //     // console.log(timer + '초');
+    //     if (timer === 0) {
+    //         clearInterval(limitTime);
+    //         setTimer(120);
+    //         console.log('접근');
+    //         send('끝');
+    //     }
+    //     return () => {
+    //         clearInterval(limitTime);
+    //     };
+    // }, [start, timer]);
+    // const limitTime = () =>
+    //     setInterval(() => {
+    //         setTimer((e) => e - 1);
+    //     }, 1000);
+    // useEffect(() => {
+    //     if (turn) {
+    //         limitTime();
+    //         // console.log(timer + '초');
+    //         if (userTimer === 0) {
+    //             clearInterval(limitTime);
+    //             setUserTimer(10);
+    //             console.log('접근');
+    //             send('끝');
+    //         }
+    //         return () => {
+    //             clearInterval(limitTime);
+    //         };
+    //     }
+    // }, [turn, userTimer]);
+
     useEffect(() => {
         // const leave = history.block('페이지를 나가실건가요?');
         return () => {
             console.log('웹소켓로그아웃한다아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ');
-            // ws.current.close();
+            ws.current.close();
         };
     }, [history]);
 
@@ -51,15 +86,16 @@ const FollowWord = ({ history }) => {
                 wordInfo: dataSet.wordInfo,
                 char: dataSet.char,
                 turn: dataSet.turn,
+                result: dataSet.result,
             };
             console.log(dataSet);
             // console.log('11111111111 ' + dataSet.list);
             if (dataSet.list !== undefined) {
-                console.log('메인에서 진입');
                 console.log(dataSet.list);
 
                 setList(dataSet.list);
             }
+
             setSocketData(data);
             setTurn(dataSet.turn);
             if (!dataSet.char) {
@@ -70,6 +106,16 @@ const FollowWord = ({ history }) => {
                 } else {
                     setStart(false);
                 }
+            }
+            console.log('!!!!!!!!!!!!' + dataSet.re);
+            if (data.result !== undefined) {
+                console.log(data.result[0]);
+                console.log(data.result[0].name);
+                console.log(
+                    data.result.map((e) => {
+                        console.log(e.count);
+                    })
+                );
             }
         };
     });
@@ -183,6 +229,20 @@ const FollowWord = ({ history }) => {
     return (
         <>
             <div>{id}</div>
+            <div>시간:{timer}</div>
+            <ProgressBar
+                variant="danger"
+                now={(timer / 120) * 100}
+                label={`${timer}초`}
+                className="progress"
+            />
+            <ProgressBar
+                variant="warning"
+                now={userTimer * 10}
+                label={`${userTimer}초`}
+                className="progress"
+            />
+
             <Copy
                 list={list}
                 data={socketData}

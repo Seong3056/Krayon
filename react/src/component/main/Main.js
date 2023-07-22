@@ -8,7 +8,7 @@ import UserInfo from './UserInfo';
 import '../../resource/scss/main/Main.scss';
 import Chat from './Chat';
 import TypeHangul from '../../../node_modules/type-hangul/src/index';
-const Main = () => {
+const Main = ({ history }) => {
     const ws = useRef(null);
     const oldWs = useRef(null);
     const [socketData, setSocketData] = useState('');
@@ -117,14 +117,14 @@ const Main = () => {
     const disconnectSocket = () => {
         //     ws.current.close();
     };
+
     useEffect(() => {
         console.log(list);
     }, [list]);
-    useEffect(() => {}, [window.location.pathname]);
-
-    window.onload = () => {
+    useEffect(() => {
         webSocketLogin();
-    };
+    }, []);
+
     function test() {
         const $test = document.getElementById('test');
 
