@@ -83,17 +83,21 @@ public class CatchMindSocketChat {
 
         String name = map.get("name");
         String date = map.get("date");
+        //단어제출 받기
+        String sendAnswer = map.get("msg");//얘랑 wordInfo의 word와 일치하면 유저리스트에서의 다음사람을 그리미로 지정----맞추면 모두 턴을 false하고 리스트에서의 다음사람을 true로 지정해서 순서대로 그리미가 돈다.
+        log.info("msg: "+sendAnswer);
+
 
         objMap.put("name",name);
         objMap.put("date",date);
 
         log.info("userList"+ Arrays.toString(clients.toArray()));
-        if(sessionTurn != null) log.info("현재 턴:"+ sessionTurn.getRequestParameterMap().get("name").get(0));
+//        if(sessionTurn != null) log.info("현재 턴:"+ sessionTurn.getRequestParameterMap().get("name").get(0));
         Object[] clientsArray = clients.toArray();
         int index = Arrays.asList(clientsArray).indexOf(session);
 
 
-        if (map.containsKey("img")) { //입력값이 msg 일때
+        if (map.containsKey("img")) { //입력값이 img 일때
             log.info("메세지엔 접근했는데");
             if(sessionTurn == session) {
 

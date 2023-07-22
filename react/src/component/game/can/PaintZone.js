@@ -3,7 +3,7 @@ import { CanvasStyle } from "./style/canvas";
 
 const API = "http://localhost:8181/api/catch";
 
-export default function PaintZone({ data, sendImg, startWord, list }) {
+export default function PaintZone({ data, sendImg, crtWord, list }) {
   // useRef
   const canvasRef = useRef(null);
   const canvasRef2 = useRef(null);
@@ -115,7 +115,7 @@ export default function PaintZone({ data, sendImg, startWord, list }) {
   // };
 
   useEffect(() => {
-    if (!!startWord);
+    if (!!crtWord);
     if (data.wordInfo !== undefined) {
       console.log("단어" + data.wordInfo.pos);
       if (data.wordInfo.isVaild) {
@@ -136,7 +136,7 @@ export default function PaintZone({ data, sendImg, startWord, list }) {
 
   return (
     <>
-      <CanvasStyle>
+      {/* <CanvasStyle> */}
         <div className="view">
           <div className="sectionMyPage">
             {!userTurn ? (
@@ -152,7 +152,7 @@ export default function PaintZone({ data, sendImg, startWord, list }) {
             ) : (
               
               <div className="paintZone">
-              <div className="canvasWrap" onClick={sendCanvasData}>
+              <div className="canvasWrap" onClick={sendCanvasData} style={{ width: 800, height: 540, backgroundColor: "white" }}>
                 <canvas
                   className="canvas"
                   ref={canvasRef}
@@ -229,17 +229,26 @@ export default function PaintZone({ data, sendImg, startWord, list }) {
                   style={{ backgroundColor: "black" }}
                   onClick={() => handlePenColorChange("black")}
                 ></button>
+
+                
+              </div>
+
+              <div className="getQuiz" disabled={!userTurn}>
+                <p>문제</p>
+                <p>{crtWord}</p>
               </div>
             </div>
             )}
-          </div>
+            
+            </div>
         </div>
 
         {/*그림 데이터 읽어서 이미지 src에 확인하기*/}
-        <div style={{ backGroundColor: "#ffff00", width: 400, height: 270, marginTop: 500 }} disabled={!userTurn} >
+        
+      {/* </CanvasStyle> */}
+      <div style={{ backGroundColor: "#ffff00", width: 400, height: 270, marginTop: 500 }} disabled={!userTurn} >
           <canvas ref={canvasRef2} alt="" id="test1" width="400" height="270" />
         </div>
-      </CanvasStyle>
     </>
   );
 }

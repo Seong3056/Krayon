@@ -104,7 +104,7 @@ function Copy({ send, sendChar, data, list, startWord }) {
                 onKeyDown={(e) => {
                     if (e.keyCode === 13) {
                         CheckWord();
-                        document.getElementById('input').value = '';
+                        // document.getElementById('input').value = '';
                     }
                 }}
             />

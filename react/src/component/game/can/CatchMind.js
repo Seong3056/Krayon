@@ -18,9 +18,10 @@ const CatchMind = ({history}) => {
     const [socketData, setSocketData] = useState('');//수신한 데이터 저장
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
-    const [startWord, setStartWord] = useState('');
+    const [crtWord, setCrtWord] = useState('');
     const [start, setStart] = useState(false);
-    const [turn, setTurn] = useState(true);
+    const [turn, setTurn] = useState(false);
+    const [answer, setAnswer] = useState('');//정답작성
 
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
@@ -36,7 +37,6 @@ const CatchMind = ({history}) => {
     useEffect(() => {
       webSocketLogin();
     }, [])
-    
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
         sessionStorage.setItem('socketURL', URL);
@@ -45,27 +45,29 @@ const CatchMind = ({history}) => {
             //웹소켓에서 전송한 데이터를 수신 및 객체 저장
             console.log('웹소켓 수신 데이터: ' + message.data);
             const dataSet = JSON.parse(message.data);
+            console.log(dataSet);
             const data = {
                 name: dataSet.name,
                 img: dataSet.img,
                 date: dataSet.date,
-                turn: dataSet.turn
+                turn: dataSet.turn,
+                
             };
-            console.log(dataSet);//내가 누구고 여기 누가 있는지 그림데이터는 뭔지 확인
+            if(dataSet.wordInfo != undefined){
+                setCrtWord(dataSet.wordInfo.word);
+                console.log(dataSet.wordInfo.word);
+            }
+            
             if (dataSet.list !== undefined) {
                 console.log('메인에서 캐치마인드진입');
                 console.log(dataSet.list);
                 setList(dataSet.list);
             }
-            // console.log(dataSet.turn);
             setSocketData(data);
-            setTurn(dataSet.turn)
+            setTurn(dataSet.turn);
+            console.log("내턴값(단어표출!)"+dataSet.turn);
 
-            if (!!dataSet.startWord) {
-                setStartWord(dataSet.startWord.word);
-                console.log(dataSet.startWord);
-                
-            }
+           
         };
     });
 
@@ -73,7 +75,7 @@ const CatchMind = ({history}) => {
     const disconnectSocket = () => {
         ws.current.close();
     };
-    const sendImg = useCallback((img) => {
+    const sendImg = useCallback((img) => {//이미지 데이터 보내기
         //웹소켓으로 메세지 전송
         if (!chkLog) {
             //웹소켓 로그인안됬을경우 (!false)
@@ -112,7 +114,47 @@ const CatchMind = ({history}) => {
         // setMsg('');
     });
 
-    const gameStart = useCallback(() => {
+    const sendAnswer = useCallback((msg) => {//이미지 데이터 보내기
+        //웹소켓으로 메세지 전송
+        if (!chkLog) {
+            //웹소켓 로그인안됬을경우 (!false)
+            if (id === '') {
+                alert('이름을 입력하세요.');
+                document.getElementById('id').focus();
+                return;
+            }
+            // webSocketLogin();
+            setChkLog(true);
+        }
+        const date =
+            (new Date().getHours() < 10
+                ? '0' + new Date().getHours()
+                : new Date().getHours()) +
+            ':' +
+            (new Date().getMinutes() < 10
+                ? '0' + new Date().getMinutes()
+                : new Date().getMinutes());
+
+        if (msg !== '') {
+            //메세지를 data에 담아 백엔드로 JSON 객체 전송
+            const data = {
+                name: id,
+                msg:answer,
+                date: date,
+            }; //전송 데이터(JSON)
+
+            const temp = JSON.stringify(data);
+
+            ws.current.send(temp);
+            console.log("데이터 발신---"+msg);
+            setAnswer(''); // 전송 후 입력값 초기화
+        } else {
+            return;
+        }
+        // setMsg('');
+    });
+
+    const gameStart = useCallback(() => {//게임 시작 start true
         //웹소켓으로 메세지 전송
             console.log(URL);
         const date =
@@ -145,12 +187,22 @@ const CatchMind = ({history}) => {
     <div>{id}</div>
     <div className='view'>
         <div class="sectionMypage" >
-            <PaintZone data={socketData} sendImg={sendImg} startWord={startWord} list={list} />
+            <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} />
+            <input 
+            type="text" 
+            id="answer" 
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)} 
+            placeholder="정답 또는 채팅을 입력해주세요!"
+            onKeyDown={(e) => {
+                if (e.keyCode === 13) {
+                    sendAnswer();
+                }
+            }} 
+            />
         </div>
-        <div class="can-bottom">
-            {/* <Chatting className = "canChat"/> */}
-            {/* <GetQuiz className = "getQuiz"/> */}
-        </div>
+            
+
     </div>
 
         <button onClick={gameStart}>게임시작</button>
