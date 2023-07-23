@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import "./index.css";
+import './index.css';
 
 import Main from "./component/main/Main";
 import Tab from "./component/Tab";
@@ -14,6 +14,7 @@ import game from "./component/game/game";
 import CatchMind from "./component/game/can/CatchMind";
 import WordMatch from "./component/game/wordmatch/WordMatch";
 import SearchApp from "./component/search/SearchApp";
+import Login from './component/Login';
 
 const App = () => {
   return (

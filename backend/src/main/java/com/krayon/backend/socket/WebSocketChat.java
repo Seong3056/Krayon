@@ -1,34 +1,32 @@
 package com.krayon.backend.socket;
 
-import com.krayon.backend.socket.service.ConversionJson;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.krayon.backend.korean.WordService;
+import com.krayon.backend.socket.util.ConversionJson;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.BinaryMessage;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
 import java.util.*;
 
 @Service
 @Slf4j
 
-@ServerEndpoint("/socket/chatt")
+@ServerEndpoint("/api/chatt")
+
 public class WebSocketChat {
     //이페이지에 접속해있는 유저 세션을 담은 리스트 (Set)
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     //데이터값을 JSON 형태로 변환해주는 클래스 선언
     ConversionJson c = new ConversionJson();
-    
+    public WordService wordService;
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
@@ -36,6 +34,7 @@ public class WebSocketChat {
         Map<String, List<String>> res = session.getRequestParameterMap();
         String id = res.get("id").get(0);
         log.info("시작");
+
 //        log.info(session.getId());
 //        log.info(session.getContainer().toString());
 //        log.info(session.getOpenSessions().toString());
@@ -56,7 +55,7 @@ public class WebSocketChat {
         log.info("res={}", res);
         log.info(Arrays.toString(clients.toArray()));
         System.out.println("id = " + id);
-        String conversion = c.conversion("open",clients,id,"시스템");
+        String conversion = c.conversion("open",clients,  id,"시스템");
 
 
 
@@ -65,19 +64,29 @@ public class WebSocketChat {
         for( Session s :clients){
             s.getBasicRemote().sendText(conversion);
         }
+
     }
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
         log.info("receive message : {}", message);
+        ObjectMapper json = new ObjectMapper();
+        Map<String, String > map = json.readValue((String) message, new TypeReference<Map<String, String>>() {});
 
-        for (Session s : clients) {
+
+        if(map.containsKey("msg")) {
+            for (Session s : clients) {
             log.info("send data : {}", message);
-            s.getBasicRemote().sendText(message);
+            s.getBasicRemote().sendText((String) message);
 
+            }
+        } else if(map.containsKey("room")){
+            for(Session s: clients){
+//                s.getBasicRemote().sendBinary();
+            }
         }
     }
-    @OnMessage
+
 
 
 

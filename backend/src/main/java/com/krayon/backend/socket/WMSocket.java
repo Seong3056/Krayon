@@ -1,5 +1,7 @@
 package com.krayon.backend.socket;
 
+import com.krayon.backend.korean.WordService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +15,21 @@ import java.util.*;
 
 @Service
 @Slf4j
-@ServerEndpoint("/socket/game")
-public class OtherSocketChat {
+@ServerEndpoint("/api/game/WM")
+@RequiredArgsConstructor
+public class WMSocket {
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
-
+    private final WordService wordService;
     @OnOpen
     public void onOpen(Session session) {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
         log.info("res={}", res);
 
+
         if(!clients.contains(session)) {
             clients.add(session);
-            log.info("session open : {}", session);
+            log.info("WM session open : {}", session);
         }else{
             log.info("이미 연결된 session");
         }

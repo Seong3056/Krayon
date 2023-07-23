@@ -1,11 +1,14 @@
 import React from 'react';
 import '../../resource/scss/main/UserInfo.scss';
-const UserInfo = () => {
+const UserInfo = ({ id }) => {
     return (
         <div className="box">
-            <img src="../../resource/image/test/anonymous.jpg" alt="" />
+            <img
+                src={require('../../resource/image/test/anonymous.jpg')}
+                alt=""
+            />
             <div class="info">
-                <p>아이디123</p>
+                <p>{id}님</p>
                 <p>
                     점수: <span>3852</span>
                 </p>
