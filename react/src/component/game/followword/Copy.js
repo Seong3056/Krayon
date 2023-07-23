@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { json } from 'react-router-dom';
 
-function Copy({ send, sendChar, data, list, startWord }) {
+function Copy({ send, sendChar, data, list, startWord, turn }) {
     const [currentWord, setCurrentWord] = useState('');
     const [previousWord, setPreviousWord] = useState('');
     const [inputValue, setInputValue] = useState('');
