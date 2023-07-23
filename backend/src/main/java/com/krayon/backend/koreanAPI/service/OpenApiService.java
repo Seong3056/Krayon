@@ -1,7 +1,9 @@
+
 package com.krayon.backend.koreanAPI.service;
 
 
-
+import com.krayon.backend.koreanAPI.entity.Word;
+import com.krayon.backend.koreanAPI.repository.WordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.json.*;
 import org.springframework.stereotype.Service;
@@ -18,15 +20,25 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.krayon.backend.config.CorsConfig;
+
+import javax.transaction.Transactional;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 
 @Service
 @Slf4j
+@Transactional
 public class OpenApiService {
     private static final String API_KEY = "BAAA5C2F46E8178AC1D5714D4775EAB5";
     private static final String BASE_URL = "https://opendict.korean.go.kr/api/search";
+
+    private final WordRepository wordRepository;
+
+    public OpenApiService(WordRepository wordRepository) {
+        this.wordRepository = wordRepository;
+    }
+
 
     public List<Map<String, String>> getWordsContaining(String searchWord) {
         List<Map<String, String>> wordList = new ArrayList<>();
@@ -74,18 +86,14 @@ public class OpenApiService {
 
                         // Replace caret symbol (^) with underscore (_)
                         // ...
-
-// Replace caret symbol (^) with underscore (_) and space
-                        definition = definition.replace("^", " ").replace("_", " ");
-                        wordValue = wordValue.replace("^", " ").replace("_", " ");
+                        // Replace caret symbol (^) with underscore (_) and space
+                        definition = definition.replace("^", " ").replace("_", " ").replace("<FL>", "").trim();
+                        wordValue = wordValue.replace("^", " ").replace("_", " ").replace("<FL>", "").trim();
 
                         log.info("            " + definition);
                         wordMap.put("definition", definition);
                         wordMap.put("word", wordValue);
                         log.info("+++++++++++++++++++++++" + wordMap.toString() + "+++++++++++++++++++++++");
-
-// ...
-
                     }
                     wordList.add(wordMap);
                     log.info("================" + wordList.toString() + "==================");
@@ -103,6 +111,33 @@ public class OpenApiService {
         }
         return wordList;
     }
+
+
+
+
+    public void saveWordsContaining(String searchWord) {
+        List<Map<String, String>> wordList = getWordsContaining(searchWord);
+
+        if (!wordList.isEmpty()) {
+            List<Word> wordsToSave = wordList.stream()
+                    .map(wordMap -> {
+                        Word wordEntity = new Word();
+                        wordEntity.setWord(wordMap.get("word"));
+                        wordEntity.setDefinition(wordMap.get("definition"));
+                        return wordEntity;
+                    })
+                    .collect(Collectors.toList());
+
+            wordRepository.saveAll(wordsToSave);
+        }
+    }
+
+
+
+
+
+
+
 
 
     // JSON 형식 유효성 검사 함수

@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -33,6 +34,30 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.json:json:20210307' //JSON라이브러리인 org.json -> org.json 및 org.json.JSONObject 사용가능
+
+
+	implementation 'org.springframework.boot:spring-boot-starter-web' //토스
+	implementation 'com.fasterxml.jackson.core:jackson-databind' //토스
+
+	implementation 'org.apache.commons:commons-text:1.9' //사전
+
+
+
+	// Toss API 사용을 위한 HttpClient 라이브러리
+	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+	// JSON 라이브러리
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	// JSON 파싱을 위한 Jackson 라이브러리
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0'
+	// 토스페이먼츠 API URL 설정
+	ext {
+		tossApiUrl = "https://api.tosspayments.com/v1"
+	}
+
+	//토스페이
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
 
 
@@ -54,4 +79,11 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+//토스페이 -> 실행 시에 런타임 종속성을 별도의 디렉토리로 복사하여 JAR 파일에 포함시키는 역할을 합니다.
+task copyBundledDependencies(type: Copy) {
+	from(configurations.runtimeClasspath)
+	into "${buildDir}/libs"
+	rename { file -> file.name = file.name.replace("jar", "jar.original") }
 }
