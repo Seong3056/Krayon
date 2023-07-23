@@ -63,6 +63,7 @@ dependencies {
 
 	// 입력값 검증 라이브러리
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation group: 'org.json', name: 'json', version: '20090211'
 	//jackson
 //	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 //	implementation 'com.fasterxml.jackson.core:jackson-core:2.14.2'

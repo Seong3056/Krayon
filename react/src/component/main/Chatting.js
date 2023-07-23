@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../../resource/scss/main/Chatting.scss';
+// import '../../resource/scss/main/Chatting.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import ChatItem from './ChatItem';
 
