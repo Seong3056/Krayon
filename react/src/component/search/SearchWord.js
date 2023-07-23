@@ -135,68 +135,6 @@ const SearchForm = () => {
       ) : (
         searchWord && <p className="no-results"></p>
       )}
-
-      <style>
-        {`
-          .search-form {
-            width: 500px;
-            margin: 0 auto;
-          }
-
-          .input-group {
-            margin-bottom: 1rem;
-          }
-
-          .form-control {
-            border-radius: 0.25rem;
-            font-size: 1rem;
-          }
-
-          .btn-primary {
-            border-radius: 0.25rem;
-            font-size: 1rem;
-          }
-
-          .error-message {
-            color: red;
-            margin-top: 1rem;
-          }
-
-          .search-results {
-            margin-top: 1rem;
-            font-weight: bold;
-          }
-
-          .search-results-list {
-            margin-top: 1rem;
-          }
-
-          .search-results-list div {
-            margin-bottom: 0.5rem;
-          }
-
-          .search-results-list strong {
-            margin-right: 0.5rem;
-          }
-
-          .search-here {
-            border: 2px solid #6c757d;
-            border-radius: 0.25rem;
-            padding: 1rem;
-          }
-
-          .collapse-toggle,
-          .expand-toggle {
-            cursor: pointer;
-            color: #007bff;
-            margin-left: 0.5rem;
-          }
-
-          .game-header {
-            text-align: center;
-          }
-        `}
-      </style>
     </div>
   );
 };
