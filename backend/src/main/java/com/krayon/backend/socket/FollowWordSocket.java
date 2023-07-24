@@ -201,12 +201,15 @@ public class FollowWordSocket {
                       sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
                       objMap.replace("turn",true);
                   }
-                  String user = sessionTurn.getRequestParameterMap().get("name").get(0);
-                  objMap.put("user",user);
-                  message=c.conversionWord(objMap, true);
-                  log.info("session:{} send data : {}",clientsArray[i], message);
-                  ((Session)clientsArray[i]).getBasicRemote().sendText(message);
               }
+                for (Session s : clients) {
+                    String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                    objMap.put("user",user);
+                    message=c.conversionWord(objMap, true);
+
+                    s.getBasicRemote().sendText(message);
+                }
+
             } else {
                 for (Session s : clients) {
                     s.getBasicRemote().sendText(message);
@@ -220,11 +223,15 @@ public class FollowWordSocket {
         } else if(map.containsKey("start")){ //게임시작버튼이 눌렸을때
             if(map.get("start").equals("true")){
                 sessionTurn = session;
-                Map<String, String> randomWord = wordService.randomWord("명사");
+                Map<String, String> randomWord = new HashMap<>();
+                while (true) {
+                    randomWord = wordService.randomWord("명사");
+                    if(randomWord != null) break;
+                }
                 objMap.put("word",randomWord.get("word"));
                 objMap.put("definition",randomWord.get("definition"));
                 objMap.put("pos","");
-                
+//                objMap.put("word",randomWord.get("word"));
                 currentWordMap.put("word",randomWord.get("word"));
                 currentWordMap.put("definition",randomWord.get("definition"));
                 currentWordMap.put("pos","");
@@ -234,6 +241,8 @@ public class FollowWordSocket {
                 for (Session s : clients) {
                     objMap.put("turn",false);
                     if(s == sessionTurn) objMap.replace("turn",true);
+                    String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                    objMap.put("user",user);
                     message = c.conversionWord(objMap,true);
                     log.info(message);
                     s.getBasicRemote().sendText(message);

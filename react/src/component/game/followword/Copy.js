@@ -53,7 +53,7 @@ function Copy({ send, sendChar, data, list, startWord, turn }) {
         if (data.wordInfo !== undefined) {
             // setPreviousWord(data.wordInfo.word);
             // setDefinition(data.wordInfo.definition);
-            // console.log('단어' + data.wordInfo.pos);
+            console.log('단어' + data.wordInfo);
             if (data.wordInfo.word !== undefined) {
                 setPreviousWord(data.wordInfo.word);
                 // alert('단어뜻: ' + data.wordInfo.definition);
@@ -82,7 +82,6 @@ function Copy({ send, sendChar, data, list, startWord, turn }) {
     return (
         <div className="play">
             <div className="game">
-                <div className="definition">{definition}</div>
                 <div className="preview">
                     <div className="prev">
                         {!!previousWord
@@ -100,6 +99,7 @@ function Copy({ send, sendChar, data, list, startWord, turn }) {
                     <div className="current">{currentWord}</div>
                     {/* {definition} */}
                 </div>
+                <div className="definition">{definition}</div>
             </div>
             <div className="chat">
                 <input

@@ -68,15 +68,6 @@ const Chat = ({ ws, textData, send }) => {
                             }
                         }}
                     />
-                    {/* <input
-                        type="button"
-                        value="전송"
-                        id="btnSend"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            send(msg);
-                        }}
-                    /> */}
                 </div>
             </div>
         </>
