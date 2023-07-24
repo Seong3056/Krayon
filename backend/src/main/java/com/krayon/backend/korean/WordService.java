@@ -125,7 +125,6 @@ public class WordService {
 			String findWord = wordInfo.getString("word");
 			replaceWord = findWord.replace("^"," ").replace("-"," ").replace("_"," ");
 
-			log.info("replaceWord: ", replaceWord);
 
 			JSONObject senseInfo = item.getJSONObject("senseInfo");
 			definition = senseInfo.getString("definition");
@@ -179,8 +178,11 @@ public class WordService {
 				JSONObject senseInfo = item.getJSONObject("senseInfo");
 				definition = senseInfo.getString("definition");
 				String findWordPos = senseInfo.getString("pos");
-				log.warn(findWord+findWordPos);
-				if(!findWordPos.equals(pos)) {log.info("다시실행"); continue; }
+				System.out.println("findWordPos = " + findWordPos);
+				String findWordType = senseInfo.getString("type");
+				System.out.println("findWordType = " + findWordType);
+//				log.warn(findWord+findWordPos);
+				if(findWordPos == null || !findWordPos.contains(pos) || findWord.length()<2) { log.info("다시실행"); continue; }
 				else {
 					replaceWord = findWord.replace("^", " ").replace("-", " ").replace("_", " ");
 					map.put("word", replaceWord);
@@ -195,7 +197,7 @@ public class WordService {
 		}
 
 
-		log.info(map.toString());
+
 		return map;
 	}
 	public static String getTagValue(String tag, Element eElement) {

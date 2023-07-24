@@ -77,17 +77,14 @@ const WordQuiz = ({ sendStart, data, send }) => {
   };
 
   return (
-    <div className="quizBox">
-      <div id="textBox">{quizDefinition}</div>
-      <button onClick={sendStart}>Quiz Start</button>
-      <input
-        type="text"
-        id="in"
-        onKeyDown={(e) => {
-          if (e.key == "Enter") send(document.getElementById("in").value);
-        }}
-      />
-      <button onClick={handleSubmit}>Submit</button>
+    <div className="play">
+      <div className="game">
+        <div className="textBox">{quizDefinition}</div>
+      </div>
+      <div className="chat">
+        <input className="input" type="text" />
+        <button className="button" onClick={runWordQuiz}></button>
+      </div>
     </div>
   );
 };

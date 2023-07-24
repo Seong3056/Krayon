@@ -1,9 +1,10 @@
 .tab{
     height: 30px;
-    position: absolute;
-    top: -30px;
-    left: 8px;
-    z-index: -2;
+    position: fixed;
+    top: 0;
+    left: 10%;
+    transform: translateX(-10%);
+    z-index: -200;
     
     
         display: flex;

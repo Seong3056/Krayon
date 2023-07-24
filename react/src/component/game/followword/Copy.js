@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { json } from 'react-router-dom';
+import '../../../resource/scss/gametest/followword/Play.scss';
+import '../../../resource/scss/game/followword/followword.scss';
 
-function Copy({ send, sendChar, data, list, startWord }) {
+function Copy({ send, sendChar, data, list, startWord, turn }) {
     const [currentWord, setCurrentWord] = useState('');
-    const [previousWord, setPreviousWord] = useState('아이');
+    const [previousWord, setPreviousWord] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [gameStarted, setGameStarted] = useState(false);
-    const [definition, setDefinition] = useState('');
-    const [userTurn, setUserTurn] = useState(true);
+    const [definition, setDefinition] = useState('게임시작을 눌러주세요!');
+    const [userTurn, setUserTurn] = useState(false);
     const API = 'http://localhost:8181/api/followWord';
 
     const handleInputChange = (event) => {
@@ -43,12 +45,16 @@ function Copy({ send, sendChar, data, list, startWord }) {
         }
     };
     useEffect(() => {
-        if (!!startWord) setPreviousWord(startWord);
+        if (!!startWord) {
+            setPreviousWord(startWord.word);
+            setDefinition(startWord.definition);
+        }
+        console.log(data.wordInfo);
         if (data.wordInfo !== undefined) {
             // setPreviousWord(data.wordInfo.word);
             // setDefinition(data.wordInfo.definition);
-            console.log('단어' + data.wordInfo.pos);
-            if (data.wordInfo.isVaild) {
+            // console.log('단어' + data.wordInfo.pos);
+            if (data.wordInfo.word !== undefined) {
                 setPreviousWord(data.wordInfo.word);
                 // alert('단어뜻: ' + data.wordInfo.definition);
 
@@ -69,37 +75,49 @@ function Copy({ send, sendChar, data, list, startWord }) {
         console.log('!!!!!!!!!!!!!!!' + data.turn);
         if (data.turn !== undefined) {
             setUserTurn(data.turn);
-            console.log('turn에 접근');
+            console.log('turn에 접근' + data.turn);
         }
     }, [data]);
 
     return (
-        <div className="in-game">
-            <div className="definition">{definition}</div>
-            <div className="preview">
-                <div className="prev">
-                    {previousWord.substring(0, previousWord.length - 1)}
-                    <span className="last-char">
-                        {previousWord.substring(previousWord.length - 1)}
-                    </span>
-                </div>
+        <div className="play">
+            <div className="game">
+                <div className="definition">{definition}</div>
+                <div className="preview">
+                    <div className="prev">
+                        {!!previousWord
+                            ? previousWord.substring(0, previousWord.length - 1)
+                            : ''}
+                        <span className="last-char">
+                            {!!previousWord
+                                ? previousWord.substring(
+                                      previousWord.length - 1
+                                  )
+                                : ''}
+                        </span>
+                    </div>
 
-                <div className="current">{currentWord}</div>
-                {/* {definition} */}
+                    <div className="current">{currentWord}</div>
+                    {/* {definition} */}
+                </div>
             </div>
-            <input
-                disabled={!userTurn}
-                type="text"
-                // value={inputValue}
-                id="input"
-                onChange={(e) => sendChar(handleInputChange(e))}
-                onKeyDown={(e) => {
-                    if (e.keyCode === 13) {
-                        CheckWord();
-                        document.getElementById('input').value = '';
-                    }
-                }}
-            />
+            <div className="chat">
+                <input
+                    // disabled={!userTurn}
+                    type="text"
+                    // value={inputValue}
+                    // id="input"
+                    className="input"
+                    onChange={(e) => sendChar(handleInputChange(e))}
+                    onKeyDown={(e) => {
+                        if (e.keyCode === 13) {
+                            CheckWord();
+                            document.querySelector('.input').value = '';
+                        }
+                    }}
+                />
+                <button className="button">입력</button>
+            </div>
         </div>
     );
 }

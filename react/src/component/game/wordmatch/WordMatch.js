@@ -3,6 +3,9 @@ import WordQuiz from "./WordQuiz";
 import WMPlayer from "./WMPlayer";
 
 import "../../../resource/scss/game/wordmatch/WordMatch.scss";
+import User from "../User";
+import Info from "../Info";
+import "../../../resource/scss/game/wordmatch/WordMatch.scss";
 
 const WordMatch = () => {
   const ws = useRef(null);
@@ -50,6 +53,52 @@ const WordMatch = () => {
       setSocketData(data);
     };
   });
+
+  const sendStart = useCallback(() => {
+    //웹소켓으로 메세지 전송
+    if (!chkLog) {
+      //웹소켓 로그인안됬을경우 (!false)
+      if (id === "") {
+        alert("이름을 입력하세요.");
+        document.getElementById("id").focus();
+        return;
+      }
+      //   webSocketLogin();
+      setChkLog(true);
+    }
+    const date =
+      (new Date().getHours() < 10
+        ? "0" + new Date().getHours()
+        : new Date().getHours()) +
+      ":" +
+      (new Date().getMinutes() < 10
+        ? "0" + new Date().getMinutes()
+        : new Date().getMinutes());
+
+    //메세지를 data에 담아 백엔드로 JSON 객체 전송
+    const data = {
+      name: id,
+      start: true,
+      date: date,
+    }; //전송 데이터(JSON)
+
+    const temp = JSON.stringify(data);
+
+    // if (ws.current.readyState === 0) {
+    //     //readyState는 웹 소켓 연결 상태를 나타냄
+    //     ws.current.onopen = () => {
+    //         //webSocket이 맺어지고 난 후, 실행
+    //         console.log(ws.current.readyState);
+    //         ws.current.send(temp);
+    //     };
+    // } else {
+    ws.current.send(temp);
+
+    // }
+
+    // setMsg('');
+  });
+  // send, list, socketData. list=["성민","userid2"] socketData={name"성민",img"안녕하세요",date"23:23"}
 
   const send = useCallback((msg) => {
     //웹소켓으로 메세지 전송
@@ -102,56 +151,14 @@ const WordMatch = () => {
     }
     // setMsg('');
   });
-  const sendStart = useCallback(() => {
-    //웹소켓으로 메세지 전송
-    if (!chkLog) {
-      //웹소켓 로그인안됬을경우 (!false)
-      if (id === "") {
-        alert("이름을 입력하세요.");
-        document.getElementById("id").focus();
-        return;
-      }
-      //   webSocketLogin();
-      setChkLog(true);
-    }
-    const date =
-      (new Date().getHours() < 10
-        ? "0" + new Date().getHours()
-        : new Date().getHours()) +
-      ":" +
-      (new Date().getMinutes() < 10
-        ? "0" + new Date().getMinutes()
-        : new Date().getMinutes());
 
-    //메세지를 data에 담아 백엔드로 JSON 객체 전송
-    const data = {
-      name: id,
-      start: true,
-      date: date,
-    }; //전송 데이터(JSON)
-
-    const temp = JSON.stringify(data);
-
-    // if (ws.current.readyState === 0) {
-    //     //readyState는 웹 소켓 연결 상태를 나타냄
-    //     ws.current.onopen = () => {
-    //         //webSocket이 맺어지고 난 후, 실행
-    //         console.log(ws.current.readyState);
-    //         ws.current.send(temp);
-    //     };
-    // } else {
-    ws.current.send(temp);
-
-    // }
-
-    // setMsg('');
-  });
-  // send, list, socketData. list=["성민","userid2"] socketData={name"성민",img"안녕하세요",date"23:23"}
   return (
-    <div className="wrapper">
-      <WordQuiz data={socketData} sendStart={sendStart} send={send} />
-      <WMPlayer />
-    </div>
+    <>
+      <User data={socketData} list={list} />
+      <WordQuiz />
+      <Info />
+      {/* <WMPlayer list={list} /> */}
+    </>
   );
 };
 
