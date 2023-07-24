@@ -1,17 +1,20 @@
 package com.krayon.backend.user.api;
 
-//import com.krayon.backend.auth.TokenUserInfo;
+import com.krayon.backend.auth.TokenProvider;
+import com.krayon.backend.auth.TokenUserInfo;
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
+import com.krayon.backend.user.dto.request.GuestDTO;
 import com.krayon.backend.user.dto.request.LoginRequestDTO;
 import com.krayon.backend.user.dto.request.UserRequestDTO;
 import com.krayon.backend.user.dto.response.LoginResponseDTO;
 import com.krayon.backend.user.dto.response.UserResponseDTO;
+import com.krayon.backend.user.entity.User;
 import com.krayon.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +22,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/krayon")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
+    private final TokenProvider tokenProvider;
 
-    @PostMapping
+    @PostMapping("/join")
     // 회원 가입 요청 처리
     public ResponseEntity<?> join(
             @Validated @RequestBody UserRequestDTO dto, BindingResult result
@@ -52,7 +56,6 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody LoginRequestDTO dto, BindingResult result) {
-
         try {
             LoginResponseDTO responseDTO = userService.authenticate(dto);
             return ResponseEntity.ok().body(responseDTO);
@@ -93,4 +96,15 @@ public class UserController {
 //            return ResponseEntity.internalServerError().body(UserResponseDTO.builder().error(e.getMessage()));
 //        }
 //    }
+
+    @PostMapping("/guest")
+    public ResponseEntity<?> guest(
+            @RequestBody GuestDTO dto ,
+            BindingResult result
+    ) {
+        String guestId = dto.getGuestId();
+        String token = tokenProvider.guestToken(guestId);
+        log.info("token : " + token);
+        return ResponseEntity.ok().body(token);
+    }
 }

@@ -15,12 +15,12 @@ public class LoginResponseDTO {
     private String userId;
     private String token;
 
-//    public LoginResponseDTO(User user, String token) {
-//        this.userId = user.getUserId();
-//        this.token = token;
-//    }
-
-    public LoginResponseDTO(User user) {
+    public LoginResponseDTO(User user, String token) {
         this.userId = user.getUserId();
+        this.token = token;
     }
+
+//    public LoginResponseDTO(User user) {
+//        this.userId = user.getUserId();
+//    }
 }

@@ -19,6 +19,10 @@ public class User {
 
 	@Id
 	private String userId;
+
 	@Column(nullable = false)
 	private String userPw;
+
+	@Column(nullable = false)
+	private int cash;
 }

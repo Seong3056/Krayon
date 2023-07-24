@@ -14,6 +14,9 @@ import game from './component/game/game';
 import CatchMind from './component/game/can/CatchMind';
 import WordMatch from './component/game/wordmatch/WordMatch';
 
+import Login from './component/user/Login';
+import Join from './component/user/Join';
+
 const App = () => {
     return (
         <div className="section">
@@ -22,10 +25,13 @@ const App = () => {
                 <Route path="/" Component={Main} />
                 <Route path="/user" Component={User} />
                 <Route path="/shop" Component={Shop} />
+                <Route path="login" Component={Login} />
+                <Route path="join" Component={Join} />
+                
                 <Route path="/game" Component={game}>
-                <Route path="followword" Component={FollowWord} />
-                <Route path="can" Component={CatchMind} />
-                <Route path="wordmatch" Component={WordMatch} />
+                    <Route path="followword" Component={FollowWord} />
+                    <Route path="can" Component={CatchMind} />
+                    <Route path="wordmatch" Component={WordMatch} />                    
                 </Route>
             </Routes>
         </div>
