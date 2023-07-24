@@ -4,12 +4,17 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 // import Chatting from '../main/Chatting'
 // import UserList from '../main/UserList'
 import "../../../resource/scss/game/can/can.scss"
+
+
+
 import PaintZone from './PaintZone'
 import Chatting from '../../main/Chatting'
 import UserInfo from '../../main/UserInfo'
 import UserList from '../../main/UserList'
 import GetQuiz from './style/GetQuiz'
 import { Link } from 'react-router-dom'
+import User from '../User'
+import Info from '../Info'
 
 const CatchMind = ({history}) => {
     //웹소켓 객체저장, 유저리스트
@@ -54,8 +59,10 @@ const CatchMind = ({history}) => {
                 
             };
             if(dataSet.wordInfo != undefined){
-                setCrtWord(dataSet.wordInfo.word);
-                console.log(dataSet.wordInfo.word);
+                if(!dataSet.wordInfo.isVaild){
+                    setCrtWord(dataSet.wordInfo.word);
+                console.log("dnjemdlsvh"+dataSet.wordInfo.word);
+                }
             }
             
             if (dataSet.list !== undefined) {
@@ -64,7 +71,7 @@ const CatchMind = ({history}) => {
                 setList(dataSet.list);
             }
             setSocketData(data);
-            setTurn(dataSet.turn);
+            if(dataSet.turn !== undefined)setTurn(dataSet.turn);
             console.log("내턴값(단어표출!)"+dataSet.turn);
 
            
@@ -114,7 +121,7 @@ const CatchMind = ({history}) => {
         // setMsg('');
     });
 
-    const sendAnswer = useCallback((msg) => {//이미지 데이터 보내기
+    const sendAnswer = useCallback((answer) => {//이미지 데이터 보내기
         //웹소켓으로 메세지 전송
         if (!chkLog) {
             //웹소켓 로그인안됬을경우 (!false)
@@ -135,18 +142,18 @@ const CatchMind = ({history}) => {
                 ? '0' + new Date().getMinutes()
                 : new Date().getMinutes());
 
-        if (msg !== '') {
+        if (answer !== '') {
             //메세지를 data에 담아 백엔드로 JSON 객체 전송
             const data = {
                 name: id,
-                msg:answer,
+                answer: answer,
                 date: date,
             }; //전송 데이터(JSON)
 
             const temp = JSON.stringify(data);
 
             ws.current.send(temp);
-            console.log("데이터 발신---"+msg);
+            console.log("데이터 발신---"+answer);
             setAnswer(''); // 전송 후 입력값 초기화
         } else {
             return;
@@ -184,13 +191,14 @@ const CatchMind = ({history}) => {
 
   return (
     <>
-    <div>{id}</div>
-    <div className='view'>
-        <div class="sectionMypage" >
-            <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} />
-            <input 
+    {/* <div>{id}</div> */}
+    <User data={socketData} list={list} />
+    
+        {/* <div class="sectionMypage" > */}
+            <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} sendAnswer={sendAnswer}/>
+            {/* <input 
             type="text" 
-            id="answer" 
+            className="input"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)} 
             placeholder="정답 또는 채팅을 입력해주세요!"
@@ -199,29 +207,30 @@ const CatchMind = ({history}) => {
                     sendAnswer();
                 }
             }} 
-            />
-        </div>
+            /> */}
+        {/* </div> */}
             
 
-    </div>
-
-        <button onClick={gameStart}>게임시작</button>
+    
+    <Info gameStart={gameStart} />
+        {/* <button onClick={gameStart}>게임시작</button> */}
         
         
-        <div className="sectionUserList">
-            <UserInfo className = "userInfo"/>
-            {/* <UserList className = "userList"/> */}
-            <Link to="/" onClick={disconnectSocket}>
-                나가기
-            </Link>
-        </div>
-
-        {list.map((e) => (
-                <div>{e}</div>
-            ))}
+      
         
     </>
   )
 }
 
 export default CatchMind
+//   <div className="sectionUserList">
+{/* <UserInfo className = "userInfo"/> */}
+{/* <UserList className = "userList"/> */}
+{/* <Link to="/" onClick={disconnectSocket}> */}
+    // 나가기
+// </Link>
+// </div>
+
+// {list.map((e) => (
+    // <div>{e}</div>
+// ))}

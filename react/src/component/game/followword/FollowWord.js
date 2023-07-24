@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import CheckWord from './CheckWord';
 import Copy from './Copy';
 import '../../../resource/scss/game/followword/followword.scss';
-import '../../../resource/scss/gametest/followword/Info.scss';
+
 import '../../../resource/scss/gametest/followword/User.scss';
 import { Link } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';

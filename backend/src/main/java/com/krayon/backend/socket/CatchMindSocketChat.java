@@ -79,19 +79,20 @@ public class CatchMindSocketChat {
     public void onMessage(String message, Session session) throws IOException, JSONException {
         log.info("receive message : {}", message);
         ObjectMapper json = new ObjectMapper();
-        Map<String, String > map = json.readValue((String) message, new TypeReference<Map<String, String>>() {});
+        Map<String, String> map = json.readValue((String) message, new TypeReference<Map<String, String>>() {
+        });
 
         String name = map.get("name");
         String date = map.get("date");
         //단어제출 받기
-        String sendAnswer = map.get("msg");//얘랑 wordInfo의 word와 일치하면 유저리스트에서의 다음사람을 그리미로 지정----맞추면 모두 턴을 false하고 리스트에서의 다음사람을 true로 지정해서 순서대로 그리미가 돈다.
-        log.info("msg: "+sendAnswer);
+        String sendAnswer = map.get("answer");//얘랑 wordInfo의 word와 일치하면 유저리스트에서의 다음사람을 그리미로 지정----맞추면 모두 턴을 false하고 리스트에서의 다음사람을 true로 지정해서 순서대로 그리미가 돈다.
+        log.info("사용자가 입력한 answer: " + sendAnswer);
 
 
-        objMap.put("name",name);
-        objMap.put("date",date);
+        objMap.put("name", name);
+        objMap.put("date", date);
 
-        log.info("userList"+ Arrays.toString(clients.toArray()));
+        log.info("userList" + Arrays.toString(clients.toArray()));
 //        if(sessionTurn != null) log.info("현재 턴:"+ sessionTurn.getRequestParameterMap().get("name").get(0));
         Object[] clientsArray = clients.toArray();
         int index = Arrays.asList(clientsArray).indexOf(session);
@@ -99,93 +100,70 @@ public class CatchMindSocketChat {
 
         if (map.containsKey("img")) { //입력값이 img 일때
             log.info("메세지엔 접근했는데");
-            if(sessionTurn == session) {
+            if (sessionTurn == session) {
 
-                    for (Session s : clients) {
-                        s.getBasicRemote().sendText(message);
-                    }
-        }
-            else {
                 for (Session s : clients) {
                     s.getBasicRemote().sendText(message);
-                }}
+                }
+
             }
-        else if (map.containsKey("word")) { // 입력값이 word일때
-
-            String word = map.get("word");
-            log.info(message);
-            List<Map<String, String>> result = wordService.findWord(word);
-
-            if(result == null){
-                message = c.conversionWord(name,date,false);
-            } else{
-//                String definition = result.get(0).get("definition");
-                String pos = result.get(0).get("pos");
-                //여기서 obj에 값 put
-                objMap.put("word",word);
-                objMap.put("pos",pos);
-
-                currentWordMap.replace("word",word);
-                currentWordMap.replace("pos",pos);
-                System.out.println("currentWordMap = " + currentWordMap);
-                message = c.conversionWord(objMap,true);
-            }
-            for(int i =0;i<clients.size();i++){
-                objMap.put("turn",false);
-                log.info("i: "+i+"다음사람:"+(index+1)%clients.size());
-                if(i == (index+1)%clients.size()) objMap.replace("turn",true);
-                message = c.conversionWord(objMap,true);
-
-                log.info(i+"번째 "+ message);
-                ((Session)clientsArray[i]) .getBasicRemote().sendText(message);
-            }
-        } else if(map.containsKey("start")){ //게임시작버튼이 눌렸을때
-            if(map.get("start").equals("true")){
+        } else if (map.containsKey("start")) { //게임시작버튼이 눌렸을때
+            if (map.get("start").equals("true")) {
                 sessionTurn = session;
                 Map<String, String> randomWord = wordService.randomWord("명사");
-                objMap.put("word",randomWord.get("word"));
+                objMap.put("word", randomWord.get("word"));
 //                objMap.put("definition",randomWord.get("definition"));
-                objMap.put("pos","");
+                objMap.put("pos", "");
 
-                currentWordMap.put("word",randomWord.get("word"));
+                currentWordMap.put("word", randomWord.get("word"));
 //                currentWordMap.put("definition",randomWord.get("definition"));
-                currentWordMap.put("pos","");
+                currentWordMap.put("pos", "");
 //                System.out.println("startWord = " + startWord);
 
 
                 for (Session s : clients) {
-                    objMap.put("turn",false);
-                    if(s == sessionTurn) objMap.replace("turn",true);
-                    message = c.conversionWord(objMap,true);
+                    objMap.put("turn", false);
+                    if (s == sessionTurn) objMap.replace("turn", true);
+                    message = c.conversionWord(objMap, true);
                     log.info(message);
                     s.getBasicRemote().sendText(message);
                 }
             }
-        }
-        else if(sendAnswer.equals(currentWordMap.get("word"))){//정답입력하면 모두 false 주고 맞춘사람 true줘서 턴돌리기
+        } else if (map.containsKey("answer")) {//정답입력하면 모두 false 주고 맞춘사람 true줘서 턴돌리기
+            if (sendAnswer.equals(currentWordMap.get("word"))) {
+                for (int i = 0; i < clients.size(); i++) {
+                    if ((Session) clientsArray[i] == clientsArray[(index + 1) % clientsArray.length]) {
+                        sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
+                    }
 
-            for (Session s : clients) {
-                objMap.put("turn",false);
-                if(s == sessionTurn) objMap.replace("turn",true);
-                message = c.conversionWord(objMap,true);
-                log.info(message);
-                s.getBasicRemote().sendText(message);
+
+                    Map<String, String> randomWord = wordService.randomWord("명사");
+                    objMap.put("word", randomWord.get("word"));
+                    objMap.put("pos", "");
+
+                    currentWordMap.replace("word", randomWord.get("word"));
+                    currentWordMap.replace("pos", "");
+                    objMap.put("turn", false);
+                    String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                    objMap.put("user",user);
+                }
+                for (Session s : clients) {
+                    if (s == sessionTurn) objMap.replace("turn", true);
+                    message = c.conversionWord(objMap, true);
+                    log.info(message);
+                    s.getBasicRemote().sendText(message);
+                }
+            } else {
+                for (Session s : clients) {
+                    message = c.conversionWord(objMap, false);
+                    log.info(message);
+                    s.getBasicRemote().sendText(message);
+                }
             }
 
-            sessionTurn = session;
-            Map<String, String> randomWord = wordService.randomWord("명사");
-            objMap.put("word",randomWord.get("word"));
-//                objMap.put("definition",randomWord.get("definition"));
-            objMap.put("pos","");
-
-            currentWordMap.put("word",randomWord.get("word"));
-//                currentWordMap.put("definition",randomWord.get("definition"));
-            currentWordMap.put("pos","");
         }
 
     }
-
-
 
 
     @OnClose
@@ -197,12 +175,12 @@ public class CatchMindSocketChat {
 //        String turn = map.get("turn").get(0); //파라미터값
 
         Object[] clientsArray = clients.toArray(); //접속종료전 세션list
-        int index = (Arrays.asList(clientsArray).indexOf(session) + 1)%clientsArray.length; //접속종료유저의 세션list의 인덱스
+        int index = Arrays.asList(clientsArray).indexOf(session); //접속종료유저의 세션list의 인덱스
 
         log.error("삭제전"+clientsArray.toString());
         clients.remove(session); //세션list에서 해당유저 삭제
         clientsArray = clients.toArray(); //해당유저가 삭제된 세션list 재호출
-        sessionTurn = (Session) clientsArray[index];
+        sessionTurn = (Session) clientsArray[(index+1)%clientsArray.length];
         log.error("삭제후"+clientsArray.toString());
 
         log.info(clients.toString());

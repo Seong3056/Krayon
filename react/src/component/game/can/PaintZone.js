@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import { CanvasStyle } from "./style/canvas";
+import '../../../resource/scss/gametest/followword/Play.scss';
+import "../../../resource/scss/game/can/can.scss"
 
 const API = "http://localhost:8181/api/catch";
 
-export default function PaintZone({ data, sendImg, crtWord, list }) {
+export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) {
   // useRef
   const canvasRef = useRef(null);
   const canvasRef2 = useRef(null);
@@ -16,11 +18,13 @@ export default function PaintZone({ data, sendImg, crtWord, list }) {
   const [getPic, setGetPic] = useState();
   const [userTurn, setUserTurn] = useState(true);
 
+  const [answer, setAnswer] = useState('');//정답작성
+
   useEffect(() => {
     // canvas useRef
     const canvas = canvasRef.current;
     if (canvas) {
-      canvas.width = 800;
+      canvas.width = 980;
       canvas.height = 540;
       const ctx = canvas.getContext("2d");
       ctx.lineJoin = "round";
@@ -135,120 +139,130 @@ export default function PaintZone({ data, sendImg, crtWord, list }) {
   }, [data]);
 
   return (
-    <>
-      {/* <CanvasStyle> */}
-        <div className="view">
-          <div className="sectionMyPage">
-            {!userTurn ? (
-              <div>
-              <img
-                src={getPic}
-                id="test"
-                alt=""
-                style={{ width: 800, height: 540, backgroundColor: "white" }}
-              />
-            </div>
-              
-            ) : (
-              
-              <div className="paintZone">
-              <div className="canvasWrap" onClick={sendCanvasData} style={{ width: 800, height: 540, backgroundColor: "white" }}>
-                <canvas
-                  className="canvas"
-                  ref={canvasRef}
-                  onMouseDown={() => setPainting(true)}
-                  onMouseUp={() => setPainting(false)}
-                  onMouseMove={(e) => drawFn(e)}
-                  onMouseLeave={() => setPainting(false)}
-                  id="canvasDraw"
-                />
-              </div>
-
-              <div className="canvasTools">
-                <button id="resetBtn" onClick={resetCanvas}>
-                  전체 지우기
-                </button>
-                <button id="eraserBtn" onClick={eraseMode}>
-                  지우개
-                </button>
-                <button id="penBtn" onClick={penMode}>
-                  펜
-                </button>
-                <input
-                  className="boldBar"
-                  type="range"
-                  min="1"
-                  max="30"
-                  step="0.5"
-                  value={lineWidth}
-                  onChange={handleChangeLineWidth}
-                />
-
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "red" }}
-                  onClick={() => handlePenColorChange("red")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "orange" }}
-                  onClick={() => handlePenColorChange("orange")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "yellow" }}
-                  onClick={() => handlePenColorChange("yellow")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "green" }}
-                  onClick={() => handlePenColorChange("green")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "blue" }}
-                  onClick={() => handlePenColorChange("blue")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "indigo" }}
-                  onClick={() => handlePenColorChange("indigo")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "purple" }}
-                  onClick={() => handlePenColorChange("purple")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "brown" }}
-                  onClick={() => handlePenColorChange("brown")}
-                ></button>
-                <button
-                  className="paint"
-                  style={{ backgroundColor: "black" }}
-                  onClick={() => handlePenColorChange("black")}
-                ></button>
-
-                
-              </div>
-
-              <div className="getQuiz" disabled={!userTurn}>
-                <p>문제</p>
-                <p>{crtWord}</p>
-              </div>
-            </div>
-            )}
-            
-            </div>
-        </div>
-
-        {/*그림 데이터 읽어서 이미지 src에 확인하기*/}
+    <div className="play">
+    <div className="game">
+    {!userTurn ? (
+        <div>
+        <img
+          src={getPic}
+          id="test"
+          alt=""
+          style={{ width: 980, height: 540, backgroundColor: "white" }}
+        />
+      </div>
         
-      {/* </CanvasStyle> */}
-      <div style={{ backGroundColor: "#ffff00", width: 400, height: 270, marginTop: 500 }} disabled={!userTurn} >
-          <canvas ref={canvasRef2} alt="" id="test1" width="400" height="270" />
+      ) : (
+        
+      <div className="paintZone">
+
+        <div className="getQuiz" disabled={!userTurn}>
+          <p>문제 : {crtWord}</p>
         </div>
-    </>
+
+        <div className="canvasWrap" onClick={sendCanvasData} style={{ width: 980, height: 540, backgroundColor: "white" }}>
+          <canvas
+            className="canvas"
+            ref={canvasRef}
+            onMouseDown={() => setPainting(true)}
+            onMouseUp={() => setPainting(false)}
+            onMouseMove={(e) => drawFn(e)}
+            onMouseLeave={() => setPainting(false)}
+            id="canvasDraw"
+          />
+        </div>
+
+        <div className="canvasTools">
+          <button id="resetBtn" onClick={resetCanvas}>
+            전체 지우기
+          </button>
+          <button id="eraserBtn" onClick={eraseMode}>
+            지우개
+          </button>
+          <button id="penBtn" onClick={penMode}>
+            펜
+          </button>
+          <input
+            className="boldBar"
+            type="range"
+            min="1"
+            max="30"
+            step="0.5"
+            value={lineWidth}
+            onChange={handleChangeLineWidth}
+          />
+
+          <button
+            className="paint"
+            style={{ backgroundColor: "red" }}
+            onClick={() => handlePenColorChange("red")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "orange" }}
+            onClick={() => handlePenColorChange("orange")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "yellow" }}
+            onClick={() => handlePenColorChange("yellow")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "green" }}
+            onClick={() => handlePenColorChange("green")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "blue" }}
+            onClick={() => handlePenColorChange("blue")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "indigo" }}
+            onClick={() => handlePenColorChange("indigo")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "purple" }}
+            onClick={() => handlePenColorChange("purple")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "brown" }}
+            onClick={() => handlePenColorChange("brown")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "black" }}
+            onClick={() => handlePenColorChange("black")}
+          ></button>
+
+          
+        </div>
+
+        
+      </div>
+      )}
+      
+    </div>
+      <div className="chat">
+        <input className="input" type="text"
+        onChange={(e) => setAnswer(e.target.value)} 
+        placeholder="정답 또는 채팅을 입력해주세요!"
+        // disabled={userTurn}
+        onKeyDown={(e) => {
+            if (e.keyCode === 13) {
+                sendAnswer(answer);
+                document.querySelector('.input').value = '';
+            }
+        }} 
+        />
+        <button className="button">입력</button>
+      </div>
+    <div style={{ backGroundColor: "#ffff00", width: 400, height: 270, marginTop: 500 }} disabled={!userTurn} >
+    <canvas ref={canvasRef2} alt="" id="test1" width="400" height="270" />
+  </div>
+    
+  </div>
   );
 }
