@@ -92,12 +92,14 @@ public class ConversionJson {
 		map.put("name",objMap.get("name"));
 		map.put("date",objMap.get("date"));
 		if(objMap.containsKey("turn"))map.put("turn",objMap.get("turn"));
-
+		if(objMap.containsKey("user")) map.put("user",objMap.get("user"));
+		if(objMap.containsKey("msg")) map.put("msg",objMap.get("msg"));
 
 		Map<String,Object> wordMap = new HashMap<>(); // word 객체 생성
 		if(objMap.containsKey("word")) wordMap.put("word",objMap.get("word"));
 		if(objMap.containsKey("definition")) wordMap.put("definition",objMap.get("definition"));
 		if(objMap.containsKey("pos")) wordMap.put("pos",objMap.get("pos"));
+
 
 		wordMap.put("isVaild",flag);
 

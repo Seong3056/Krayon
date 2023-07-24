@@ -17,14 +17,14 @@ const FollowWord = ({ history }) => {
     const [chkLog, setChkLog] = useState(false);
     const [startWord, setStartWord] = useState('');
     const [start, setStart] = useState(false);
-    const [turn, setTurn] = useState(true);
+    const [turn, setTurn] = useState('');
     const [timer, setTimer] = useState(120);
     const [userTimer, setUserTimer] = useState(10);
 
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
-    const ip = '175.114.130.19';
-    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + id;
+    const ip = 'localhost';
+    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + 132;
 
     useEffect(() => {
         webSocketLogin();
@@ -66,7 +66,7 @@ const FollowWord = ({ history }) => {
             }
 
             setSocketData(data);
-            setTurn(dataSet.turn);
+            if (dataSet.user !== undefined) setTurn(dataSet.user);
             if (!dataSet.char) {
                 if (dataSet.wordInfo !== undefined) {
                     setStartWord(dataSet.wordInfo);
@@ -197,7 +197,7 @@ const FollowWord = ({ history }) => {
 
     return (
         <>
-            <User data={socketData} list={list} />
+            <User turn={turn} data={socketData} list={list} />
             {/* <div>시간:{timer}</div> */}
             {/* <ProgressBar
                 variant="danger"

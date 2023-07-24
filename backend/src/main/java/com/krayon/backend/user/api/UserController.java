@@ -1,17 +1,14 @@
 package com.krayon.backend.user.api;
 
-//import com.krayon.backend.auth.TokenUserInfo;
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
 
 import com.krayon.backend.user.dto.request.UserRequestDTO;
+import com.krayon.backend.user.dto.response.LoginResponseDTO;
 import com.krayon.backend.user.dto.response.UserResponseDTO;
-
 import com.krayon.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/krayon")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/join")
     // 회원 가입 요청 처리
     public ResponseEntity<?> join(
             @Validated @RequestBody UserRequestDTO dto, BindingResult result
@@ -52,9 +49,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody UserRequestDTO dto, BindingResult result) {
-
         try {
-            UserResponseDTO responseDTO = userService.authenticate(dto);
+            LoginResponseDTO responseDTO = userService.authenticate(dto);
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,22 +58,22 @@ public class UserController {
         }
     }
 
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<?> deleteUser(
-////            @AuthenticationPrincipal TokenUserInfo userInfo
-//
-//    ) {
-//        log.info("DELETE 할 id : " + userInfo);
-//
-//        if(userInfo == null) {
-//            return ResponseEntity.badRequest().body(UserResponseDTO.builder().error("ID를 전달해 주세요"));
-//        }
-//
-//        try {
-//            UserResponseDTO responseDTO = userService.delete(userInfo.getUserId());
-//            return ResponseEntity.ok().body(responseDTO);
-//        } catch (Exception e) {
-//            return ResponseEntity.internalServerError().body(UserResponseDTO.builder().error(e.getMessage()));
-//        }
-//    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(
+            @Validated @RequestBody UserRequestDTO dto
+    ) {
+        log.info("DELETE 할 id : " + dto.getUserId());
+
+        if(dto.getUserId() == null) {
+            return ResponseEntity.badRequest().body("ID를 전달해 주세요");
+        }
+
+        try {
+            UserResponseDTO responseDTO = userService.delete(dto.getUserId());
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
 }
