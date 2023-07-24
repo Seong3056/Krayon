@@ -1,17 +1,17 @@
 package com.krayon.backend.user.service;
 
-//import com.krayon.backend.auth.TokenProvider;
 import com.krayon.backend.exception.DuplicatedUserIdException;
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
 
 import com.krayon.backend.user.dto.request.UserRequestDTO;
+import com.krayon.backend.user.dto.response.LoginResponseDTO;
 import com.krayon.backend.user.dto.response.UserResponseDTO;
 import com.krayon.backend.user.entity.User;
 import com.krayon.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @Slf4j
@@ -19,12 +19,14 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-//    private final PasswordEncoder encoder;
-//    private final TokenProvider tokenProvider;
+    private final PasswordEncoder encoder;
+
+    String NoEncodedPw = "";
 
     public UserResponseDTO create(final UserRequestDTO dto) throws RuntimeException {
 
         String userId = dto.getUserId();
+
         if(dto == null) {
             throw new NoRegisteredArgumentsException("가입 정보가 없습니다.");
         }
@@ -33,13 +35,12 @@ public class UserService {
             throw new DuplicatedUserIdException("중복된 아이디 입니다.");
         }
 
-//        String encoded = encoder.encode(dto.getUserPw());
-//        dto.setUserPw(encoded);
+        String encoded = encoder.encode(dto.getUserPw());
+        dto.setUserPw(encoded);
 
         User user = dto.toEntity();
-
         User saved = userRepository.save(user);
-        log.info(saved.toString());
+
         return new UserResponseDTO(saved);
     }
 
@@ -47,7 +48,7 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
-    public UserResponseDTO authenticate(final UserRequestDTO dto) {
+    public LoginResponseDTO authenticate(final UserRequestDTO dto) {
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(
@@ -59,15 +60,13 @@ public class UserService {
         String encodedPassword = user.getUserPw();
         log.info("encodedPassword : " + encodedPassword);
 
-//        if(!encoder.matches(rawPassword, encodedPassword)) {
-//            throw new RuntimeException("비밀번호가 틀렸습니다.");
-//        }
+        if(!encoder.matches(rawPassword,encodedPassword)) {
+            log.info("인코딩 안된 비밀번호는 : " + NoEncodedPw);
+            throw new RuntimeException("비밀번호가 틀렸습니다.");
+        }
 
-//        String token = tokenProvider.createToken(user);
-
-        return new UserResponseDTO(user
-//                token
-        );
+        return new LoginResponseDTO(user);
+//        return new LoginResponseDTO(user);
     }
 
     public UserResponseDTO delete(String userId) {
@@ -78,4 +77,10 @@ public class UserService {
         }
         return null;
     }
+//
+//    public UserResponseDTO update(UserRequestDTO dto) throws RuntimeException {
+//        Optional<User> userEntity = userRepository.findById(dto.getUserId());
+//
+//
+//    }
 }
