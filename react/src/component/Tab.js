@@ -5,7 +5,7 @@ const Tab = () => {
     return (
         <>
             <div className="tab">
-                <Link to="/" className="d tab-main">
+                <Link to="/main" className="d tab-main">
                     메인
                 </Link>
                 <Link to="/user" className="d tab-info">
