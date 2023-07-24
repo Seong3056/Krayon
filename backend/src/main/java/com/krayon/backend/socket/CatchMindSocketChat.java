@@ -162,6 +162,26 @@ public class CatchMindSocketChat {
                 }
             }
         }
+        else if(sendAnswer.equals(currentWordMap.get("word"))){//정답입력하면 모두 false 주고 맞춘사람 true줘서 턴돌리기
+
+            for (Session s : clients) {
+                objMap.put("turn",false);
+                if(s == sessionTurn) objMap.replace("turn",true);
+                message = c.conversionWord(objMap,true);
+                log.info(message);
+                s.getBasicRemote().sendText(message);
+            }
+
+            sessionTurn = session;
+            Map<String, String> randomWord = wordService.randomWord("명사");
+            objMap.put("word",randomWord.get("word"));
+//                objMap.put("definition",randomWord.get("definition"));
+            objMap.put("pos","");
+
+            currentWordMap.put("word",randomWord.get("word"));
+//                currentWordMap.put("definition",randomWord.get("definition"));
+            currentWordMap.put("pos","");
+        }
 
     }
 
