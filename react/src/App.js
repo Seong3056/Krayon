@@ -13,25 +13,29 @@ import FollowWord from './component/game/followword/FollowWord';
 import game from './component/game/game';
 import CatchMind from './component/game/can/CatchMind';
 import WordMatch from './component/game/wordmatch/WordMatch';
+import SearchApp from './component/search/SearchApp';
+
 
 import Login from './component/user/Login';
 import Join from './component/user/Join';
 
 const App = () => {
     return (
-        <div className="section">
+        <div className="wrapper">
             <Tab />
             <Routes>
-                <Route path="/" Component={Main} />
+                <Route path="/main" Component={Main} />
                 <Route path="/user" Component={User} />
                 <Route path="/shop" Component={Shop} />
                 <Route path="login" Component={Login} />
                 <Route path="join" Component={Join} />
-                
+
+                <Route path="/search" Component={SearchApp} />
+
                 <Route path="/game" Component={game}>
                     <Route path="followword" Component={FollowWord} />
                     <Route path="can" Component={CatchMind} />
-                    <Route path="wordmatch" Component={WordMatch} />                    
+                    <Route path="wordmatch" Component={WordMatch} />
                 </Route>
             </Routes>
         </div>

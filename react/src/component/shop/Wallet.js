@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Wallet = () => {
+const Wallet = ({ openPay }) => {
+    const pay = () => {};
     return (
         <div className="wallet">
             <div class="user-id">유저아이디</div>
@@ -10,6 +12,7 @@ const Wallet = () => {
             <div class="cash">
                 보유 캐시: <span>2500</span>
             </div>
+            <button onClick={openPay}>충전하기</button>
         </div>
     );
 };
