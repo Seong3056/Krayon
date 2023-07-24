@@ -14,9 +14,9 @@ const WordMatch = () => {
     const [chkLog, setChkLog] = useState(false);
 
     // const [msg, setMsg] = useState('');
-    const id = localStorage.getItem('id');
-    const ip = '175.114.130.19';
-    const URL = 'ws://' + ip + ':8181/api/wm?id=' + id;
+    const id = sessionStorage.getItem('id');
+    const ip = 'localhost';
+    const URL = 'ws://' + ip + ':8181/api/game/wm?name=' + id;
 
     useEffect(() => {
         webSocketLogin();

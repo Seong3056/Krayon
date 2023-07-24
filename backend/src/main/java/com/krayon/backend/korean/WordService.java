@@ -144,7 +144,7 @@ public class WordService {
 		String replaceWord = "";
 		String definition = "";
 
-		while (true){
+
 			int r = (int) Math.floor(random.nextInt(100000) +1);
 			log.info(String.valueOf(r));
 			String requestUrl = VIEW_URL + "?key=" + key +"&method=target_code"+ "&q="+r;
@@ -177,27 +177,29 @@ public class WordService {
 				String findWord = wordInfo.getString("word");
 				JSONObject senseInfo = item.getJSONObject("senseInfo");
 				definition = senseInfo.getString("definition");
+				System.out.println("definition = " + definition);
+				String findWordPos = null;
+				if(!senseInfo.isNull("pos")){
+				 findWordPos = senseInfo.getString("pos");}
 
-				String findWordPos = senseInfo.getString("pos");
 				System.out.println("findWordPos = " + findWordPos);
-
 				String findWordType = senseInfo.getString("type");
 				System.out.println("findWordType = " + findWordType);
-
 //				log.warn(findWord+findWordPos);
-				if(findWordPos == null || !findWordPos.contains(pos) || findWord.length()<2) { log.info("다시실행"); continue; }
+
+				if(findWordPos == null || !findWordPos.contains(pos) || findWord.length()<2) { log.info("다시실행"); map=null;}
 				else {
 					replaceWord = findWord.replace("^", " ").replace("-", " ").replace("_", " ");
 					map.put("word", replaceWord);
 					map.put("definition", definition);
 					log.info(map.toString());
-					break;
 				}
+
 
 			} catch (JSONException e) {
 				return null;
 			}
-		}
+
 
 
 

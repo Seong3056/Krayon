@@ -10,11 +10,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponseDTO {
+public class LoginResponseDTO {
 
     private String userId;
 
-    public UserResponseDTO(User user) {
+    public LoginResponseDTO(User user) {
         this.userId = user.getUserId();
     }
+
+//    public LoginResponseDTO(User user) {
+//        this.userId = user.getUserId();
+//    }
 }
