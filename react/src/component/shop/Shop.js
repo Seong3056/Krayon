@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ArticleList from './ArticleList';
 import Wallet from './Wallet';
 import Article from './Article';

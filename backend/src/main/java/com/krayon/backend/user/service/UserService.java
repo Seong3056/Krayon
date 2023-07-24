@@ -1,10 +1,8 @@
 package com.krayon.backend.user.service;
 
-import com.krayon.backend.auth.TokenProvider;
-import com.krayon.backend.auth.TokenProvider;
 import com.krayon.backend.exception.DuplicatedUserIdException;
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
-import com.krayon.backend.user.dto.request.LoginRequestDTO;
+
 import com.krayon.backend.user.dto.request.UserRequestDTO;
 import com.krayon.backend.user.dto.response.LoginResponseDTO;
 import com.krayon.backend.user.dto.response.UserResponseDTO;
@@ -12,9 +10,8 @@ import com.krayon.backend.user.entity.User;
 import com.krayon.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -23,7 +20,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
-    private final TokenProvider tokenProvider;
 
     String NoEncodedPw = "";
 
@@ -39,15 +35,12 @@ public class UserService {
             throw new DuplicatedUserIdException("중복된 아이디 입니다.");
         }
 
-        log.info("UserService/create 인코딩 안된 비밀번호는 : " + dto.getUserPw());
-        NoEncodedPw = dto.getUserPw();
         String encoded = encoder.encode(dto.getUserPw());
         dto.setUserPw(encoded);
 
         User user = dto.toEntity();
-
         User saved = userRepository.save(user);
-        log.info(saved.toString());
+
         return new UserResponseDTO(saved);
     }
 
@@ -55,7 +48,7 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
-    public LoginResponseDTO authenticate(final LoginRequestDTO dto) {
+    public LoginResponseDTO authenticate(final UserRequestDTO dto) {
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(
@@ -72,9 +65,7 @@ public class UserService {
             throw new RuntimeException("비밀번호가 틀렸습니다.");
         }
 
-        String token = tokenProvider.createToken(user);
-        log.info("UserService Token : " + token);
-        return new LoginResponseDTO(user, token);
+        return new LoginResponseDTO(user);
 //        return new LoginResponseDTO(user);
     }
 

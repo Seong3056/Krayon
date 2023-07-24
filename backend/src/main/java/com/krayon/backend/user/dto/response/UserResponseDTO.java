@@ -13,12 +13,6 @@ import lombok.*;
 public class UserResponseDTO {
 
     private String userId;
-    private String token;
-
-//    public LoginResponseDTO(User user, String token) {
-//        this.userId = user.getUserId();
-//        this.token = token;
-//    }
 
     public UserResponseDTO(User user) {
         this.userId = user.getUserId();

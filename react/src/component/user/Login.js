@@ -6,20 +6,11 @@ import CustomSnackBar from '../layout/CustomSnackBar';
 
 const Login = () => {
 
-    const redirection = useNavigate();
+    const redirection = useNavigate(null);
 
     const { onLogin, isLoggedIn } = useContext(AuthContext);
 
     const [open, setOpen] = useState(false);
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            setOpen(true);
-            setTimeout(() => {
-                redirection('/');
-            }, 3000);
-        }
-    }, [isLoggedIn, redirection]);
 
     const BASE = 'http://localhost:8181';
     const USER = '/api';
@@ -46,11 +37,13 @@ const Login = () => {
             return;
         }
 
-        const { token, userId } = await res.json();
+        const { userId } = await res.json();
 
-        onLogin(token, userId);
+        onLogin(userId);
+        console.log('userId : ' + userId);
+        sessionStorage.setItem("id",userId);
 
-        redirection('/');
+        redirection('/main');
     }
 
     const loginHandler = e => {
@@ -65,31 +58,13 @@ const Login = () => {
         const guestId = 'Guest_' + num;
         console.log(guestId);
 
-        const res = await fetch(GUEST_URL, {
-            method: 'POST',
-            headers: { 'content-type' : 'application/json' },
-            body: JSON.stringify({
-                guestId
-            })
-        });
-
-        if (res.status === 400) {
-            const text = await res.text();
-            alert(text);
-            return;
-        }
-
-        const data = await res.text();
-        console.log("접근");
-        console.log(data);
-        sessionStorage.setItem("token",data);
         sessionStorage.setItem("id",guestId)
         
         // const guest = $guestId + token;
         // alert(guest);
         // onLogin(guest);
         
-        redirection('/');
+        redirection('/main');
     }
 
 
@@ -147,8 +122,7 @@ const Login = () => {
                     </Grid>
                 </form>
                 <Grid item xs={12}>
-                    <Button
-                        href="/"
+                    <Button               
                         fullWidth
                         id="guestId"
                         variant="contained"

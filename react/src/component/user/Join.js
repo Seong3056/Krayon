@@ -6,18 +6,11 @@ import CustomSnackBar from '../layout/CustomSnackBar'
 
 const Join = () => {
 
-  const redirection = useNavigate();
+  const redirection = useNavigate(null);
   const { isLoggedIn } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-      if(isLoggedIn) {
-          setOpen(true);
-          setTimeout(() => {
-            redirection('/');
-          }, 3000);
-    }
-  }, [isLoggedIn, redirection]);
+
 
   const BASE = 'http://localhost:8181';
   const USER = '/api';
