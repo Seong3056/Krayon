@@ -20,14 +20,14 @@ public class Controller {
 
     private final OpenApiService openAPIService;
 
-    @GetMapping
+    @GetMapping //handleSearch로 인해 검색어 비어있으면 fetch가 이 메서드 부름
     public ResponseEntity<List<Map<String, String>>> getWordsContaining(@RequestParam String searchWord) {
         if (searchWord == null || searchWord.isEmpty()) {
             return ResponseEntity.badRequest().build(); // 검색어가 비어있는 경우 400 Bad Request 반환
         }
         
         //fetch API , db저장
-        openAPIService.saveWordsContaining(searchWord);
+        openAPIService.saveWordsContaining(searchWord); //검색어가 포함된 단어 목록을 가져오기 위해 호출.
 
 
 

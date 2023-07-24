@@ -40,11 +40,11 @@ public class OpenApiService {
     }
 
 
-    public List<Map<String, String>> getWordsContaining(String searchWord) {
+    public List<Map<String, String>> getWordsContaining(String searchWord) { // API에서 지정된 검색어가 포함된 단어를 가져오는 역할을 함
         List<Map<String, String>> wordList = new ArrayList<>();
 
         try {
-            String encodedSearchWord = URLEncoder.encode(searchWord, StandardCharsets.UTF_8.toString());
+            String encodedSearchWord = URLEncoder.encode(searchWord, StandardCharsets.UTF_8.toString()); //인코딩된 검색어 및 요청 유형을 JSON으로 사용하여 요청 URL을 구성함
             String requestUrl = BASE_URL + "?key=" + API_KEY + "&q=" + encodedSearchWord + "&req_type=json";
             log.info(requestUrl);
             URLConnection connection = new URL(requestUrl).openConnection();
@@ -61,9 +61,26 @@ public class OpenApiService {
 
             log.info(sb.toString());
 
-            // JSON 형식을 확인하여 처리
+            
+              /*
+              즉, 인코딩된 검색어 및 요청 유형을 JSON으로 사용하여 요청 URL을 구성함,
+              API URL에 대한 연결을 열고 응답 데이터를 가져옴, 
+              메서드 를 사용하여 응답 데이터가 유효한 JSON 형식인지 확인함,
+              isValidJson은 응답 데이터가 유효한 JSON이면 JSON 데이터를 구문 분석하여 단어 정의를 추출하고 
+              목록에 추가함,
+              Map<String, String>은 각 맵에는 단어와 해당 정의가 포함되어 있음,
+              응답 데이터가 유효한 JSON 형식이 아니거나 단어 정의가 없으면 빈 목록을 반환함
+              */
+            
+            
+
+
+            
+            // JSON 형식을 확인하여 처리 -> isValidJson은 문자열에서 JSON 개체 및 배열을 생성하려고 시도하여 주어진 JSON문자열이 유효한 JSON형태인지 확인하는 메서드.
+            //성공하면 트루, 아니면 폴스를 반환한다.
             if (isValidJson(sb.toString())) {
                 JSONObject json = new JSONObject(sb.toString());
+                //응답 데이터는 JSONObjectnamed 로 변환된 json을 channel사용하여 JSON에서 개체를 가져옴. json.getJSONObject("channel").
                 JSONObject channelObject = json.getJSONObject("channel");
                 JSONArray itemArray = channelObject.getJSONArray("item");
                 //Map<String, String> wordMap = new HashMap<>();
