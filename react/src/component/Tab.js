@@ -5,12 +5,15 @@ const Tab = () => {
     return (
         <>
             <div className="title">Krayon</div>
-            <div className="tab">
+            <div className="tab" aria-disabled="true">
                 <Link to="/" className="d tab-main">
                     메인
                 </Link>
                 <Link to="/user" className="d tab-info">
                     내정보
+                </Link>
+                <Link to="/diction" className="d tab-shop">
+                    단어장
                 </Link>
                 <Link to="/shop" className="d tab-shop">
                     상점

@@ -30,5 +30,4 @@ public class WMController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }

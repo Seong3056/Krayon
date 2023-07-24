@@ -1,5 +1,5 @@
 // react
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 // style
 // import { CanvasStyle } from "./style/canvas";
 // import UserInfo from '../main/UserInfo';
@@ -8,11 +8,13 @@ import React, { useRef, useEffect, useState } from "react";
 import Send from "./Send";
 import { CanvasStyle } from "./style/canvas";
 
-const API = 'http://localhost:8181/api/catch'
+const API = "http://localhost:8181/api/catch";
 
 export default function PaintZone() {
   // useRef
   const canvasRef = useRef(null);
+  const canvasRef2 = useRef(null);
+
   // getCtx
   const [getCtx, setGetCtx] = useState(null);
   // painting state
@@ -26,6 +28,38 @@ export default function PaintZone() {
 
   const [getPic, setgetPic] = useState();
 
+  //데이터 보내는 소켓
+  const [img, setImg] = useState(""); //메세지
+  const [name, setName] = useState(""); //전송자
+  const [chatt, setChatt] = useState([]); //웹소켓 수신 데이터들 [] 배열
+  const [chkLog, setChkLog] = useState(false); //웹소켓 접속 여부
+  const [socketData, setSocketData] = useState(); //웹소켓 수신 메세지 {name, msg, date}
+  const ws = useRef(null); //webSocket을 담는 변수,
+  //컴포넌트가 변경될 때 객체가 유지되어야하므로 'ref'로 저장
+
+  let picData = "";
+  const webSocketLogin = useCallback(() => {
+    ws.current = new WebSocket("ws://localhost:8181/socket/chatt");
+    console.log("웹소켓 접속");
+
+    ws.current.onmessage = (message) => {
+      //웹소켓에서 전송한 데이터를 수신 및 객체 저장
+      console.log("웹소켓 수신 데이터: " + message.data);
+      const dataSet = JSON.parse(message.data);
+      setSocketData(dataSet);
+    };
+  });
+
+  //데이터 바뀔때마다 전송
+  useEffect(() => {
+    if (socketData !== undefined) {
+      const tempData = chatt.concat(socketData);
+      console.log(tempData);
+      setChatt(tempData);
+      // console.log("----------------------------------------------dataUrl"+dataURL.length);
+    }
+  }, [socketData]); //socketData가 바뀔때마다
+
   useEffect(() => {
     // canvas useRef
     const canvas = canvasRef.current;
@@ -36,8 +70,6 @@ export default function PaintZone() {
     ctx.lineWidth = 2.5;
     ctx.strokeStyle = "#000000";
     setGetCtx(ctx);
-
-
   }, []);
 
   //펜의 색상선택
@@ -80,7 +112,7 @@ export default function PaintZone() {
     ctx.strokeStyle = penColor;
   };
 
-  const drawFn = e => {
+  const drawFn = (e) => {
     // mouse position
     const mouseX = e.nativeEvent.offsetX;
     const mouseY = e.nativeEvent.offsetY;
@@ -92,147 +124,180 @@ export default function PaintZone() {
       getCtx.lineTo(mouseX, mouseY);
       getCtx.stroke();
     }
-  }
-  const answerSend = answerText =>{
-
-    fetch(API+"/chat", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ message: answerText}),
-        })
-          .then((response) => response.json())
-          .catch((error) => {
-            console.error('오류:', error);
-          });
-  }
+  };
+  
 
   const sendCanvasData = () => {
     const canvas = canvasRef.current;
     const dataURL = canvas.toDataURL();
+    setImg(dataURL);
+    setgetPic(dataURL);
+    // console.log(getPic);
+
+    const smallCanvas = canvasRef2.current;
+    const dataURLSmall = smallCanvas.toDataURL();
+    console.log(dataURLSmall);
+    
+
+    // var formdata = new FormData(); // formData 생성
+    // formdata.append("file", file); // file data 추가
+
     // console.log(typeof(dataURL));
 
-    fetch(API, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ canvasData: dataURL }),
-    })
-      .then((response) => response.json())
-      // .then((data) => {
-      //   console.log('서버 응답:', data);
-      //   console.log(dataURL);
-      //   console.log(canvas);
-      // })
-      .then(data=>{
-        console.log('받은그림:', data);
-        setgetPic(data.canvasData);
-        console.log(getPic);
+    
 
-      })
-      .catch((error) => {
-        console.error('오류:', error);
-      });
-      setImageData(dataURL);
+    //소켓으로 데이터 보내기
+    //웹소켓으로 메세지 전송
+    if (!chkLog) {
+      //웹소켓 로그인안됬을경우 (!false)
+
+      webSocketLogin();
+      setChkLog(true);
+    }
+    const date =
+      (new Date().getHours() < 10
+        ? "0" + new Date().getHours()
+        : new Date().getHours()) +
+      ":" +
+      (new Date().getMinutes() < 10
+        ? "0" + new Date().getMinutes()
+        : new Date().getMinutes());
+
+    if (img !== '') {
+            //메세지를 data에 담아 백엔드로 JSON 객체 전송
+            const data = {
+                name,
+                img:dataURLSmall,
+                date: date,
+            }; //전송 데이터(JSON)
+
+            const temp = JSON.stringify(data);
+
+            if (ws.current.readyState === 0) {
+                //readyState는 웹 소켓 연결 상태를 나타냄
+                ws.current.onopen = () => {
+                    //webSocket이 맺어지고 난 후, 실행
+                    console.log(ws.current.readyState);
+                    ws.current.send(temp);
+                };
+            } else {
+                ws.current.send(temp);
+            }
+        } else {
+            // 입력창이 공란일경우 안내창
+            // alert('메세지를 입력하세요.');
+            // document.getElementById('chat').focus();
+            // return;
+        }
+        
+        
   };
 
-
-
   useEffect(() => {
-    console.log('이미지 src 바뀜');
+    console.log("이미지 src 바뀜");
+    // console.log(ws.current.readyState);
+  }, [img]);
+  // if (window.location.reload()) console.log("페이지새로고침");
+  window.onload = () => {
+    console.log("페이지새로고침");
+  };
 
-  }, [getPic])
-
+  // let i = document.getElementById('test').style.width
+  // i.style.width = '160px';
+  // i.style.height = '108px';
   return (
     <>
-    <CanvasStyle>
-      <div className="view">
+      <CanvasStyle>
+        <div className="view">
+          <div className="sectionMyPage">
+            <div className="paintZone">
+              <div className="canvasWrap" onClick={sendCanvasData}>
+                <canvas
+                  className="canvas"
+                  ref={canvasRef}
+                  onMouseDown={() => setPainting(true)}
+                  onMouseUp={() => setPainting(false)}
+                  onMouseMove={(e) => drawFn(e)}
+                  onMouseLeave={() => setPainting(false)}
+                  id="canvasDraw"
+                />
+              </div>
+              <div className="canvasTools">
+                <button id="resetBtn" onClick={resetCanvas}>
+                  전체지우기
+                </button>
+                <button id="eraserBtn" onClick={eraseMode}>
+                  지우개
+                </button>
+                <button id="eraserBtn" onClick={penMode}>
+                  펜
+                </button>
+                <input
+                  className="boldBar"
+                  type="range"
+                  min="1"
+                  max="30"
+                  step="0.5"
+                  value={lineWidth}
+                  onChange={handleChangeLineWidth}
+                />
 
-        <div className="sectionMyPage">
-        <div className="paintZone">
-          <div className="canvasWrap" onClick={sendCanvasData}>
-              <canvas
-                className="canvas"
-                ref={canvasRef}
-                onMouseDown={() => setPainting(true)}
-                onMouseUp={() => setPainting(false)}
-                onMouseMove={e => drawFn(e)}
-                onMouseLeave={() => setPainting(false)}
-                id="canvasDraw"
-              />
-
-          </div>
-          <div className = "canvasTools">
-                  <button id="resetBtn" onClick={resetCanvas}>전체지우기</button>
-                  <button id="eraserBtn" onClick={eraseMode}>지우개</button>
-                  <button id="eraserBtn" onClick={penMode}>펜</button>
-                  <input className="boldBar"
-                    type="range"
-                    min="1"
-                    max="30"
-                    step="0.5"
-                    value={lineWidth}
-                    onChange={handleChangeLineWidth}
-                  />
-
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "red" }}
                   onClick={() => handlePenColorChange("red")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "orange" }}
                   onClick={() => handlePenColorChange("orange")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "yellow" }}
                   onClick={() => handlePenColorChange("yellow")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "green" }}
                   onClick={() => handlePenColorChange("green")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "blue" }}
                   onClick={() => handlePenColorChange("blue")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "indigo" }}
                   onClick={() => handlePenColorChange("indigo")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "purple" }}
                   onClick={() => handlePenColorChange("purple")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "brown" }}
                   onClick={() => handlePenColorChange("brown")}
                 ></button>
-                <button className="paint"
+                <button
+                  className="paint"
                   style={{ backgroundColor: "black" }}
                   onClick={() => handlePenColorChange("black")}
                 ></button>
               </div>
             </div>
-
-
-        </div>{/*sectionleft*/}
-
-
-
-
+          </div>
+          {/*sectionleft*/}
         </div>
 
-      {/*그림 데이터 읽어서 이미지 src에 확인하기*/}
-      <div style={{backGroundColor:'#ffff00', width: 300,height:300}} >
-          {/* <img src={getPic} alt="" /> */}
-      </div>
-    </CanvasStyle>
-
-
-
-
+        {/*그림 데이터 읽어서 이미지 src에 확인하기*/}
+        <div style={{ backGroundColor: "#ffff00", width: 160, height:108, marginTop: 500}}>
+          <canvas ref={canvasRef2} alt="" id="test" width='160' height='108' />
+        </div>
+      </CanvasStyle>
     </>
-  )
+  );
 }

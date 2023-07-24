@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import "../../../resource/scss/game/wordmatch/WordQuiz.scss";
-
-const WordQuiz = () => {
+import TypeHangul from "../../../../node_modules/type-hangul/src/index";
+const WordQuiz = ({ sendStart, data, send }) => {
   const url = "http://localhost:8181/api/match";
 
   const [quizDefinition, setQuizDefinition] = useState("");
@@ -10,32 +10,40 @@ const WordQuiz = () => {
   const [answer, setAnswer] = useState("");
 
   useEffect(() => {
-    console.log(quizWord);
-  }, [quizWord]);
+    if (data.wordInfo !== undefined) {
+      const definition = data.wordInfo.definition
+        .replaceAll("(", "")
+        .replaceAll(")", "");
+      console.log(definition);
+      setQuizDefinition(definition);
+    }
+  }, [data]);
+  useEffect(() => {
+    const $textBox = document.getElementById("textBox");
+    console.log($textBox.textContent);
+    if ($textBox.textContent !== "")
+      TypeHangul.type("#textBox", {
+        intervalType: 60,
+      });
+  }, [quizDefinition]);
 
   const fetchQuiz = async () => {
     const res = await fetch(url, { method: "GET" });
     const data = await res.json();
 
-    // console.log(data);
-    // console.log(data.definition + ": " + data.word);
     setQuizDefinition(data.definition);
     setQuizWord(data.word);
-    // console.log(quizWord + " " + quizDefinition);
   };
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       handleSubmit(e.target.value);
     }
-    // console.log(e.target.value);
+
     setAnswer(e.target.value);
   };
 
   const handleSubmit = (e) => {
-    // if (e === quizWord) alert("정답입니다!!");
-    // else alert("틀렸습니다");
-
     setAnswer(e);
     document.getElementById("in").value = "";
   };
@@ -70,9 +78,15 @@ const WordQuiz = () => {
 
   return (
     <div className="quizBox">
-      <div className="textBox">{quizDefinition}</div>
-      <button onClick={runWordQuiz}>Quiz Start</button>
-      <input type="text" id="in" onKeyDown={handleKeyDown} />
+      <div id="textBox">{quizDefinition}</div>
+      <button onClick={sendStart}>Quiz Start</button>
+      <input
+        type="text"
+        id="in"
+        onKeyDown={(e) => {
+          if (e.key == "Enter") send(document.getElementById("in").value);
+        }}
+      />
       <button onClick={handleSubmit}>Submit</button>
     </div>
   );

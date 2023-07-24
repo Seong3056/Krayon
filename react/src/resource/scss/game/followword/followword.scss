@@ -1,0 +1,49 @@
+.in-game{
+    margin: 50px auto;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .definition {
+        font-size: 30px;
+        height: 30px;
+    }
+    .preview{
+        display: flex;
+        flex-direction: row;
+        width: 80%;
+        height: 200px;
+        justify-content: center;
+        .prev{
+            display: flex;
+            
+            
+            margin-right: 30px;
+            color: #888;
+            // background-color: red;
+            align-items: center;
+            font-size: 40px;
+            .last-char{
+                color: #555;
+            }
+        }
+        .current{
+            display: flex;
+            
+            width: 25%;
+            
+            margin-right: 30px;
+            font-size: 40px;
+            align-items: center;
+            
+        }
+
+    }
+    
+}
+#input {
+    width: 50%;
+    height: 100px;
+    font-size: 35px;
+    
+}
