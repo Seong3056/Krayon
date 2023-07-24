@@ -1,0 +1,88 @@
+.play {
+    width: 60%;
+    height: 100%;
+    background: #dde1e7;
+    // background: url("https://applemagazine.com/wp-content/uploads/2020/09/AppleMagazine-iPad-Air-Wallpaper-2020-4.png");
+    background-size: cover;
+    // padding: 50px;
+    box-sizing: border-box;
+    
+    // position: relative;
+
+    .game {
+        width: 95%;
+        height: 85%;
+        margin: 26px auto;
+        background: #dde1e7;
+        // background: url("https://applemagazine.com/wp-content/uploads/2020/09/AppleMagazine-iPad-Air-Wallpaper-2020-4.png");
+        background-size: cover;
+        box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+
+
+        // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+        //     backdrop-filter: blur(10px);
+        //     -webkit-backdrop-filter: blur(10px);
+        //     border: 2px solid rgba(255, 255, 255, 0.18);
+        //     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    
+    .chat {
+        // margin-bottom: 2%;
+        position: relative;
+        width: 95%;
+        height: 40px;
+        margin: auto;
+        // position: absolute;
+        // bottom: 15px;
+        // left: 2.5%;
+        // background: yellowgreen;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .input {
+            width: 90%;
+            height: 85%;
+            border: none;
+            outline: none;
+            background: #dde1e7;
+            box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288); 
+
+
+            // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            // backdrop-filter: blur(10px);
+            // -webkit-backdrop-filter: blur(10px);
+            // border: 2px solid rgba(255, 255, 255, 0.18);
+            // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            caret-color: #3498db;
+            color: #3498db;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 2px;
+        }
+        
+        .button {
+            width: 8%;
+            height: 100%;
+            border: none;
+            background: #3498db;
+            border-radius: 12px;
+            box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+
+
+            // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            // backdrop-filter: blur(10px);
+            // -webkit-backdrop-filter: blur(10px);
+            // border: 2px solid rgba(255, 255, 255, 0.18);
+            // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            // position: absolute;
+            // bottom: 2px;
+            // left: 92%;
+            &:hover {
+                background-color: #2980b9;
+            }
+        }
+    }
+}

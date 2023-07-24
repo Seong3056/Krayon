@@ -80,7 +80,6 @@ public class OpenApiService {
                     JSONArray sense = itemObject.getJSONArray("sense");
                     for (int k = 0; k < sense.length(); k++) {
                         JSONObject senseObject = sense.getJSONObject(k);
-                        log.warn("이거 안될시 용석이형 재입대 " + senseObject.toString());
                         String definition = senseObject.optString("definition");
                         String wordValue = itemObject.optString("word", "");
 

@@ -5,7 +5,9 @@ import UserList from './UserList';
 import Chatting from './Chatting';
 import UserInfo from './UserInfo';
 
-import '../../resource/scss/main/Main.scss';
+// import '../../resource/scss/main/Main.scss';
+import '../../resource/scss/maintest/Start.scss';
+// src\resource\scss\maintest\Start.scss
 import Chat from './Chat';
 import TypeHangul from '../../../node_modules/type-hangul/src/index';
 const Main = ({ history }) => {
@@ -130,22 +132,55 @@ const Main = ({ history }) => {
 
         TypeHangul.type('#test');
     }
+    //  <div class="top">
+    {
+        /* <div id="test">한글타이핑 테스트내용입니다.</div>
+                <button onClick={test}>실행</button> */
+    }
+    // <Rooms id={id} dis={disconnectSocket} />
+    // <UserList userList={list} />
+    // {/* <Socket wss={ws} id={id} /> */}
+    // </div>
 
+    // <div class="bottom">
+    // <UserInfo id={id} />
+
+    // </div>
+    // <div class="col col1">
+    {
+        /* <UserInfo id={id} /> */
+    }
+    // <Chat send={send} ws={ws.current} textData={socketData} />
+    // </div>
     return (
-        <>
-            <div class="top">
+        <div className="select">
+            <div class="row">
                 {/* <div id="test">한글타이핑 테스트내용입니다.</div>
                 <button onClick={test}>실행</button> */}
+
+                {/* <UserList userList={list} /> */}
+                {/* <Socket wss={ws} id={id} /> */}
+                <div className="start-info"></div>
+                <div className="col col1">
+                    <h1>캐치마인드</h1>
+                    <p>
+                        {/* 보는 이상 그것을 품고 소금이라 눈에 같이 부패뿐이다.
+                        군영과 그들의 얼마나 이상, 보이는 눈에 피에 사랑의
+                        쓸쓸하랴? 돋고, 새가 같으며, 황금시대다. 밥을 풍부하게
+                        이상의 작고 천지는 몸이 철환하였는가? 황금시대를 실현에
+                        광야에서 귀는 약동하다. */}
+                        '캐치마인드'는 제시된 단어를 그려 맞추도록 유도하는
+                        게임입니다. <br />
+                        맞추는 사람은 그리는 사람의 그림을 보고 정답을
+                        맞춰보세요!
+                    </p>
+                    <button type="button">Start</button>
+                </div>
                 <Rooms id={id} dis={disconnectSocket} />
                 <UserList userList={list} />
-                {/* <Socket wss={ws} id={id} /> */}
             </div>
-
-            <div class="bottom">
-                <UserInfo id={id} />
-                <Chat send={send} ws={ws.current} textData={socketData} />
-            </div>
-        </>
+            <Chat send={send} ws={ws.current} textData={socketData} />
+        </div>
     );
 };
 

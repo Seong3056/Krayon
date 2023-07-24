@@ -3,6 +3,8 @@ import WordQuiz from './WordQuiz';
 import WMPlayer from './WMPlayer';
 
 import '../../../resource/scss/game/wordmatch/WordMatch.scss';
+import User from '../User';
+import Info from '../Info';
 
 const WordMatch = () => {
     const ws = useRef(null);
@@ -96,10 +98,12 @@ const WordMatch = () => {
     });
 
     return (
-        <div className="wrapper">
+        <>
+            <User data={socketData} list={list} />
             <WordQuiz />
-            <WMPlayer />
-        </div>
+            <Info />
+            {/* <WMPlayer list={list} /> */}
+        </>
     );
 };
 

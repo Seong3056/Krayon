@@ -1,0 +1,77 @@
+// body {
+//     // background-color: #222;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     height: 100vh;
+//     background-color: #dde1e7;
+// }
+
+.login-container {
+    background-color: #dde1e7;
+    border-radius: 16px;
+    box-shadow: -10px -10px 20px rgba(255, 255, 255, 0.05), 10px 10px 20px rgba(0, 0, 0, .5);
+    box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    margin: auto;
+    width: 35%;
+
+    h2 {
+        color: #fff;
+        font-size: 32px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+
+        label {
+            color: #ddd;
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+
+        }
+
+        input {
+            background-color: #dde1e7;
+            border: none;
+            outline-color: #2980b9;
+            border-radius: 12px;
+            // box-shadow: inset -5px -5px 10px rgba(255, 255, 255, 0.05), inset 5px 5px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288);
+            // color: #ddd;
+            color: rgb(80, 80, 80);
+            padding: 10px 15px;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        input::placeholder {
+            columns: #888;
+        }
+
+        button {
+            background-color: #3498db;
+            // box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: background-color 0.3s;
+            width: 33%;
+            
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+        }
+    }
+
+
+}

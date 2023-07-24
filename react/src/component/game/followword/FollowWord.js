@@ -2,8 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import CheckWord from './CheckWord';
 import Copy from './Copy';
 import '../../../resource/scss/game/followword/followword.scss';
+import '../../../resource/scss/gametest/followword/Info.scss';
+import '../../../resource/scss/gametest/followword/User.scss';
 import { Link } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import User from '../User';
+import Info from '../Info';
 
 const FollowWord = ({ history }) => {
     const ws = useRef(null);
@@ -27,41 +31,6 @@ const FollowWord = ({ history }) => {
 
         console.log('1111111111111111웹소켓로그인');
     }, []);
-
-    // useEffect(() => {
-    //     const limitTime = setInterval(() => {
-    //         setTimer((e) => e - 1);
-    //     }, 1000);
-    //     // console.log(timer + '초');
-    //     if (timer === 0) {
-    //         clearInterval(limitTime);
-    //         setTimer(120);
-    //         console.log('접근');
-    //         send('끝');
-    //     }
-    //     return () => {
-    //         clearInterval(limitTime);
-    //     };
-    // }, [start, timer]);
-    // const limitTime = () =>
-    //     setInterval(() => {
-    //         setTimer((e) => e - 1);
-    //     }, 1000);
-    // useEffect(() => {
-    //     if (turn) {
-    //         limitTime();
-    //         // console.log(timer + '초');
-    //         if (userTimer === 0) {
-    //             clearInterval(limitTime);
-    //             setUserTimer(10);
-    //             console.log('접근');
-    //             send('끝');
-    //         }
-    //         return () => {
-    //             clearInterval(limitTime);
-    //         };
-    //     }
-    // }, [turn, userTimer]);
 
     useEffect(() => {
         // const leave = history.block('페이지를 나가실건가요?');
@@ -228,9 +197,9 @@ const FollowWord = ({ history }) => {
 
     return (
         <>
-            <div>{id}</div>
-            <div>시간:{timer}</div>
-            <ProgressBar
+            <User data={socketData} list={list} />
+            {/* <div>시간:{timer}</div> */}
+            {/* <ProgressBar
                 variant="danger"
                 now={(timer / 120) * 100}
                 label={`${timer}초`}
@@ -241,7 +210,7 @@ const FollowWord = ({ history }) => {
                 now={userTimer * 10}
                 label={`${userTimer}초`}
                 className="progress"
-            />
+            /> */}
 
             <Copy
                 list={list}
@@ -250,14 +219,18 @@ const FollowWord = ({ history }) => {
                 send={send}
                 startWord={startWord}
             />
-            {<button onClick={gameStart}>게임시작</button>}
-            <Link to="/" onClick={disconnectSocket}>
-                나가기
-            </Link>
+            <Info gameStart={gameStart} />
+            {/* <button className="ready" onClick={gameStart}>
+                게임시작
+            </button> */}
 
-            {list.map((e) => (
+            {/* <Link to="/" onClick={disconnectSocket}>
+                나가기
+            </Link> */}
+
+            {/* {list.map((e) => (
                 <div>{e}</div>
-            ))}
+            ))} */}
         </>
     );
 };
