@@ -1,12 +1,16 @@
-.in-game{
-    margin: 50px auto;
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.game{
+    // margin: 50px auto;
+    // width: 80%;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    padding: 50px;
     .definition {
+        // margin-top: 250px;
         font-size: 30px;
+        width: 70%;
         height: 30px;
+        text-align: center;
     }
     .preview{
         display: flex;
@@ -40,10 +44,14 @@
 
     }
     
-}
-#input {
-    width: 50%;
-    height: 100px;
-    font-size: 35px;
     
 }
+.progress{
+    width: 50%;
+}
+// #input {
+//     width: 50%;
+//     height: 100px;
+//     font-size: 35px;
+    
+// }

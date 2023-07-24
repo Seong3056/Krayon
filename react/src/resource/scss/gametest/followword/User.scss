@@ -1,0 +1,100 @@
+.users {
+    width: 20%;
+    min-width: 180px;
+    height: 100%;
+    // background: #dde1e7;
+    // background: url("https://applemagazine.com/wp-content/uploads/2020/09/AppleMagazine-iPad-Air-Wallpaper-2020-4.png");
+    // background-size: cover;
+    
+    
+    
+    .user {
+        width: 90%;
+        min-width: 180px;
+        height: 80px;
+        // background: #dde1e7;
+        margin: 27px 20px 20px 20px;
+        display: flex;
+        position: relative;
+        
+        
+        .profile {
+            width: 80px;
+            min-width: 80px;
+            height: 80px;
+            background: #dde1e7;
+            box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+            // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            // backdrop-filter: blur(10px);
+            // -webkit-backdrop-filter: blur(10px);
+            // border: 2px solid rgba(255, 255, 255, 0.18);
+            // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin: 0 15px;
+        }
+
+        .score {
+            width: 90%;
+            min-width: 100px;
+            height: 80px;
+            background: #dde1e7;
+            box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+            // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            // backdrop-filter: blur(10px);
+            // -webkit-backdrop-filter: blur(10px);
+            // border: 2px solid rgba(255, 255, 255, 0.18);
+            // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-top: 1px;
+            margin-right: -10px;
+            font-size: 45px;
+        }
+        .comment{
+            display: none;
+            width: 134px;
+            height: 95%;
+            background: url('../../../image/game/bubble7.png') no-repeat  left / contain;
+            
+            // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            // border: 2px solid rgba(255, 255, 255, 0.18);
+            // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-right: 5px;
+            // display: none;            
+            position: absolute;
+            top: 0;
+            right: -159px;
+            // left: 109%;
+            opacity: 0;
+
+            text-align: center;
+            font-size: 30px;
+            line-height: 76px;            
+            transition: 3s;
+           
+        }
+        .claim{
+            display: block;
+            opacity: 1;
+            transition: 2s;         
+        }
+       
+        @keyframes fadeInOut {
+            0%{
+                opacity: 0;
+            }            
+            100%{
+                opacity: 1;
+            }
+        }
+        &.turn {
+           
+                
+                background-color: red;
+                border: 2px solid red;
+                
+                
+            
+        }
+    }
+   
+}

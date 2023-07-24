@@ -25,6 +25,11 @@ public class Controller {
         if (searchWord == null || searchWord.isEmpty()) {
             return ResponseEntity.badRequest().build(); // 검색어가 비어있는 경우 400 Bad Request 반환
         }
+        
+        //fetch API , db저장
+        openAPIService.saveWordsContaining(searchWord);
+
+
 
         List<Map<String, String>> wordList = openAPIService.getWordsContaining(searchWord);
         if (!wordList.isEmpty()) {

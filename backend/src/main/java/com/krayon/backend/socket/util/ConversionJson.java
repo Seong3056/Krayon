@@ -12,6 +12,31 @@ import java.util.*;
 @Slf4j
 @Component
 public class ConversionJson {
+	public String conversion(Map<String,Object> map){
+//		log.info(map.toString());
+		Set<String> idList = new HashSet<>();
+		Set<Session> clients = new HashSet<>();
+		if(map.containsKey("list")) {
+			clients = (Set<Session>) map.get("list");
+			clients.forEach(a -> {
+				String name = a.getRequestParameterMap().get("name").get(0);
+				log.error("유저들+"+name);
+				idList.add(name);
+
+			});
+			map.replace("list",idList);
+		}
+		log.info(map.toString());
+		if(map.containsKey("result")) log.warn("result"+ map.toString());
+		ObjectMapper mapper = new ObjectMapper();
+		String json = "";
+		try {
+			json = mapper.writeValueAsString(map);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+		return json;
+	}
 
 	public String conversion(String state, Set<Session> clients, Map<String, String> currentWordMap, String ...field){
 		Map<String,Object> map = new HashMap<>();
@@ -167,6 +192,17 @@ public class ConversionJson {
 			throw new RuntimeException(e);
 		}
 
+		return json;
+	}
+
+	public String conversion(List<Map<String, String>> finish) {
+		ObjectMapper mapper = new ObjectMapper();
+		String json = "";
+		try {
+			json = mapper.writeValueAsString(finish);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 		return json;
 	}
 }
