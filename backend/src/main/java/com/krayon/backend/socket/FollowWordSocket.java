@@ -112,10 +112,14 @@ public class FollowWordSocket {
                         objMap.put("pos",currentWordMap.get("pos"));
                         objMap.put("msg",msg);
                         objMap.put("turn",false);
+
                         if((Session)clientsArray[i] == clientsArray[(index+1)%clientsArray.length]) {
                             sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
                             objMap.replace("turn",true);
+
                         }
+                        String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                        objMap.put("user",user);
                         message=c.conversionWord(objMap, true);
                         log.info("session:{} send data : {}",clientsArray[i], message);
                         ((Session)clientsArray[i]).getBasicRemote().sendText(message);
@@ -126,6 +130,17 @@ public class FollowWordSocket {
                     objMap.put("word",currentWordMap.get("word"));
                     objMap.put("definition",currentWordMap.get("definition"));
                     objMap.put("pos",currentWordMap.get("pos"));
+                    objMap.put("msg",msg);
+                    objMap.put("turn",false);
+                    for(int i =0;i<clients.size();i++) {
+                        if ((Session) clientsArray[i] == clientsArray[(index + 1) % clientsArray.length]) {
+                            sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
+                            objMap.replace("turn", true);
+
+                        }
+                    }
+                    String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                    objMap.put("user",user);
                     message=c.conversionWord(objMap, false);
                     for (Session s : clients) {
                         log.info("send data : {}", message);
@@ -168,9 +183,7 @@ public class FollowWordSocket {
                                 resultMap.put("result",finish);
 
                             }
-                            resultMap.put("word","");
-                            resultMap.put("definition","");
-                            resultMap.put("pos","");
+
                             message = c.conversion(resultMap);
 
                             log.warn(resultMap.toString());
@@ -188,6 +201,8 @@ public class FollowWordSocket {
                       sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
                       objMap.replace("turn",true);
                   }
+                  String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                  objMap.put("user",user);
                   message=c.conversionWord(objMap, true);
                   log.info("session:{} send data : {}",clientsArray[i], message);
                   ((Session)clientsArray[i]).getBasicRemote().sendText(message);

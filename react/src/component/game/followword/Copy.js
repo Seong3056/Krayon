@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { json } from 'react-router-dom';
+import '../../../resource/scss/gametest/followword/Play.scss';
+import '../../../resource/scss/game/followword/followword.scss';
 
 function Copy({ send, sendChar, data, list, startWord, turn }) {
     const [currentWord, setCurrentWord] = useState('');
@@ -78,36 +80,44 @@ function Copy({ send, sendChar, data, list, startWord, turn }) {
     }, [data]);
 
     return (
-        <div className="in-game">
-            <div className="definition">{definition}</div>
-            <div className="preview">
-                <div className="prev">
-                    {!!previousWord
-                        ? previousWord.substring(0, previousWord.length - 1)
-                        : ''}
-                    <span className="last-char">
+        <div className="play">
+            <div className="game">
+                <div className="definition">{definition}</div>
+                <div className="preview">
+                    <div className="prev">
                         {!!previousWord
-                            ? previousWord.substring(previousWord.length - 1)
+                            ? previousWord.substring(0, previousWord.length - 1)
                             : ''}
-                    </span>
-                </div>
+                        <span className="last-char">
+                            {!!previousWord
+                                ? previousWord.substring(
+                                      previousWord.length - 1
+                                  )
+                                : ''}
+                        </span>
+                    </div>
 
-                <div className="current">{currentWord}</div>
-                {/* {definition} */}
+                    <div className="current">{currentWord}</div>
+                    {/* {definition} */}
+                </div>
             </div>
-            <input
-                // disabled={!userTurn}
-                type="text"
-                // value={inputValue}
-                id="input"
-                onChange={(e) => sendChar(handleInputChange(e))}
-                onKeyDown={(e) => {
-                    if (e.keyCode === 13) {
-                        CheckWord();
-                        document.getElementById('input').value = '';
-                    }
-                }}
-            />
+            <div className="chat">
+                <input
+                    // disabled={!userTurn}
+                    type="text"
+                    // value={inputValue}
+                    // id="input"
+                    className="input"
+                    onChange={(e) => sendChar(handleInputChange(e))}
+                    onKeyDown={(e) => {
+                        if (e.keyCode === 13) {
+                            CheckWord();
+                            document.querySelector('.input').value = '';
+                        }
+                    }}
+                />
+                <button className="button">입력</button>
+            </div>
         </div>
     );
 }
