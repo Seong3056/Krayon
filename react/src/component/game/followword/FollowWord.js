@@ -24,7 +24,8 @@ const FollowWord = ({ history }) => {
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + 132;
+    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + id;
+
 
     useEffect(() => {
         webSocketLogin();

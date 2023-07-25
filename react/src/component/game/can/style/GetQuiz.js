@@ -31,7 +31,7 @@ const GetQuiz = () => {
 
   return (
     <div className="getQuiz">
-      <p>속담</p>
+      <p>문제</p>
       {quizData && <p>{quizData}</p>}
     </div>
   );

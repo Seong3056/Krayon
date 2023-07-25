@@ -51,6 +51,7 @@ function CheckWord() {
                         }
                     } else {
                         console.error('Error:', response.status);
+                        alert('사전에 정의되지 않은 단어!');
                         console.error('단어조회실패');
                         setInputValue('');
                         setCurrentWord('');
@@ -58,6 +59,7 @@ function CheckWord() {
                     }
                 } catch (error) {
                     console.error('Error:', error);
+                    alert('사전에 정의되지 않은 단어!');
                     console.error('단어조회실패2');
                     setInputValue('');
                     setCurrentWord('');
