@@ -17,10 +17,10 @@ import java.util.Random;
 @Slf4j
 public class WMService {
 
-    public String getData(String drawData) {
-        log.info("받아서 전파하는 데이터: {}", drawData);
-        return drawData;
-    }
+//    public String getData(String drawData) {
+//        log.info("받아서 전파하는 데이터: {}", drawData);
+//        return drawData;
+//    }
 
     // 랜덤 수 생성
     public int getTargetCode() {

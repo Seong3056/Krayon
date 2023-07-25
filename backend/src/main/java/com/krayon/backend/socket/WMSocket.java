@@ -32,26 +32,12 @@ public class WMSocket {
         Map<String, List<String>> res = session.getRequestParameterMap();
         log.info("res={}", res);
 
-        String name = res.get("name").get(0);
-        log.info("시작");
-        objMap.put("name",name);
-        objMap.put("date","시스템");
-        objMap.put("msg",name+"님이 접속했습니다.");
-        objMap.put("wordInfo",currentWordMap);
-
-
 
         if(!clients.contains(session)) {
             clients.add(session);
             log.info("WM session open : {}", session);
         }else{
             log.info("이미 연결된 session");
-        }
-        objMap.put("list",clients);
-        String message = c.conversion(objMap);
-        for (Session s : clients) {
-            log.info("send data : {}", message);
-            s.getBasicRemote().sendText(message);
         }
     }
 

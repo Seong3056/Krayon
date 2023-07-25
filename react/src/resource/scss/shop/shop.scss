@@ -1,3 +1,7 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
 .shop{
     width: 98%;
     height: 95%;
@@ -59,6 +63,7 @@
             padding-top: 20%;
             margin: 1%;
             background-color: #fff;
+            cursor: pointer;
         }
         
     }

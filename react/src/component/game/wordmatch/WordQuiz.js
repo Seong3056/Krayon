@@ -1,92 +1,92 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import '../../../resource/scss/game/wordmatch/WordQuiz.scss';
+import "../../../resource/scss/game/wordmatch/WordQuiz.scss";
+import TypeHangul from "../../../../node_modules/type-hangul/src/index";
+const WordQuiz = ({ sendStart, data, send }) => {
+  const url = "http://localhost:8181/api/match";
 
-const WordQuiz = () => {
-    let quiz = 'Word Quiz';
-    const url = 'http://localhost:8181/api/match';
+  const [quizDefinition, setQuizDefinition] = useState("");
+  const [quizWord, setQuizWord] = useState("");
+  const [answer, setAnswer] = useState("");
 
-    const [definition, setDefinition] = useState('');
-    const [word, setWord] = useState('');
-    const [hintTime, setHintTime] = useState(20000);
-    const [answer, setAnswer] = useState('');
+  useEffect(() => {
+    if (data.wordInfo !== undefined) {
+      const definition = data.wordInfo.definition
+        .replaceAll("(", "")
+        .replaceAll(")", "");
+      console.log(definition);
+      setQuizDefinition(definition);
+    }
+  }, [data]);
+  useEffect(() => {
+    const $textBox = document.getElementById("textBox");
+    console.log($textBox.textContent);
+    if ($textBox.textContent !== "")
+      TypeHangul.type("#textBox", {
+        intervalType: 60,
+      });
+  }, [quizDefinition]);
 
-    useEffect(() => {
-        console.log(word);
-    }, [word]);
+  const fetchQuiz = async () => {
+    const res = await fetch(url, { method: "GET" });
+    const data = await res.json();
 
-    const fetchQuiz = async () => {
-        const res = await fetch(url, { method: 'GET' });
-        const data = await res.json();
+    setQuizDefinition(data.definition);
+    setQuizWord(data.word);
+  };
 
-        console.log(data);
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      handleSubmit(e.target.value);
+    }
 
-        setDefinition(data.definition);
-        setWord(data.word);
-    };
+    setAnswer(e.target.value);
+  };
 
-    const [inputValue, setInputValue] = useState('');
+  const handleSubmit = (e) => {
+    setAnswer(e);
+    document.getElementById("in").value = "";
+  };
 
-    const handleKeyDown = (e) => {
-        if (e.keyCode === 13) {
-            handleSubmit(e.target.value);
-        }
-    };
+  const runWordQuiz = () => {
+    console.log("버튼이 눌림");
+    let count = 1;
 
-    const handleSubmit = (a) => {
-        // if (answer === word) alert('정답입니다!!');
-        // else alert('틀렸습니다');
-        // const a = document.getElementById('in').value;
+    let quiz = setInterval(() => {
+      console.log("인터벌 진입");
 
-        setAnswer(a);
-        setInputValue('');
-        document.getElementById('in').value = '';
-        console.log(inputValue);
-    };
+      count++;
+      console.log("count: " + count);
 
-    const runWordQuiz = () => {
-        console.log('버튼이 눌림');
-        let count = 1;
+      if (count > 4) {
+        console.log("중지시켜~~~~~~~~~~~~~~~~~~");
+        clearInterval(quiz);
+      }
 
-        let quiz = setInterval(() => {
-            console.log('인터벌 진입');
+      fetchQuiz();
 
-            count++;
-            console.log('count: ' + count);
+      console.log("정답: " + quizWord);
+      console.log("answer: " + answer);
 
-            if (count > 4) {
-                console.log('중지시켜~~~~~~~~~~~~~~~~~~');
-                clearInterval(quiz);
-            }
+      if (answer !== "" && answer === quizWord) {
+        console.log("정답: " + quizWord);
+        console.log("answer: " + answer);
+        clearInterval(quiz);
+      }
+    }, 3000);
+  };
 
-            fetchQuiz();
-
-            if (answer === word) {
-                console.log('정답: ' + word);
-                console.log('answer: ' + answer);
-                clearInterval(quiz);
-            }
-        }, 3000);
-    };
-
-    // <div className='quizBox'>
-    //         <div className='textBox'>{ definition }</div>
-    //         <button onClick={runWordQuiz}>Quiz Start</button>
-    //         <input type='text' id='in' onKeyDown={handleKeyDown} />
-    //     <button onClick={() => handleSubmit(inputValue)}>Submit</button>
-    //     </div>
-
-    return (
-        <div className="play">
-            <div className="game">
-                <div className="textBox">{definition}</div>
-            </div>
-            <div className="chat">
-                <input className="input" type="text" />
-                <button className="button" onClick={runWordQuiz}></button>
-            </div>
-        </div>
-    );
+  return (
+    <div className="play">
+      <div className="game">
+        <div className="textBox">{quizDefinition}</div>
+      </div>
+      <div className="chat">
+        <input className="input" type="text" />
+        <button className="button" onClick={runWordQuiz}></button>
+      </div>
+    </div>
+  );
 };
 
 export default WordQuiz;
