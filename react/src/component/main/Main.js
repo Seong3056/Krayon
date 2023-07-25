@@ -20,7 +20,7 @@ const Main = ({ history }) => {
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/chatt?id=' + id ;
+    const URL = 'ws://' + ip + ':8181/api/chatt?name=' + id;
     const socketClose = () => {
         if (ws.current.readyState === 1) ws.current.close();
     };

@@ -16,7 +16,9 @@ public class ConversionJson {
 //		log.info(map.toString());
 		Set<String> idList = new HashSet<>();
 		Set<Session> clients = new HashSet<>();
+
 		if(map.containsKey("list")) {
+			log.info(clients.toString());
 			clients = (Set<Session>) map.get("list");
 			clients.forEach(a -> {
 				String name = a.getRequestParameterMap().get("name").get(0);
@@ -156,8 +158,8 @@ public class ConversionJson {
 		Set<String> idList = new HashSet<>();
 //		JSONPObject json = new JSONPObject(idList);
 		clients.forEach(a -> {
-			String id = a.getRequestParameterMap().get("id").get(0);
-			idList.add(id);
+			String name = a.getRequestParameterMap().get("name").get(0);
+			idList.add(name);
 
 		});
 		map.put("name",field[0]); //아이디

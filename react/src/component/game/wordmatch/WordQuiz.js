@@ -1,89 +1,123 @@
 import React, { useEffect, useState } from 'react';
 
 import '../../../resource/scss/game/wordmatch/WordQuiz.scss';
+import TypeHangul from '../../util/TypeHangul';
+import { d } from 'hangul-js';
+// import TypeHangul from '../../../../node_modules/type-hangul/src/index';
 
-const WordQuiz = () => {
+const WordQuiz = ({ word, definitionData, send, answer }) => {
     let quiz = 'Word Quiz';
     const url = 'http://localhost:8181/api/match';
 
-    const [definition, setDefinition] = useState('');
-    const [word, setWord] = useState('');
+    const [definition, setDefinition] = useState(' ');
+
     const [hintTime, setHintTime] = useState(20000);
-    const [answer, setAnswer] = useState('');
+    // const [answer, setAnswer] = useState('');
+    const [msg, setMsg] = useState('');
+    const [dummy, setDummy] = useState('');
+    const [inputValue, setInputValue] = useState('');
+    const [ans, setAns] = useState('');
+    // setDummy(sessionStorage.getItem('definition'));
+    const $def = document.getElementById('definition');
+    const $ans = document.getElementById('answer');
+    useEffect(() => {
+        // console.log(document.getElementById('definition').textContent);
+        console.log('42424' + definitionData);
+        if (definitionData !== '') {
+            console.log(definitionData);
+            // setDefinition(definitionData);
+            wait();
+            $def.textContent = '';
+            $ans.textContent = '';
+            setAns('');
+            $def.textContent = definitionData;
+            console.log(cho_hangul(word));
+            $ans.textContent = cho_hangul(word);
+            TypeHangul.type('#definition');
+            console.log(dummy);
+        }
+    }, [definitionData]);
 
     useEffect(() => {
-        console.log(word);
-    }, [word]);
+        console.log('answer' + answer);
+        if (answer !== undefined) {
+            setAns(answer);
+        }
+    }, [answer]);
 
-    const fetchQuiz = async () => {
-        const res = await fetch(url, { method: 'GET' });
-        const data = await res.json();
-
-        console.log(data);
-
-        setDefinition(data.definition);
-        setWord(data.word);
-    };
-
-    const [inputValue, setInputValue] = useState('');
-
-    const handleKeyDown = (e) => {
-        if (e.keyCode === 13) {
-            handleSubmit(e.target.value);
+    const wait = () => {
+        let length = sessionStorage.getItem('definition');
+        if (definition == length) return;
+        else if (definition != length) {
+            setTimeout(() => {
+                wait();
+            }, 500);
         }
     };
 
-    const handleSubmit = (a) => {
-        // if (answer === word) alert('정답입니다!!');
-        // else alert('틀렸습니다');
-        // const a = document.getElementById('in').value;
-
-        setAnswer(a);
-        setInputValue('');
-        document.getElementById('in').value = '';
-        console.log(inputValue);
+    const sendMsg = (msg) => {
+        send(msg);
+        document.querySelector('.input').value = '';
     };
-
-    const runWordQuiz = () => {
-        console.log('버튼이 눌림');
-        let count = 1;
-
-        let quiz = setInterval(() => {
-            console.log('인터벌 진입');
-
-            count++;
-            console.log('count: ' + count);
-
-            if (count > 4) {
-                console.log('중지시켜~~~~~~~~~~~~~~~~~~');
-                clearInterval(quiz);
+    function cho_hangul(str) {
+        const cho = [
+            'ㄱ',
+            'ㄲ',
+            'ㄴ',
+            'ㄷ',
+            'ㄸ',
+            'ㄹ',
+            'ㅁ',
+            'ㅂ',
+            'ㅃ',
+            'ㅅ',
+            'ㅆ',
+            'ㅇ',
+            'ㅈ',
+            'ㅉ',
+            'ㅊ',
+            'ㅋ',
+            'ㅌ',
+            'ㅍ',
+            'ㅎ',
+        ];
+        let result = '';
+        console.log('sssssssssssssssss' + str);
+        if (str !== undefined)
+            for (let i = 0; i < str.length; i++) {
+                let code = str.charCodeAt(i) - 44032;
+                if (code > -1 && code < 11172)
+                    result += cho[Math.floor(code / 588)];
             }
-
-            fetchQuiz();
-
-            if (answer === word) {
-                console.log('정답: ' + word);
-                console.log('answer: ' + answer);
-                clearInterval(quiz);
-            }
-        }, 3000);
+        return result;
+    }
+    const a = {
+        123: 5000,
     };
-
-    // <div className='quizBox'>
-    //         <div className='textBox'>{ definition }</div>
-    //         <button onClick={runWordQuiz}>Quiz Start</button>
-    //         <input type='text' id='in' onKeyDown={handleKeyDown} />
-    //     <button onClick={() => handleSubmit(inputValue)}>Submit</button>
-    //     </div>
-
+    const b = 123;
+    console.log(a.b);
     return (
         <div className="play">
             <div className="game">
-                <div className="textBox">{definition}</div>
+                <div id="definition"></div>
+                <div id="answer">{ans}</div>
             </div>
             <div className="chat">
-                <input className="input" type="text" />
-                <button className="button" onClick={runWordQuiz}></button>
+                <input
+                    className="input"
+                    type="text"
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') sendMsg(msg);
+                        else setMsg(e.target.value);
+                        console.log(e.target.value);
+                    }}
+                />
+                <button
+                    className="button"
+                    // onClick={compareLength($def.textContent.length)}
+                >
+                    전송
+                </button>
             </div>
         </div>
     );
