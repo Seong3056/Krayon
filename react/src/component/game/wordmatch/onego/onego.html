@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./onego.css">
+    <!-- <link rel="stylesheet" href="./onego.js"> -->
+
+</head>
+<body>
+
+    <div class="manuscript-container">
+        <div class="manuscript">
+            <p>
+                바람을 타고 날아오르는
+            </p>
+            <p>
+                새들은 걱정 없이
+            </p>
+            <!-- <img src="https://i.imgur.com/pEmnc36.jpg" alt="roster" /> -->
+            <p>
+                아름다운 세상 속으로
+            </p>
+            <p>
+                음표가 되어 나네
+            </p>
+            <p>
+                향기 나는 연필로 쓴 일기처럼
+            </p>
+            <p>숨겨두었던 마음</p>
+        </div>
+    </div>
+
+    <script>
+
+        
+
+function initManuscript() {
+    const manuscript = document.querySelectorAll(".manuscript");
+    const handleResize = () => {
+        manuscript.forEach((elt) => {
+            resizeMnuascriptContainer(elt);
+            resizeImage(elt);
+        });
+    };
+
+    window.addEventListener("load", handleResize, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    manuscript.forEach((element) => {
+        element.querySelectorAll("p").forEach((element) => {
+            const text = element.innerText;
+
+            element.innerHTML = "";
+            [...text].forEach((word) => {
+                const span = document.createElement("span");
+                const textNode = document.createTextNode(word);
+
+                span.appendChild(textNode);
+                element.append(span);
+            });
+        });
+    });
+
+    handleResize();
+}
+
+function resizeMnuascriptContainer(element) {
+    element.style.width = `${
+        (Math.floor(element.parentElement.offsetWidth / 24) - 1) * 24 - 1
+    }px`;
+}
+
+function resizeImage(element) {
+    element.querySelectorAll("img").forEach((img) => {
+        const { naturalWidth, naturalHeight } = img;
+        const ratio = naturalHeight / naturalWidth;
+        const newHeight = element.offsetWidth * ratio;
+
+        img.height = Math.floor(newHeight - (newHeight % 32) - 8);
+    });
+}
+
+initManuscript();
+
+    </script>
+    
+</body>
+</html>

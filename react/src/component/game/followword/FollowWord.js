@@ -24,7 +24,7 @@ const FollowWord = ({ history }) => {
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + 132;
+    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + id;
 
     useEffect(() => {
         webSocketLogin();
@@ -217,9 +217,9 @@ const FollowWord = ({ history }) => {
                 data={socketData}
                 sendChar={sendChar}
                 send={send}
-                startWord={startWord}
+                sendStart={startWord}
             />
-            <Info gameStart={gameStart} />
+            <Info sendStart={gameStart} />
             {/* <button className="ready" onClick={gameStart}>
                 게임시작
             </button> */}

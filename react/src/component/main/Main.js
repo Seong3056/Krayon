@@ -6,16 +6,28 @@ import Chatting from './Chatting';
 import UserInfo from './UserInfo';
 
 // import '../../resource/scss/main/Main.scss';
-import '../../resource/scss/maintest/Start.scss';
+import "../../resource/scss/maintest/Start.scss";
 // src\resource\scss\maintest\Start.scss
-import Chat from './Chat';
-import TypeHangul from '../../../node_modules/type-hangul/src/index';
+import Chat from "./Chat";
+import TypeHangul from "../../../node_modules/type-hangul/src/index";
+import Tab from "../Tab";
+
+import { BiSolidBook } from "react-icons/bi";
+import { FaBook } from "react-icons/fa";
+import { MdFace3 } from "react-icons/md";
+import { HiHome } from "react-icons/hi";
+import { BsBookmarksFill } from "react-icons/bs";
+// import { FaFaceSmileWink } from "react-icons/fa";
+
 const Main = ({ history }) => {
-    const ws = useRef(null);
-    const oldWs = useRef(null);
-    const [socketData, setSocketData] = useState('');
-    const [list, setList] = useState([]);
-    const [chkLog, setChkLog] = useState(false);
+  const ws = useRef(null);
+  const oldWs = useRef(null);
+  const [socketData, setSocketData] = useState("");
+  const [list, setList] = useState([]);
+  const [chkLog, setChkLog] = useState(false);
+  const [toggleIcon, setToggleIcon] = useState(false);
+  const [selGame, setselGame] = useState("");
+  const [selDes, setselDes] = useState("");
 
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
@@ -145,17 +157,75 @@ const Main = ({ history }) => {
     // <div class="bottom">
     // <UserInfo id={id} />
 
-    // </div>
-    // <div class="col col1">
+  // </div>
+  // <div class="col col1">
+  {
+    /* <UserInfo id={id} /> */
+  }
+  // <Chat send={send} ws={ws.current} textData={socketData} />
+  // </div>
+  const room = [
+    { game: "캐치마인드", describe: "캐치마인드 설명" },
     {
-        /* <UserInfo id={id} /> */
-    }
-    // <Chat send={send} ws={ws.current} textData={socketData} />
-    // </div>
-    return (
-        <div className="select">
-            <div class="row">
-                {/* <div id="test">한글타이핑 테스트내용입니다.</div>
+      game: "끝말잇기",
+      describe: "설명",
+    },
+    {
+      game: "단어맞추기",
+      describe: "설명",
+    },
+  ];
+  const toggleMenu = () => {
+    setToggleIcon(!toggleIcon);
+  };
+
+  let gameTitle = document.getElementById("gameTitle");
+  // console.log("gameTitle: " + gameTitle.textContent);
+
+  const describe = (pickCardTitle) => {
+    console.log(room[0].game);
+    let selectGame = "";
+    let selectDes = "";
+    room.map((r) => {
+      if (r.game == pickCardTitle) {
+        setselGame(r.game);
+        setselDes(r.describe);
+        return;
+      }
+    });
+  };
+
+  useEffect(() => {}, [describe]);
+
+  return (
+    <div className="select">
+      <div className="navbar">
+        {/* <div className="logo"></div> */}
+        <div className="menu">
+          <div
+            className={`${toggleIcon && "active"} toggle menu-icon `}
+            onClick={toggleMenu}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div className={`${toggleIcon && "showMenu"} menubar`}>
+            {toggleIcon && (
+              <>
+                <HiHome className="showIcon"></HiHome>
+                {/* <FaFaceSmileWink></FaFaceSmileWink> */}
+                <MdFace3 className="showIcon"></MdFace3>
+                <BiSolidBook className="showIcon"></BiSolidBook>
+                <BsBookmarksFill className="showIcon"></BsBookmarksFill>
+                {/* <Tab></Tab> */}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        {/* <div id="test">한글타이핑 테스트내용입니다.</div>
                 <button onClick={test}>실행</button> */}
 
                 {/* <UserList userList={list} /> */}
@@ -169,20 +239,16 @@ const Main = ({ history }) => {
                         쓸쓸하랴? 돋고, 새가 같으며, 황금시대다. 밥을 풍부하게
                         이상의 작고 천지는 몸이 철환하였는가? 황금시대를 실현에
                         광야에서 귀는 약동하다. */}
-                        보는 이상 그것을 품고 소금이라 눈에 같이 부패뿐이다.
-                        군영과 그들의 얼마나 이상, 보이는 눈에 피에 사랑의
-                        쓸쓸하랴? 돋고, 새가 같으며, 황금시대다. 밥을 풍부하게
-                        이상의 작고 천지는 몸이 철환하였는가? 황금시대를 실현에
-                        광야에서 귀는 약동하다.
-                    </p>
-                    <button type="button">Start</button>
-                </div>
-                <Rooms id={id} dis={disconnectSocket} />
-                <UserList userList={list} />
-            </div>
-            <Chat send={send} ws={ws.current} textData={socketData} />
+            {selDes}
+          </p>
+          <button type="button">시작</button>
         </div>
-    );
+        <Rooms id={id} dis={disconnectSocket} describe={describe} />
+        <UserList userList={list} />
+      </div>
+      <Chat send={send} ws={ws.current} textData={socketData} />
+    </div>
+  );
 };
 
 export default Main;

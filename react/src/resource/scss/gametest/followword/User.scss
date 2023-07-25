@@ -45,7 +45,10 @@
             // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             margin-top: 1px;
             margin-right: -10px;
-            font-size: 45px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: start;
         }
         .comment{
             display: none;

@@ -38,6 +38,10 @@
         height: 7%;
         position: absolute;
         bottom: 85px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
         // left: 1%;
         // margin: 5% auto;
         transition: background-color 0.3s;
@@ -48,7 +52,7 @@
         // -webkit-backdrop-filter: blur(10px);
         // border: 2px solid rgba(255, 255, 255, 0.18);
         // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        // cursor: pointer;
+        cursor: pointer;
 
         &:hover {
             background-color: #2980b9;
@@ -60,6 +64,9 @@
         height: 40px;
         position: absolute;
         bottom: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         // left: 5%;
         // margin: auto;
         background: #dde1e7;
@@ -69,6 +76,6 @@
         // -webkit-backdrop-filter: blur(10px);
         // border: 2px solid rgba(255, 255, 255, 0.18);
         // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        // cursor: pointer;
+        cursor: pointer;
     }
 }

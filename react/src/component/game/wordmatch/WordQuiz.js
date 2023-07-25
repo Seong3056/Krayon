@@ -31,7 +31,7 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
             $ans.textContent = '';
             setAns('');
             $def.textContent = definitionData;
-            console.log(cho_hangul(word));
+            // console.log(cho_hangul(word));
             $ans.textContent = cho_hangul(word);
             TypeHangul.type('#definition');
             console.log(dummy);
@@ -98,11 +98,11 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
     console.log(a.b);
     return (
         <div className="play">
-            <div className="game">
+            <div className="game wm">
                 <div id="definition"></div>
-                <div id="answer">{ans}</div>
+                <div id="answer"></div>
             </div>
-            <div className="chat">
+            <div className="play-chat">
                 <input
                     className="input"
                     type="text"

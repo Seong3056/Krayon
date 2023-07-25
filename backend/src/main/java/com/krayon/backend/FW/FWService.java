@@ -37,6 +37,7 @@ public class FWService {
         return result;
     }
 
+
     public int checkWord(String searchWord){
         try{
             String url = "https://krdict.korean.go.kr/api/search?certkey_no=5597&key=EDA74127B22EE2D406A4F053EFC0E2BD&type_search=search&part=word&q="+searchWord+"&sort=dict";
@@ -49,7 +50,7 @@ public class FWService {
             doc.getDocumentElement().normalize();
 
             // 파싱할 tag
-            NodeList nList = doc.getElementsByTagName("word_info");
+            NodeList nList = doc.getElementsByTagName("item");
 
             int randomIndex = new Random().nextInt(nList.getLength());
 

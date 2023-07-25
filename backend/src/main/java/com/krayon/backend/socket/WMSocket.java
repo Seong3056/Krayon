@@ -34,6 +34,7 @@ public class WMSocket {
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
+
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
         String name = res.get("name").get(0);
@@ -45,10 +46,12 @@ public class WMSocket {
         objMap.put("word",currentWordMap.get("word") != null ? currentWordMap.get("word"): "");
 
 
+        log.info("res={}", res);
+
 
         if(!clients.contains(session)) {
             clients.add(session);
-            log.info("session open : {}", session);
+            log.info("WM session open : {}", session);
         }else{
             log.info("이미 연결된 session");
         }

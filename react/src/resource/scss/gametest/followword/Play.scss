@@ -24,9 +24,13 @@
         //     -webkit-backdrop-filter: blur(10px);
         //     border: 2px solid rgba(255, 255, 255, 0.18);
         //     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+       
     }
+    &.can{
+        padding: 0;   
+       }
     
-    .chat {
+    .play-chat {
         // margin-bottom: 2%;
         position: relative;
         width: 95%;

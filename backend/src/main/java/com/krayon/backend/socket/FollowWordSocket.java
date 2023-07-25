@@ -224,6 +224,7 @@ public class FollowWordSocket {
             if(map.get("start").equals("true")){
                 sessionTurn = session;
                 Map<String, String> randomWord = new HashMap<>();
+
                 while (true) {
                     randomWord = wordService.randomWord("명사");
                     if(randomWord != null) break;
