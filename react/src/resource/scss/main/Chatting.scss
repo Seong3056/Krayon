@@ -8,7 +8,7 @@
     // margin-right: 3px;
     display: flex;
     flex-flow: column;   
-    
+    color: black;
     // border-radius: 10px;
     
     box-sizing: border-box;
@@ -20,7 +20,13 @@
         max-height: 185px;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
-        background-color: red;
+        // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+        backdrop-filter: blur(1px);
+        // -webkit-backdrop-filter: blur(10px);
+        // border: 2px solid rgba(255, 255, 255, 0.18);
+        // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        background-color: #f9f9f9;
+        box-shadow: 0px 0px 0px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
         // padding-bottom: 16px;
         // text-align: center;
         text-indent: 10px;
@@ -53,19 +59,34 @@
         
         display: flex;
         .input {
-            width: 100%;
+            width: 88%;
             height: 30px;
             border-bottom-left-radius: 10px;            
             border-bottom-right-radius: 10px;            
             outline: none;
             border: none;
-            background-color: blue;
+            // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            // backdrop-filter: blur(10px);
+            // -webkit-backdrop-filter: blur(10px);
+            // border: 2px solid rgba(255, 255, 255, 0.18);
+            // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288);
+            margin-right: auto;
 
         }
         .btnSend{
-            background-color: aqua;
+            // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            // backdrop-filter: blur(10px);
+            // -webkit-backdrop-filter: blur(10px);
+            // border: 2px solid rgba(255, 255, 255, 0.18);
+            // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow:  -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
             border: none;
+            
             border-bottom-right-radius: 10px;
+            &:active {
+                box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288);
+            }
         }
 
         // label {
@@ -91,6 +112,13 @@
     cursor: pointer;
     position: absolute;
     right: 20px;
-    bottom: 20px;
+    bottom: 25px;
     // position: absolute;
+    &:hover {
+        color: goldenrod;
+    }
+    &:active {
+        padding: 10px;
+        box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288);
+    }
 }
