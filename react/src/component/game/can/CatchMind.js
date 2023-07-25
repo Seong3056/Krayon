@@ -58,10 +58,10 @@ const CatchMind = ({history}) => {
                 turn: dataSet.turn,
                 
             };
-            if(dataSet.wordInfo != undefined){
-                if(!dataSet.wordInfo.isVaild){
+            if(dataSet.wordInfo !== undefined){
+                if(dataSet.wordInfo.isVaild){
                     setCrtWord(dataSet.wordInfo.word);
-                console.log("dnjemdlsvh"+dataSet.wordInfo.word);
+                    console.log("캐치마인드 단어 수신"+dataSet.wordInfo.word);
                 }
             }
             
@@ -71,8 +71,9 @@ const CatchMind = ({history}) => {
                 setList(dataSet.list);
             }
             setSocketData(data);
+            console.log(crtWord);
             if(dataSet.turn !== undefined)setTurn(dataSet.turn);
-            console.log("내턴값(단어표출!)"+dataSet.turn);
+            console.log("내턴값"+dataSet.turn);
 
            
         };

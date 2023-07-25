@@ -27,6 +27,7 @@ public class CatchMindSocketChat {
     private static Map<String,String> currentWordMap = new HashMap<>();
     private static HashSet<String> correct = new HashSet<>();
 
+
     private Map<String ,Object > objMap = new HashMap<>();
     private static Session sessionTurn = null;
 
@@ -99,7 +100,7 @@ public class CatchMindSocketChat {
 
 
         if (map.containsKey("img")) { //입력값이 img 일때
-            log.info("메세지엔 접근했는데");
+            log.info("그림엔 접근했는데");
             if (sessionTurn == session) {
 
                 for (Session s : clients) {
@@ -109,35 +110,46 @@ public class CatchMindSocketChat {
             }
         } else if (map.containsKey("start")) { //게임시작버튼이 눌렸을때
             if (map.get("start").equals("true")) {
+                log.info("이건 시작");
                 sessionTurn = session;
-                Map<String, String> randomWord = wordService.randomWord("명사");
-                objMap.put("word", randomWord.get("word"));
-//                objMap.put("definition",randomWord.get("definition"));
-                objMap.put("pos", "");
+
+                Map<String, String> randomWord = new HashMap<>();
+                while (true) {
+                    randomWord = wordService.randomWord("명사");
+                    if(randomWord != null) break;
+                }
 
                 currentWordMap.put("word", randomWord.get("word"));
 //                currentWordMap.put("definition",randomWord.get("definition"));
                 currentWordMap.put("pos", "");
 //                System.out.println("startWord = " + startWord);
+                objMap.put("word", randomWord.get("word"));
+//                objMap.put("definition",randomWord.get("definition"));
+                objMap.put("pos", "");
+
 
 
                 for (Session s : clients) {
                     objMap.put("turn", false);
                     if (s == sessionTurn) objMap.replace("turn", true);
                     message = c.conversionWord(objMap, true);
-                    log.info(message);
+                    log.info("---"+message);
                     s.getBasicRemote().sendText(message);
                 }
             }
         } else if (map.containsKey("answer")) {//정답입력하면 모두 false 주고 맞춘사람 true줘서 턴돌리기
             if (sendAnswer.equals(currentWordMap.get("word"))) {
+                log.info("단어 정답검증 접근했는데");
                 for (int i = 0; i < clients.size(); i++) {
-                    if ((Session) clientsArray[i] == clientsArray[(index + 1) % clientsArray.length]) {
+                    if ((Session) clientsArray[i] == clientsArray[(index) % clientsArray.length]) {
                         sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
                     }
 
-
-                    Map<String, String> randomWord = wordService.randomWord("명사");
+                    Map<String, String> randomWord = new HashMap<>();
+                    while (true) {
+                        randomWord = wordService.randomWord("명사");
+                        if(randomWord != null) break;
+                    }
                     objMap.put("word", randomWord.get("word"));
                     objMap.put("pos", "");
 
@@ -148,17 +160,38 @@ public class CatchMindSocketChat {
                     objMap.put("user",user);
                 }
                 for (Session s : clients) {
+                    objMap.put("turn", false);
                     if (s == sessionTurn) objMap.replace("turn", true);
                     message = c.conversionWord(objMap, true);
-                    log.info(message);
+                    log.info("---"+message);
                     s.getBasicRemote().sendText(message);
                 }
-            } else {
+            } else {//틀렸을때는 그대로 유지
                 for (Session s : clients) {
+                    objMap.put("turn", false);
+                    if (s == sessionTurn) objMap.replace("turn", true);
                     message = c.conversionWord(objMap, false);
-                    log.info(message);
+                    log.info("---"+message);
                     s.getBasicRemote().sendText(message);
                 }
+
+//                sessionTurn = session;
+//                Map<String, String> randomWord = wordService.randomWord("명사");
+//                objMap.put("word",randomWord.get("word"));
+////                objMap.put("definition",randomWord.get("definition"));
+//                objMap.put("pos","");
+//
+//                currentWordMap.put("word",randomWord.get("word"));
+////                currentWordMap.put("definition",randomWord.get("definition"));
+//                currentWordMap.put("pos","");
+//
+//                for (Session s : clients) {
+//                    objMap.put("turn",false);
+//                    if(s == sessionTurn) objMap.replace("turn",true);
+//                    message = c.conversionWord(objMap,true);
+//                    log.info(message);
+//                    s.getBasicRemote().sendText(message);
+//                }
             }
 
         }

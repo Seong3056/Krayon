@@ -24,7 +24,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
     // canvas useRef
     const canvas = canvasRef.current;
     if (canvas) {
-      canvas.width = 980;
+      canvas.width = 1160;
       canvas.height = 540;
       const ctx = canvas.getContext("2d");
       ctx.lineJoin = "round";
@@ -121,15 +121,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
   useEffect(() => {
     if (!!crtWord);
     if (data.wordInfo !== undefined) {
-      console.log("단어" + data.wordInfo.pos);
-      if (data.wordInfo.isVaild) {
-        if (data.wordInfo.definition.length > 50) {
-          console.log(data.wordInfo.definition.length);
-        }
-        console.log("접속 유저 리스트" + list);
-      } else {
-        // 단어가 없을 때
-      }
+      
     }
     console.log("!!!!!!!!!!!!!!!" + data.turn);
     if (data.turn !== undefined) {
@@ -147,7 +139,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
           src={getPic}
           id="test"
           alt=""
-          style={{ width: 980, height: 540, backgroundColor: "white" }}
+          style={{ width: 1160, height: 540, backgroundColor: "white" }}
         />
       </div>
         
@@ -159,7 +151,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
           <p>문제 : {crtWord}</p>
         </div>
 
-        <div className="canvasWrap" onClick={sendCanvasData} style={{ width: 980, height: 540, backgroundColor: "white" }}>
+        <div className="canvasWrap" onClick={sendCanvasData} style={{ width: 1160, height: 540, backgroundColor: "white" }}>
           <canvas
             className="canvas"
             ref={canvasRef}
