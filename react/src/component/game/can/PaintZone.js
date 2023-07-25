@@ -31,8 +31,10 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
       ctx.lineWidth = 2.5;
       ctx.strokeStyle = "#000000";
       setGetCtx(ctx);
+      console.log("정상캔버스 등장");
     }
-  }, []);
+  }, [userTurn]);
+
 
   const handlePenColorChange = (newColor) => {
     setPenColor(newColor);
