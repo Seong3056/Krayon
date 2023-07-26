@@ -17,6 +17,23 @@
         // border: 2px solid rgba(255, 255, 255, 0.18);
         // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         margin: 30px 60px 30px auto;
+        display: flex;
+        flex-direction: column;
+
+        .user-score{
+            display: flex;
+            flex-direction: row;
+            font-size: 25px;
+            .name {
+                width: 50%;
+                text-align: right;
+            }
+            .point{
+                width: 50px;
+                margin-left: 20px;
+            }
+            
+        }
     }
 
     .myInfo {

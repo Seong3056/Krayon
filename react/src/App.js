@@ -21,8 +21,10 @@ import Join from './component/user/Join';
 const App = () => {
     return (
         <div className="wrapper">
-            {/* <Tab /> */}
+            <Tab />
             <Routes>
+                <Route path="/" Component={Login} />
+                <Route path="/join" Component={Join} />
                 <Route path="/main" Component={Main} />
                 <Route path="/user" Component={User} />
                 <Route path="/shop" Component={Shop} />

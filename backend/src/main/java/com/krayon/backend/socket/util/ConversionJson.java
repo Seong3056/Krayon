@@ -15,8 +15,22 @@ public class ConversionJson {
 	public String conversion(Map<String,Object> map){
 //		log.info(map.toString());
 		Set<String> idList = new HashSet<>();
+		List<Map<String,Object>> p = new ArrayList<>();
 		Set<Session> clients = new HashSet<>();
+		if(map.containsKey("point")){
+			Object point = map.get("point");
+			for (Object o : (List) point) {
+				System.out.println("o = " + o);
+				Map<String,Object> oMap = (Map<String, Object>) o;
+				Map<String,Object> nMap = new HashMap<>();
+				nMap.put("name",oMap.get("name"));
+				nMap.put("point",oMap.get("point"));
 
+				p.add(nMap);
+			}
+			System.out.println("p = " + p);
+			map.replace("point",p);
+		}
 		if(map.containsKey("list")) {
 			log.info(clients.toString());
 			clients = (Set<Session>) map.get("list");

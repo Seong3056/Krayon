@@ -56,6 +56,7 @@ const FollowWord = ({ history }) => {
                 char: dataSet.char,
                 turn: dataSet.turn,
                 result: dataSet.result,
+                point: dataSet.point,
             };
             console.log(dataSet);
             // console.log('11111111111 ' + dataSet.list);
@@ -66,6 +67,7 @@ const FollowWord = ({ history }) => {
             }
 
             setSocketData(data);
+            console.log(data);
             if (dataSet.user !== undefined) setTurn(dataSet.user);
             if (!dataSet.char) {
                 if (dataSet.wordInfo !== undefined) {
@@ -76,7 +78,7 @@ const FollowWord = ({ history }) => {
                     setStart(false);
                 }
             }
-            console.log('!!!!!!!!!!!!' + dataSet.re);
+
             if (data.result !== undefined) {
                 console.log(data.result[0]);
                 console.log(data.result[0].name);
@@ -219,7 +221,11 @@ const FollowWord = ({ history }) => {
                 send={send}
                 sendStart={startWord}
             />
-            <Info sendStart={gameStart} />
+            <Info
+                point={socketData.point}
+                sendStart={gameStart}
+                textData={socketData}
+            />
             {/* <button className="ready" onClick={gameStart}>
                 게임시작
             </button> */}

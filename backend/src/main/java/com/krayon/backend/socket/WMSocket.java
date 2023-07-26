@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krayon.backend.korean.WordService;
 import com.krayon.backend.socket.util.ConversionJson;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +13,11 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
@@ -24,10 +26,12 @@ import java.util.concurrent.TimeUnit;
 public class WMSocket {
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
     private static Map<String,String> currentWordMap = new HashMap<>();
-    private static List<Map<String, Integer>> controll = new ArrayList<>();
+    private static List<Map<String, Object>> control = new ArrayList<>();
+    private static LocalDateTime time = LocalDateTime.now();
+
 
     private Map<String ,Object > objMap = new HashMap<>();
-    private int point = 30;
+    private final int point = 30;
 
     WordService wordService = new WordService();
     ConversionJson c = new ConversionJson();
@@ -47,14 +51,39 @@ public class WMSocket {
 
 
         log.info("res={}", res);
-
-
-        if(!clients.contains(session)) {
-            clients.add(session);
-            log.info("WM session open : {}", session);
-        }else{
-            log.info("이미 연결된 session");
+        AtomicInteger index = new AtomicInteger();
+        control.forEach(e -> {
+            log.info("controll {} , session {}",e.get("session"),session);
+            if(e.get("name").equals(name)){
+                index.set(1);
+                return;
+            }});
+        if(index.get() == 0 ) {
+            Map<String,Object> userMap = new HashMap<>();
+            userMap.put("session",session);
+            userMap.put("point",0);
+            userMap.put("name",name);
+            control.add(userMap);
         }
+        log.info("controll: {}",control);
+        objMap.put("point",control);
+        AtomicBoolean isSession = new AtomicBoolean(false);
+        clients.forEach(e -> {
+            if(e.getRequestParameterMap().get("name").get(0).equals(name)){
+                isSession.set(true);
+            }
+        });
+        if(!isSession.get()){
+            clients.add(session);
+        }
+//        if(!clients.contains(session)) {
+//            clients.add(session);
+//
+//
+//            log.info("WM session open : {}", session);
+//        }else{
+//            log.info("이미 연결된 session");
+//        }
         objMap.put("list",clients);
         log.info("res={}", res);
         log.info(Arrays.toString(clients.toArray()));
@@ -86,7 +115,7 @@ public class WMSocket {
         String msg = map.get("msg");
         String date = map.get("date");
         String word = "";
-
+        log.info("controll: {}",control);
         objMap.put("name",name);
         objMap.put("msg",msg);
         objMap.put("date",date);
@@ -114,8 +143,32 @@ public class WMSocket {
 
                 currentWordMap.put("word",randomWord.get("word"));
                 currentWordMap.put("definition",randomWord.get("definition"));
+
+                control.forEach(e -> {
+                    log.info("map: {}",e.toString());
+                    if(e.get("name").equals(name)){
+                        int p = (Integer) e.get("point");
+                        e.replace("point",p+point);
+                        return;
+                    }});
+                objMap.put("point",control);
+//                controll.forEach(user -> {
+//                    if(((Session)user.get("session")).equals(session)){
+//                        log.info("똑같다");
+//                        int p = (Integer) user.get("point");
+//                        user.replace("point",p+point);
+//                        return;
+//                    }
+//                });
+//                Map<String, Object> userMap = controll.stream().filter(user -> ;
+
                 message = c.conversion(objMap);
+
                 TimeUnit.SECONDS.sleep(3);
+
+
+
+
                 for (Session s : clients) {
                     log.info("send data : {}", message);
                     s.getBasicRemote().sendText(message);

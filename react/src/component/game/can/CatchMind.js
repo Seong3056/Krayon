@@ -26,6 +26,8 @@ const CatchMind = ({ history }) => {
     const [turn, setTurn] = useState(false);
     const [answer, setAnswer] = useState(''); //정답작성
 
+    const disableBtn = false;
+
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
     const URL = 'ws://' + ip + ':8181/api/game/catch?name=' + id;
@@ -214,7 +216,7 @@ const CatchMind = ({ history }) => {
             /> */}
             {/* </div> */}
 
-            <Info sendStart={gameStart} />
+            <Info sendStart={gameStart} disableBtn={disableBtn} />
             {/* <button onClick={gameStart}>게임시작</button> */}
         </>
     );

@@ -17,6 +17,7 @@ const WordMatch = ({ history }) => {
     const [definition, setDefinition] = useState('');
     const [word, setWord] = useState('');
     const [answer, setAnswer] = useState('');
+    const disableBtn = false;
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
@@ -40,6 +41,7 @@ const WordMatch = ({ history }) => {
                 msg: dataSet.msg,
                 definition: dataSet.definition,
                 word: dataSet.word,
+                point: dataSet.point,
             };
 
             // console.log('11111111111 ' + dataSet.list);
@@ -50,6 +52,7 @@ const WordMatch = ({ history }) => {
 
                 setList(dataSet.list);
             }
+            console.log(data);
             setSocketData(data);
 
             if (data.definition !== undefined) {
@@ -136,7 +139,12 @@ const WordMatch = ({ history }) => {
                 send={send}
                 definitionData={definition}
             />
-            <Info sendStart={sendStart} />
+            <Info
+                p={socketData.point}
+                sendStart={sendStart}
+                disableBtn={disableBtn}
+                textData={socketData}
+            />
             {/* <WMPlayer list={list} /> */}
         </>
     );
