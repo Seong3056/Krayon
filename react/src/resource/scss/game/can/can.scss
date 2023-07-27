@@ -18,6 +18,7 @@
     display: flex;
     flex-direction: column;
     // background-color: #0f0;
+    
 }
 .can-bottom{
     display: flex;
@@ -68,15 +69,20 @@
 
   .canvasWrap {
     background-color: white;
-    width: 100%;
+    width: inherit;
+    
+  }
 
+  // .canvasDraw{
+  //   width: 100%;
+  //   height: 100%;
+  // }
+
+  .canvas {
+    cursor: url("./test.cur"),auto;
     .userInfo{
       width: 100px;
     }
-  }
-
-  .canvas {
-    cursor: pointer;
     background-color: #fff;
   }
 
@@ -85,6 +91,11 @@
     flex-direction: row;
     font-size: 15px;
   }
+
+  // .getPicture{
+  //   width: 100%;
+  //   height: 100%;
+  // }
 
   .boldBar{
     width: 80px;

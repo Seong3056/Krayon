@@ -5,10 +5,14 @@ import "../../../resource/scss/game/can/can.scss"
 
 const API = "http://localhost:8181/api/catch";
 
-export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) {
+export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  }) {
   // useRef
   const canvasRef = useRef(null);
   const canvasRef2 = useRef(null);
+  const canvasWrapRef = useRef(null);
+  const gameRef = useRef(null);
+
+  const [canvasWidth, setCanvasWidth] = useState(canvasWrapRef.current?.clientWidth || 1160);
 
   // useState
   const [getCtx, setGetCtx] = useState(null);
@@ -17,14 +21,16 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
   const [penColor, setPenColor] = useState("#000000");
   const [getPic, setGetPic] = useState();
   const [userTurn, setUserTurn] = useState(true);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const [answer, setAnswer] = useState('');//정답작성
 
   useEffect(() => {
     // canvas useRef
     const canvas = canvasRef.current;
+    // console.log(userTurn);
     if (canvas) {
-      canvas.width = 1160;
+      canvas.width = canvasWidth;
       canvas.height = 540;
       const ctx = canvas.getContext("2d");
       ctx.lineJoin = "round";
@@ -33,7 +39,26 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
       setGetCtx(ctx);
       console.log("정상캔버스 등장");
     }
-  }, [userTurn]);
+  }, [userTurn, canvasWidth, gameStarted]);
+
+  useEffect(() => {
+    // 브라우저 창 크기가 변경될 때마다 이벤트 리스너 등록
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 이벤트 리스너 해제
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
+
+  const handleWindowResize = () => {
+    // game 태그의 크기를 벗어나지 않도록 캔버스의 크기를 동적으로 조절
+    const gameElement = gameRef.current;
+    if (gameElement) {
+      const availableWidth = gameElement.clientWidth;
+      setCanvasWidth(Math.min(availableWidth, 1140));
+    }
+  };
 
 
   const handlePenColorChange = (newColor) => {
@@ -129,23 +154,29 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
     if (data.turn !== undefined) {
       setUserTurn(data.turn);
       console.log("턴에 접근");
+
+      // if (data.turn === true) {
+          setGameStarted(true);
+      //   console.log("게임 진행중");
+      // }
     }
   }, [data]);
 
+
   return (
     <div className="play">
-    <div className="game">
+    <div className="game" ref={gameRef}>
     {!userTurn ? (
         <div>
         <img
           src={getPic}
-          id="test"
+          id="getPicture"
           alt=""
-          style={{ width: 1160, height: 540, backgroundColor: "white" }}
+          style={{ width: "100%", height: 540, backgroundColor: "white" }}
         />
       </div>
         
-      ) : (
+      ) : gameStarted ? (
         
       <div className="paintZone">
 
@@ -153,7 +184,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
           <p>문제 : {crtWord}</p>
         </div>
 
-        <div className="canvasWrap" onClick={sendCanvasData} style={{ width: 1160, height: 540, backgroundColor: "white" }}>
+        <div className="canvasWrap" onClick={sendCanvasData} style={{ width: "100%", height: 540, backgroundColor: "white" }} ref={canvasWrapRef}>
           <canvas
             className="canvas"
             ref={canvasRef}
@@ -161,6 +192,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
             onMouseUp={() => setPainting(false)}
             onMouseMove={(e) => drawFn(e)}
             onMouseLeave={() => setPainting(false)}
+            // style={{ width: "100%", height: "100%" }}
             id="canvasDraw"
           />
         </div>
@@ -236,6 +268,10 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer }) 
 
         
       </div>
+      ):(
+        <div>
+            <p>Waiting for the game to start...</p>
+          </div>
       )}
       
     </div>

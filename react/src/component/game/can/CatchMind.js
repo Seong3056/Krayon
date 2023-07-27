@@ -28,6 +28,8 @@ const CatchMind = ({history}) => {
     const [turn, setTurn] = useState(false);
     const [answer, setAnswer] = useState('');//정답작성
 
+    // const [gameStarted, setGameStarted] = useState(false);
+
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
     const URL = 'ws://' + ip + ':8181/api/game/catch?name=' + id ;
@@ -184,6 +186,7 @@ const CatchMind = ({history}) => {
         ws.current.send(temp);
         setStart(true);
     });
+    
     const handleBeforeUnload = (e) => {
         e.preventDefault();
         console.log('페이지이동이 감지됨');
@@ -192,29 +195,10 @@ const CatchMind = ({history}) => {
 
   return (
     <>
-    {/* <div>{id}</div> */}
     <User data={socketData} list={list} />
-    
-        {/* <div class="sectionMypage" > */}
-            <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} sendAnswer={sendAnswer}/>
-            {/* <input 
-            type="text" 
-            className="input"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)} 
-            placeholder="정답 또는 채팅을 입력해주세요!"
-            onKeyDown={(e) => {
-                if (e.keyCode === 13) {
-                    sendAnswer();
-                }
-            }} 
-            /> */}
-        {/* </div> */}
-            
-
-    
+    <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} sendAnswer={sendAnswer}/>
     <Info gameStart={gameStart} />
-        {/* <button onClick={gameStart}>게임시작</button> */}
+
         
         
       
