@@ -31,6 +31,8 @@ public class FollowWordSocket {
     private Map<String ,Object > objMap = new HashMap<>();
     private static Session sessionTurn = null;
 
+    private static boolean start = false;
+
     final int point = 10;
     //데이터값을 JSON 형태로 변환해주는 클래스 선언
     ConversionJson c = new ConversionJson();
@@ -230,6 +232,7 @@ public class FollowWordSocket {
                   if((Session)clientsArray[i] == clientsArray[(index+1)%clientsArray.length]) {
                       sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
                       objMap.replace("turn",true);
+
                   }
               }
                 for (Session s : clients) {
@@ -254,7 +257,7 @@ public class FollowWordSocket {
             if(map.get("start").equals("true")){
                 sessionTurn = session;
                 Map<String, String> randomWord = new HashMap<>();
-
+ start = true;
                 while (true) {
                     randomWord = wordService.randomWord("명사");
                     if(randomWord != null) break;

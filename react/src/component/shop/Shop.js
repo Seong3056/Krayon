@@ -17,12 +17,11 @@ const Shop = () => {
     return (
         <>
             <div class="shop">
+                <Article />
                 {modal && <PayModal close={closePay} />}
                 <div class="shop-left">
-                    <ArticleList />
                     <Wallet openPay={openPay} />
                 </div>
-                <Article />
             </div>
         </>
     );

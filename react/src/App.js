@@ -6,7 +6,7 @@ import Main from './component/main/Main';
 import Tab from './component/Tab';
 import './resource/scss/Section.scss';
 import { Routes, Route } from 'react-router-dom';
-import User from './component/userinfo/User';
+import MyInfo from './component/userinfo/MyInfo';
 import Shop from './component/shop/Shop';
 
 import FollowWord from './component/game/followword/FollowWord';
@@ -26,7 +26,7 @@ const App = () => {
                 <Route path="/" Component={Login} />
                 <Route path="/join" Component={Join} />
                 <Route path="/main" Component={Main} />
-                <Route path="/user" Component={User} />
+                {/* <Route path="/user" Component={MyInfo} /> */}
                 <Route path="/shop" Component={Shop} />
                 <Route path="login" Component={Login} />
                 <Route path="join" Component={Join} />

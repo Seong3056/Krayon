@@ -6,6 +6,7 @@ import '../../../resource/scss/gametest/followword/Play.scss';
 import '../../../resource/scss/game/wordmatch/WordMatch.scss';
 import User from '../User';
 import Info from '../Info';
+import { BASE_URL } from '../../../config/host-config';
 
 const WordMatch = ({ history }) => {
     const ws = useRef(null);
@@ -21,7 +22,7 @@ const WordMatch = ({ history }) => {
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/game/wm?name=' + id;
+    const URL = 'ws://' + BASE_URL + '/api/game/wm?name=' + id;
 
     useEffect(() => {
         webSocketLogin();

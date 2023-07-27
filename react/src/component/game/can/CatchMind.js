@@ -13,6 +13,7 @@ import GetQuiz from './style/GetQuiz';
 import { Link } from 'react-router-dom';
 import User from '../User';
 import Info from '../Info';
+import { BASE_URL } from '../../../config/host-config';
 
 const CatchMind = ({ history }) => {
     //웹소켓 객체저장, 유저리스트
@@ -30,7 +31,7 @@ const CatchMind = ({ history }) => {
 
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/game/catch?name=' + id;
+    const URL = 'ws://' + BASE_URL + '/api/game/catch?name=' + id;
 
     useEffect(() => {
         // const leave = history.block('페이지를 나가실건가요?');
@@ -40,6 +41,7 @@ const CatchMind = ({ history }) => {
         };
     }, [history]);
     useEffect(() => {
+        console.log(URL);
         webSocketLogin();
     }, []);
     const webSocketLogin = useCallback(() => {

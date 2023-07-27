@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import User from '../User';
 import Info from '../Info';
+import { BASE_URL } from '../../../config/host-config';
 
 const FollowWord = ({ history }) => {
     const ws = useRef(null);
@@ -24,11 +25,11 @@ const FollowWord = ({ history }) => {
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + id;
+    const URL = 'ws://' + BASE_URL + '/api/game/followword?name=' + id;
 
     useEffect(() => {
         webSocketLogin();
-
+        console.log(URL);
         console.log('1111111111111111웹소켓로그인');
     }, []);
 

@@ -18,6 +18,11 @@ import { MdFace3 } from 'react-icons/md';
 import { HiHome } from 'react-icons/hi';
 import { BsBookmarksFill, BsChatRightText } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import MyInfo from '../userinfo/MyInfo';
+import SearchForm from '../search/SearchForm';
+import SearchApp from '../search/SearchApp';
+import Shop from '../shop/Shop';
+import { BASE_URL } from '../../config/host-config';
 // import { FaFaceSmileWink } from "react-icons/fa";
 
 const Main = ({ history }) => {
@@ -33,11 +38,13 @@ const Main = ({ history }) => {
     const [chatIcon, setChatIcon] = useState(false);
     const [toggleIcon, setToggleIcon] = useState(false);
 
+    const [path, setPath] = useState('home');
+
     const disableBtn = true;
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/chatt?name=' + id;
+    const URL = 'ws://' + BASE_URL + '/api/chatt?name=' + id;
     const socketClose = () => {
         if (ws.current.readyState === 1) ws.current.close();
     };
@@ -213,7 +220,13 @@ const Main = ({ history }) => {
     };
     const click = (e) => {
         e.preventDefault();
-        console.log(e.target);
+        console.log(e.target.tagName);
+        if (e.target.tagName == 'path')
+            setPath(e.target.parentNode.getAttribute('values'));
+        else setPath(e.target.parentNode.getAttribute('values'));
+
+        if (path === e.target.parentNode.getAttribute('values'))
+            setPath('home');
     };
     useEffect(() => {}, [describe]);
 
@@ -239,18 +252,27 @@ const Main = ({ history }) => {
                     >
                         {toggleIcon && (
                             <>
-                                <HiHome
-                                    className="showIcon"
-                                    values="home"
-                                    id="home"
-                                />
+                                <div className="">
+                                    <HiHome
+                                        className="showIcon"
+                                        values="home"
+                                        id="home"
+                                    />
+                                </div>
                                 {/* <FaFaceSmileWink></FaFaceSmileWink> */}
-                                <MdFace3 className="showIcon" id="" />
-                                <BiSolidBook className="showIcon" />
+                                <MdFace3
+                                    className="showIcon"
+                                    id=""
+                                    values="info"
+                                />
+                                <BiSolidBook
+                                    className="showIcon"
+                                    values="search"
+                                />
                                 <BsBookmarksFill
                                     className="showIcon"
-                                    id="search"
-                                    values="search"
+                                    id="sub"
+                                    values="sub"
                                 />
 
                                 {/* <Tab></Tab> */}
@@ -259,25 +281,44 @@ const Main = ({ history }) => {
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="article">
                 {/* <div id="test">한글타이핑 테스트내용입니다.</div>
                 <button onClick={test}>실행</button> */}
 
                 {/* <UserList userList={list} /> */}
                 {/* <Socket wss={ws} id={id} /> */}
                 <div className="start-info"></div>
-
                 <div className="col col1">
-                    <h1>{!!selGame ? selGame : 'Krayon'}</h1>
-                    <p>
-                        {/* 보는 이상 그것을 품고 소금이라 눈에 같이 부패뿐이다.
-                        군영과 그들의 얼마나 이상, 보이는 눈에 피에 사랑의
-                        쓸쓸하랴? 돋고, 새가 같으며, 황금시대다. 밥을 풍부하게
-                        이상의 작고 천지는 몸이 철환하였는가? 황금시대를 실현에
-                        광야에서 귀는 약동하다. */}
-                        {selDes}
-                    </p>
-                    <button type="button">시작</button>
+                    {(() => {
+                        switch (path) {
+                            case 'home':
+                                return (
+                                    <>
+                                        <h1>
+                                            {!!selGame ? selGame : 'Krayon'}
+                                        </h1>
+                                        <p>
+                                            {/* 보는 이상 그것을 품고 소금이라 눈에 같이 부패뿐이다.
+                    군영과 그들의 얼마나 이상, 보이는 눈에 피에 사랑의
+                    쓸쓸하랴? 돋고, 새가 같으며, 황금시대다. 밥을 풍부하게
+                    이상의 작고 천지는 몸이 철환하였는가? 황금시대를 실현에
+                    광야에서 귀는 약동하다. */}
+                                            {selDes}
+                                        </p>
+                                        <button type="button">시작</button>
+                                    </>
+                                );
+                            case 'search':
+                                return <SearchApp />;
+                            case 'info':
+                                return <MyInfo />;
+                            case 'sub':
+                                return <Shop />;
+
+                            default:
+                                return null;
+                        }
+                    })()}
                 </div>
                 <Rooms id={id} dis={disconnectSocket} describe={describe} />
             </div>

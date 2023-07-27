@@ -57,8 +57,9 @@ const Login = () => {
     };
 
     const guestLogin = async () => {
-        const uuid = crypto.randomUUID();
-        const num = uuid.replace(/[^0-9]/g, '').substring(0, 4);
+        // const uuid = crypto.randomUUID();
+        // const num = uuid.replace(/[^0-9]/g, '').substring(0, 4);
+        const num = Math.floor(Math.random() * 8999) + 1000;
         const guestId = 'Guest_' + num;
         console.log(guestId);
 
