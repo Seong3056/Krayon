@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { CanvasStyle } from "./style/canvas";
 import '../../../resource/scss/gametest/followword/Play.scss';
 import "../../../resource/scss/game/can/can.scss"
+import html2canvas from "html2canvas";
 
 const API = "http://localhost:8181/api/catch";
 
@@ -124,6 +125,21 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     }
   };
 
+  const saveAsImageHandler = () => {
+    const target = document.querySelector('.play');
+    if (!target) {
+      return alert('결과 저장에 실패했습니다.');
+    }
+    html2canvas(target).then((canvas) => {
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'result.png';
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
+
   const sendCanvasData = async () => {
     const smallCanvas = canvasRef2.current;
     const dataURLSmall = smallCanvas.toDataURL();
@@ -160,14 +176,17 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
       //   console.log("게임 진행중");
       // }
     }
-  }, [data]);
+  }, [data.turn, data.name]);
 
 
   return (
     <div className="play">
     <div className="game" ref={gameRef}>
     {!userTurn ? (
-        <div>
+
+        <div className="getQuiz" disabled={!userTurn}>
+          <p>{data.name} 그림을 그리는중...</p>
+
         <img
           src={getPic}
           id="getPicture"
@@ -198,6 +217,9 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
         </div>
 
         <div className="canvasTools">
+          <button id="resetBtn" onClick={saveAsImageHandler}>
+            화면 캡쳐
+          </button>
           <button id="resetBtn" onClick={resetCanvas}>
             전체 지우기
           </button>

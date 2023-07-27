@@ -14,7 +14,8 @@ import UserList from '../../main/UserList'
 import GetQuiz from './style/GetQuiz'
 import { Link } from 'react-router-dom'
 import User from '../User'
-import Info from '../Info'
+
+import CanInfo from './CanInfo'
 
 const CatchMind = ({history}) => {
     //웹소켓 객체저장, 유저리스트
@@ -28,7 +29,7 @@ const CatchMind = ({history}) => {
     const [turn, setTurn] = useState(false);
     const [answer, setAnswer] = useState('');//정답작성
 
-    // const [gameStarted, setGameStarted] = useState(false);
+    let userList = 0;
 
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
@@ -71,10 +72,13 @@ const CatchMind = ({history}) => {
                 console.log('메인에서 캐치마인드진입');
                 console.log(dataSet.list);
                 setList(dataSet.list);
+                userList=dataSet.list.length
+                console.log(dataSet.list.length);
             }
             setSocketData(data);
             console.log(crtWord);
             if(dataSet.turn !== undefined)setTurn(dataSet.turn);
+            if(userList<=1)setTurn(!dataSet.turn);
             console.log("내턴값"+dataSet.turn);
 
            
@@ -196,8 +200,8 @@ const CatchMind = ({history}) => {
   return (
     <>
     <User data={socketData} list={list} />
-    <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} sendAnswer={sendAnswer}/>
-    <Info gameStart={gameStart} />
+    <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} sendAnswer={sendAnswer} turn={turn}/>
+    <CanInfo gameStart={gameStart} turn={!turn}/>
 
         
         
