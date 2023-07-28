@@ -23,9 +23,9 @@ const App = () => {
         <div className="wrapper">
             <Tab />
             <Routes>
-                <Route path="/" Component={Login} />
+                <Route path="/login" Component={Login} />
                 <Route path="/join" Component={Join} />
-                <Route path="/main" Component={Main} />
+                <Route path="/" Component={Main} />
                 {/* <Route path="/user" Component={MyInfo} /> */}
                 <Route path="/shop" Component={Shop} />
                 <Route path="login" Component={Login} />

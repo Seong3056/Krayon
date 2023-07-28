@@ -17,7 +17,7 @@ import { FaBook } from 'react-icons/fa';
 import { MdFace3 } from 'react-icons/md';
 import { HiHome } from 'react-icons/hi';
 import { BsBookmarksFill, BsChatRightText } from 'react-icons/bs';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MyInfo from '../userinfo/MyInfo';
 import SearchForm from '../search/SearchForm';
 import SearchApp from '../search/SearchApp';
@@ -32,8 +32,9 @@ const Main = ({ history }) => {
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
 
-    const [selGame, setselGame] = useState('');
-    const [selDes, setselDes] = useState('');
+    const [selGame, setSelGame] = useState('');
+    const [selDes, setSelDes] = useState('');
+    const [url, setUrl] = useState('');
 
     const [chatIcon, setChatIcon] = useState(false);
     const [toggleIcon, setToggleIcon] = useState(false);
@@ -49,6 +50,8 @@ const Main = ({ history }) => {
         if (ws.current.readyState === 1) ws.current.close();
     };
     const webSocketLogin = useCallback(() => {
+        console.log(window.location.hostname);
+        console.log(BASE_URL);
         ws.current = new WebSocket(URL);
 
         if (ws.current.readyState === 1) ws.current.close();
@@ -188,15 +191,18 @@ const Main = ({ history }) => {
             describe:
                 `제시받은 단어를 그려서 정답을 외치게 유도해보세요! ` +
                 ' 그려지는 그림을 보고 정답을 맞춰보세요!',
+            url: 'game/can',
         },
         {
             game: '끝말잇기',
             describe:
                 '이전 사람의 단어를 보고 이어 나가보세요! 틀리면 자동으로 턴이 넘어갑니다.',
+            url: 'game/followword',
         },
         {
             game: '단어맞추기',
             describe: '제시된 뜻을 보고 단어를 유추해보세요! ',
+            url: 'game/wordmatch',
         },
     ];
     const toggleMenu = () => {
@@ -205,12 +211,15 @@ const Main = ({ history }) => {
 
     let gameTitle = document.getElementById('gameTitle');
     // console.log("gameTitle: " + gameTitle.textContent);
-
+    const clickStart = () => {
+        navi(url);
+    };
     const describe = useCallback((pickCardTitle) => {
         room.map((r) => {
             if (r.game === pickCardTitle) {
-                setselGame(r.game);
-                setselDes(r.describe);
+                setSelGame(r.game);
+                setSelDes(r.describe);
+                setUrl(r.url);
                 return;
             }
         });
@@ -305,7 +314,7 @@ const Main = ({ history }) => {
                     광야에서 귀는 약동하다. */}
                                             {selDes}
                                         </p>
-                                        <button type="button">시작</button>
+                                        <Link to={url}>시작</Link>
                                     </>
                                 );
                             case 'search':

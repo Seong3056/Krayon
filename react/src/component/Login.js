@@ -21,7 +21,7 @@ const Login = () => {
                                     'id',
                                     document.getElementById('username').value
                                 );
-                                navi('/main');
+                                navi('/');
                             }
                         }}
                     />

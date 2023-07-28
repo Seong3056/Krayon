@@ -48,7 +48,7 @@ const Login = () => {
         console.log('userId : ' + userId);
         sessionStorage.setItem('id', userId);
 
-        redirection('/main');
+        redirection('/');
     };
 
     const loginHandler = (e) => {
@@ -69,7 +69,7 @@ const Login = () => {
         // alert(guest);
         // onLogin(guest);
 
-        redirection('/main');
+        redirection('/');
     };
 
     return (
