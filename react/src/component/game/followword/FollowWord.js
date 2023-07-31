@@ -7,7 +7,8 @@ import '../../../resource/scss/gametest/followword/User.scss';
 import { Link } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import User from '../User';
-import Info from '../Info';
+import Info from './Info';
+
 
 const FollowWord = ({ history }) => {
     const ws = useRef(null);

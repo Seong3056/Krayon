@@ -114,6 +114,9 @@ public class CatchMindSocketChat {
 //                objMap.put("definition",randomWord.get("definition"));
                 objMap.put("pos", "");
 
+                String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                objMap.put("user",user);
+
 
 
                 for (Session s : clients) {

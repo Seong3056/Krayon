@@ -178,14 +178,13 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     }
   }, [data.turn, data.name]);
 
-
   return (
     <div className="play">
     <div className="game" ref={gameRef}>
     {!userTurn ? (
 
         <div className="getQuiz" disabled={!userTurn}>
-          <p>{data.name} 그림을 그리는중...</p>
+          <p>{data.name}가 그림을 그리는중...</p>
 
         <img
           src={getPic}

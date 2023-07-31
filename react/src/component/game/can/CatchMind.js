@@ -59,6 +59,7 @@ const CatchMind = ({history}) => {
                 img: dataSet.img,
                 date: dataSet.date,
                 turn: dataSet.turn,
+                drawer: dataSet.user
                 
             };
             if(dataSet.wordInfo !== undefined){
@@ -128,7 +129,7 @@ const CatchMind = ({history}) => {
         // setMsg('');
     });
 
-    const sendAnswer = useCallback((answer) => {//이미지 데이터 보내기
+    const sendAnswer = useCallback((answer) => {//채팅또는 정답 보내기
         //웹소켓으로 메세지 전송
         if (!chkLog) {
             //웹소켓 로그인안됬을경우 (!false)
@@ -155,6 +156,7 @@ const CatchMind = ({history}) => {
                 name: id,
                 answer: answer,
                 date: date,
+                turn: turn
             }; //전송 데이터(JSON)
 
             const temp = JSON.stringify(data);

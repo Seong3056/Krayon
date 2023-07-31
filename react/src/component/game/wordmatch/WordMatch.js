@@ -4,7 +4,7 @@ import WMPlayer from './WMPlayer';
 
 import '../../../resource/scss/game/wordmatch/WordMatch.scss';
 import User from '../User';
-import Info from '../Info';
+import Info from './Info';
 
 const WordMatch = () => {
     const ws = useRef(null);
