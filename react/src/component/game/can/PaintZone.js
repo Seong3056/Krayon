@@ -28,6 +28,9 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
   
 
   const [answer, setAnswer] = useState('');//정답작성
+  const [drawer, setDrawer]  = useState('');
+  const [correct, setCorrect]  = useState('');
+  const [correctUser, setCorrectUser]  = useState('');
 
   useEffect(() => {
     // canvas useRef
@@ -43,7 +46,11 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
       setGetCtx(ctx);
       console.log("정상캔버스 등장");
     }
-  }, [userTurn, canvasWidth, gameStarted]);
+    if(data.correct !== undefined){
+      alert("정답자: "+data.correctUser+" 정답: "+data.correct);
+    }
+
+  }, [userTurn, canvasWidth, gameStarted, data.correct, data.correctUser]);
 
   useEffect(() => {
     // 브라우저 창 크기가 변경될 때마다 이벤트 리스너 등록
@@ -181,7 +188,9 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     if (data.img !== undefined) {
       console.log("그림" + data.img);
       setGetPic(data.img);
+      
     }
+    if(data.drawer !== undefined) setDrawer(data.drawer);
   }, [data]);
 
   useEffect(() => {
@@ -207,7 +216,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
       //   console.log("게임 진행중");
       // }
     }
-  }, [data.turn, data.name]);
+  }, [data.turn]);
 
 
   return (
@@ -216,7 +225,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     {!userTurn ? (
 
         <div className="getQuiz" disabled={!userTurn}>
-          <p>{data.name} 그림을 그리는중...</p>
+          <p>{drawer} 그림을 그리는중...</p>
 
         <img
           src={getPic}

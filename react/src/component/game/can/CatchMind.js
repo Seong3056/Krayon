@@ -59,9 +59,11 @@ const CatchMind = ({history}) => {
                 img: dataSet.img,
                 date: dataSet.date,
                 turn: dataSet.turn,
-                drawer: dataSet.user
-                
+                drawer: dataSet.drawer,
+                correct:dataSet.correct,
+                correctUser:dataSet.correctName
             };
+
             if(dataSet.wordInfo !== undefined){
                 if(dataSet.wordInfo.isVaild){
                     setCrtWord(dataSet.wordInfo.word);
@@ -115,6 +117,7 @@ const CatchMind = ({history}) => {
             //메세지를 data에 담아 백엔드로 JSON 객체 전송
             const data = {
                 name: id,
+                drawer:id,
                 img,
                 date: date,
             }; //전송 데이터(JSON)
@@ -202,7 +205,7 @@ const CatchMind = ({history}) => {
   return (
     <>
     <User data={socketData} list={list} />
-    <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} sendAnswer={sendAnswer} turn={turn}/>
+    <PaintZone data={socketData} sendImg={sendImg} crtWord={crtWord} list={list} sendAnswer={sendAnswer} turn={turn} id={id}/>
     <CanInfo gameStart={gameStart} turn={!turn}/>
 
         

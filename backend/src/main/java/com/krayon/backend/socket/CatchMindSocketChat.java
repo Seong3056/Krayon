@@ -15,6 +15,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -64,7 +65,7 @@ public class CatchMindSocketChat {
     }
 
     @OnMessage(maxMessageSize = 100000)
-    public void onMessage(String message, Session session) throws IOException, JSONException {
+    public void onMessage(String message, Session session) throws IOException, JSONException, InterruptedException {
         log.info("receive message : {}", message);
         ObjectMapper json = new ObjectMapper();
         Map<String, String> map = json.readValue((String) message, new TypeReference<Map<String, String>>() {
@@ -134,7 +135,19 @@ public class CatchMindSocketChat {
                     if ((Session) clientsArray[i] == clientsArray[(index) % clientsArray.length]) {
                         sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
                     }
+                    //정답 알림
+                    objMap.put("correct",currentWordMap.get("word"));
+                    objMap.put("correctName",session.getRequestParameterMap().get("name").get(0));
+                    message = c.conversion(objMap);
+                    for( Session s :clients){
+                        s.getBasicRemote().sendText(message);
+                    }
+                    objMap.remove("correct");
+                    objMap.remove("correctName");
 
+                    TimeUnit.SECONDS.sleep(3);
+
+                    //정답 후 다른사용자에게 다른 단어 생성해서 턴 돌리고 시작
                     Map<String, String> randomWord = new HashMap<>();
                     while (true) {
                         randomWord = wordService.randomWord("명사");
@@ -148,6 +161,8 @@ public class CatchMindSocketChat {
                     objMap.put("turn", false);
                     String user = sessionTurn.getRequestParameterMap().get("name").get(0);
                     objMap.put("user",user);
+
+
                 }
                 for (Session s : clients) {
                     objMap.put("turn", false);
