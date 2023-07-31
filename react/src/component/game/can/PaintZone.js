@@ -131,6 +131,66 @@ export default function PaintZone({
             );
         }
     };
+
+    const [imgFile, setImgFile] = useState('');
+
+    const saveAsImageHandler = () => {
+        const target = document.querySelector('.play');
+        if (role === 'guest') {
+            alert('게스트는 저장할수 없습니다! ');
+            return;
+        }
+        if (!target) {
+            return alert('결과 저장에 실패했습니다.');
+        }
+        html2canvas(target).then((canvas) => {
+            const link = document.createElement('a');
+            document.body.appendChild(link);
+            link.href = canvas.toDataURL('image/png');
+            setImgFile(link.href);
+            link.download = crtWord;
+
+            document.body.removeChild(link);
+        });
+
+        fetchSaveImg(imgFile);
+    };
+
+    const fetchSaveImg = (imgFile) => {
+        const imgBlob = new Blob(imgFile);
+  const fetchSaveImg = (imgFile) => {
+    // const imgBlob = new Blob([imgFile], { type: "appication/png" });
+
+        const imgData = new FormData();
+        imgData.append('img', imgBlob);
+        imgData.append('word', crtWord);
+
+        fetch('localhost:8181/api/save', {
+            method: 'POST',
+            body: imgData,
+        }).then((res) => {
+            if (res.status === 200) {
+                alert('이미지 저장 완료!');
+            } else {
+                alert('서버와의 통신이 원활하지 않습니다');
+            }
+        });
+    };
+    fetch("http://localhost:8181/api/save", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ img: imgFile, word: crtWord }),
+    }).then((res) => {
+      if (res.status === 200) {
+        alert("이미지 저장 완료!");
+      } else {
+        alert("서버와의 통신이 원활하지 않습니다");
+      }
+    });
+  };
+
     const sendCanvasData = async () => {
         const smallCanvas = canvasRef2.current;
         const dataURLSmall = smallCanvas.toDataURL();
@@ -213,6 +273,9 @@ export default function PaintZone({
                         </div>
 
                         <div className="canvasTools">
+                            <button id="resetBtn" onClick={saveAsImageHandler}>
+                                화면 캡쳐
+                            </button>
                             <button id="resetBtn" onClick={resetCanvas}>
                                 전체 지우기
                             </button>
@@ -285,7 +348,7 @@ export default function PaintZone({
                     </div>
                 )}
             </div>
-            <div className="play-chat">
+            <div className="chat">
                 <input
                     className="input"
                     type="text"

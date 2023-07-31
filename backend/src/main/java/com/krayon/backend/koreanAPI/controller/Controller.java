@@ -1,4 +1,5 @@
 package com.krayon.backend.koreanAPI.controller;
+
 import com.krayon.backend.config.CorsConfig;
 import com.krayon.backend.koreanAPI.service.OpenApiService;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +21,20 @@ public class Controller {
 
     private final OpenApiService openAPIService;
 
-    @GetMapping //handleSearch로 인해 검색어 비어있으면 fetch가 이 메서드 부름
-    public ResponseEntity<List<Map<String, String>>> getWordsContaining(@RequestParam String searchWord) {
+    @GetMapping
+    public ResponseEntity<List<Map<String, String>>> getWordsContaining(
+            @RequestParam String searchWord,
+            @RequestParam int start // Provide a default value of 1 for start parameter
+    ) {
         if (searchWord == null || searchWord.isEmpty()) {
-            return ResponseEntity.badRequest().build(); // 검색어가 비어있는 경우 400 Bad Request 반환
+            return ResponseEntity.badRequest().build();
         }
-        
-        //fetch API , db저장
-        openAPIService.saveWordsContaining(searchWord); //검색어가 포함된 단어 목록을 가져오기 위해 호출.
 
+        // Fetch API, db 저장
+        openAPIService.saveWordsContaining(searchWord);
 
-
-        List<Map<String, String>> wordList = openAPIService.getWordsContaining(searchWord);
+        // Fetch word list with paging parameters
+        List<Map<String, String>> wordList = openAPIService.getWordsContaining(searchWord, start);
         if (!wordList.isEmpty()) {
             return ResponseEntity.ok().body(wordList);
         } else {
