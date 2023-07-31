@@ -1,7 +1,7 @@
-import SearchForm from "./SearchForm";
-import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState, useEffect } from "react";
-import "../../resource/scss/search/search.scss";
+import SearchForm from './SearchForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react';
+import '../../resource/scss/search/search.scss';
 const SearchApp = () => {
   return (
     <>
