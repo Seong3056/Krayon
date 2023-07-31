@@ -159,15 +159,14 @@ export default function PaintZone({
   };
 
   const fetchSaveImg = (imgFile) => {
-    const imgBlob = new Blob(imgFile);
+    // const imgBlob = new Blob([imgFile], { type: "appication/png" });
 
-    const imgData = new FormData();
-    imgData.append("img", imgBlob);
-    imgData.append("word", crtWord);
-
-    fetch("localhost:8181/api/save", {
+    fetch("http://localhost:8181/api/save", {
       method: "POST",
-      body: imgData,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ img: imgFile, word: crtWord }),
     }).then((res) => {
       if (res.status === 200) {
         alert("이미지 저장 완료!");
