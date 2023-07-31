@@ -1,92 +1,126 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import "../../../resource/scss/game/wordmatch/WordQuiz.scss";
-import TypeHangul from "../../../../node_modules/type-hangul/src/index";
-const WordQuiz = ({ sendStart, data, send }) => {
-  const url = "http://localhost:8181/api/match";
+import '../../../resource/scss/game/wordmatch/WordQuiz.scss';
+import TypeHangul from '../../util/TypeHangul';
+import { d } from 'hangul-js';
+// import TypeHangul from '../../../../node_modules/type-hangul/src/index';
 
-  const [quizDefinition, setQuizDefinition] = useState("");
-  const [quizWord, setQuizWord] = useState("");
-  const [answer, setAnswer] = useState("");
+const WordQuiz = ({ word, definitionData, send, answer }) => {
+    let quiz = 'Word Quiz';
+    const url = 'http://localhost:8181/api/match';
 
-  useEffect(() => {
-    if (data.wordInfo !== undefined) {
-      const definition = data.wordInfo.definition
-        .replaceAll("(", "")
-        .replaceAll(")", "");
-      console.log(definition);
-      setQuizDefinition(definition);
+    const [definition, setDefinition] = useState(' ');
+
+    const [hintTime, setHintTime] = useState(20000);
+    // const [answer, setAnswer] = useState('');
+    const [msg, setMsg] = useState('');
+    const [dummy, setDummy] = useState('');
+    const [inputValue, setInputValue] = useState('');
+    const [ans, setAns] = useState('');
+    // setDummy(sessionStorage.getItem('definition'));
+    const $def = document.getElementById('definition');
+    const $ans = document.getElementById('answer');
+    useEffect(() => {
+        // console.log(document.getElementById('definition').textContent);
+        console.log('42424' + definitionData);
+        if (definitionData !== '') {
+            console.log(definitionData);
+            // setDefinition(definitionData);
+            wait();
+            $def.textContent = '';
+            $ans.textContent = '';
+            setAns('');
+            $def.textContent = definitionData;
+            // console.log(cho_hangul(word));
+            $ans.textContent = cho_hangul(word);
+            TypeHangul.type('#definition');
+            console.log(dummy);
+        }
+    }, [definitionData]);
+
+    useEffect(() => {
+        console.log('answer' + answer);
+        if (answer !== undefined) {
+            setAns(answer);
+        }
+    }, [answer]);
+
+    const wait = () => {
+        let length = sessionStorage.getItem('definition');
+        if (definition == length) return;
+        else if (definition != length) {
+            setTimeout(() => {
+                wait();
+            }, 500);
+        }
+    };
+
+    const sendMsg = (msg) => {
+        send(msg);
+        document.querySelector('.input').value = '';
+    };
+    function cho_hangul(str) {
+        const cho = [
+            'ㄱ',
+            'ㄲ',
+            'ㄴ',
+            'ㄷ',
+            'ㄸ',
+            'ㄹ',
+            'ㅁ',
+            'ㅂ',
+            'ㅃ',
+            'ㅅ',
+            'ㅆ',
+            'ㅇ',
+            'ㅈ',
+            'ㅉ',
+            'ㅊ',
+            'ㅋ',
+            'ㅌ',
+            'ㅍ',
+            'ㅎ',
+        ];
+        let result = '';
+        console.log('sssssssssssssssss' + str);
+        if (str !== undefined)
+            for (let i = 0; i < str.length; i++) {
+                let code = str.charCodeAt(i) - 44032;
+                if (code > -1 && code < 11172)
+                    result += cho[Math.floor(code / 588)];
+            }
+        return result;
     }
-  }, [data]);
-  useEffect(() => {
-    const $textBox = document.getElementById("textBox");
-    console.log($textBox.textContent);
-    if ($textBox.textContent !== "")
-      TypeHangul.type("#textBox", {
-        intervalType: 60,
-      });
-  }, [quizDefinition]);
-
-  const fetchQuiz = async () => {
-    const res = await fetch(url, { method: "GET" });
-    const data = await res.json();
-
-    setQuizDefinition(data.definition);
-    setQuizWord(data.word);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.keyCode === 13) {
-      handleSubmit(e.target.value);
-    }
-
-    setAnswer(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    setAnswer(e);
-    document.getElementById("in").value = "";
-  };
-
-  const runWordQuiz = () => {
-    console.log("버튼이 눌림");
-    let count = 1;
-
-    let quiz = setInterval(() => {
-      console.log("인터벌 진입");
-
-      count++;
-      console.log("count: " + count);
-
-      if (count > 4) {
-        console.log("중지시켜~~~~~~~~~~~~~~~~~~");
-        clearInterval(quiz);
-      }
-
-      fetchQuiz();
-
-      console.log("정답: " + quizWord);
-      console.log("answer: " + answer);
-
-      if (answer !== "" && answer === quizWord) {
-        console.log("정답: " + quizWord);
-        console.log("answer: " + answer);
-        clearInterval(quiz);
-      }
-    }, 3000);
-  };
-
-  return (
-    <div className="play">
-      <div className="game">
-        <div className="textBox">{quizDefinition}</div>
-      </div>
-      <div className="chat">
-        <input className="input" type="text" />
-        <button className="button" onClick={runWordQuiz}></button>
-      </div>
-    </div>
-  );
+    const a = {
+        123: 5000,
+    };
+    const b = 123;
+    console.log(a.b);
+    return (
+        <div className="play">
+            <div className="game wm">
+                <div id="definition"></div>
+                <div id="answer"></div>
+            </div>
+            <div className="play-chat">
+                <input
+                    className="input"
+                    type="text"
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') sendMsg(msg);
+                        else setMsg(e.target.value);
+                        console.log(e.target.value);
+                    }}
+                />
+                <button
+                    className="button"
+                    // onClick={compareLength($def.textContent.length)}
+                >
+                    전송
+                </button>
+            </div>
+        </div>
+    );
 };
 
 export default WordQuiz;

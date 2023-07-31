@@ -131,21 +131,22 @@ public class CatchMindSocketChat {
         } else if (map.containsKey("answer")) {//정답입력하면 모두 false 주고 맞춘사람 true줘서 턴돌리기
             if (sendAnswer.equals(currentWordMap.get("word"))) {
                 log.info("단어 정답검증 접근했는데");
-                for (int i = 0; i < clients.size(); i++) {
-                    if ((Session) clientsArray[i] == clientsArray[(index) % clientsArray.length]) {
+                for (int i = 0; i < clients.size(); i++)
+                    if ((Session) clientsArray[i] == clientsArray[(index) % clientsArray.length])
                         sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
-                    }
+
+
                     //정답 알림
                     objMap.put("correct",currentWordMap.get("word"));
                     objMap.put("correctName",session.getRequestParameterMap().get("name").get(0));
                     message = c.conversion(objMap);
+                    objMap.remove("correct");
+                    objMap.remove("correctName");
+                    log.info("정답나옴");
                     for( Session s :clients){
                         s.getBasicRemote().sendText(message);
                     }
-                    objMap.remove("correct");
-                    objMap.remove("correctName");
 
-                    TimeUnit.SECONDS.sleep(3);
 
                     //정답 후 다른사용자에게 다른 단어 생성해서 턴 돌리고 시작
                     Map<String, String> randomWord = new HashMap<>();
@@ -161,9 +162,9 @@ public class CatchMindSocketChat {
                     objMap.put("turn", false);
                     String user = sessionTurn.getRequestParameterMap().get("name").get(0);
                     objMap.put("user",user);
+                    log.info("턴");
 
 
-                }
                 for (Session s : clients) {
                     objMap.put("turn", false);
                     if (s == sessionTurn) objMap.replace("turn", true);

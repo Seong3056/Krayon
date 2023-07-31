@@ -3,6 +3,7 @@ import { CanvasStyle } from "./style/canvas";
 import '../../../resource/scss/gametest/followword/Play.scss';
 import "../../../resource/scss/game/can/can.scss"
 import html2canvas from "html2canvas";
+import bgImage from '../can/style/bg2.jpg';
 
 const API = "http://localhost:8181/api/catch";
 
@@ -13,7 +14,6 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
   const canvasWrapRef = useRef(null);
   const gameRef = useRef(null);
   const id = sessionStorage.getItem("id");
-  const role = sessionStorage.getItem("role");
 
   const [canvasWidth, setCanvasWidth] = useState(canvasWrapRef.current?.clientWidth || 1160);
 
@@ -97,14 +97,19 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
   const eraseMode = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    ctx.strokeStyle = "#FFFFFF";
+    // Set the composite operation to "destination-out" to erase
+    ctx.globalCompositeOperation = "destination-out";
+    // Set a larger line width for better erasing effect
+    ctx.lineWidth = 20;
   };
-
+  
   const penMode = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    ctx.strokeStyle = "#000000";
-    ctx.strokeStyle = penColor;
+    // Set the composite operation back to default for normal drawing
+    ctx.globalCompositeOperation = "source-over";
+    // Set the line width back to the original value
+    ctx.lineWidth = lineWidth;
   };
 
   const drawFn = (e) => {
@@ -135,46 +140,19 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     }
   };
 
-  const [imgFile, setImgFile] = useState("");
-
   const saveAsImageHandler = () => {
-    const target = document.querySelector(".play");
-    if (role === "guest") {
-      alert("게스트는 저장할수 없습니다! ");
-      return;
-    }
+    const target = document.querySelector('.play');
     if (!target) {
-      return alert("결과 저장에 실패했습니다.");
+      return alert('결과 저장에 실패했습니다.');
     }
     html2canvas(target).then((canvas) => {
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       document.body.appendChild(link);
-      link.href = canvas.toDataURL("image/png");
-      setImgFile(link.href);
-      link.download = crtWord;
-
+      link.href = canvas.toDataURL('image/png');
+      link.download = crtWord+'.png';
+      link.click();
       document.body.removeChild(link);
-    });
-
-    fetchSaveImg(imgFile);
-  };
-
-  const fetchSaveImg = (imgFile) => {
-    const imgBlob = new Blob(imgFile);
-
-    const imgData = new FormData();
-    imgData.append("img", imgBlob);
-    imgData.append("word", crtWord);
-
-    fetch("localhost:8181/api/save", {
-      method: "POST",
-      body: imgData,
-    }).then((res) => {
-      if (res.status === 200) {
-        alert("이미지 저장 완료!");
-      } else {
-        alert("서버와의 통신이 원활하지 않습니다");
-      }
+      console.log(crtWord);
     });
   };
 
@@ -231,7 +209,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
           src={getPic}
           id="getPicture"
           alt=""
-          style={{ width: "100%", height: 540, backgroundColor: "white" }}
+          style={{ width: "100%", height: 540, backgroundImage: `url(${bgImage})` }}
         />
       </div>
         
@@ -281,7 +259,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
 
           <button
             className="paint"
-            style={{ backgroundColor: "red" }}
+            style={{ backgroundColor: "red"}}
             onClick={() => handlePenColorChange("red")}
           ></button>
           <button

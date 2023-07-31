@@ -101,7 +101,7 @@ function Copy({ send, sendChar, data, list, startWord, turn }) {
                 </div>
                 <div className="definition">{definition}</div>
             </div>
-            <div className="chat">
+            <div className="play-chat">
                 <input
                     // disabled={!userTurn}
                     type="text"

@@ -1,23 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import KakaoPay from './KakaoPay';
+import { BASE_URL } from '../../config/host-config';
 
 const PayModal = ({ close }) => {
     const [amount, setAmount] = useState('');
     const [payState, setPayState] = useState(false);
     const [payLink, setPayLink] = useState('');
     const loc = useLocation(null);
-
-    const url = 'http://localhost:8181/api/kakaoPay';
+    const id = sessionStorage.getItem('id');
+    const url = BASE_URL + '/api/kakaoPay';
     const fetchPay = async () => {
         let fet = await fetch(url, {
             method: 'post',
             headers: { 'content-type': 'application/json' },
 
             body: JSON.stringify({
-                id: '123',
-                amount: '10000',
-                itemName: '10,000',
+                id: id,
+                amount: '2000',
+                itemName: 'Krayon 구독',
             }),
         });
         const data = await fet.text();
@@ -39,8 +40,8 @@ const PayModal = ({ close }) => {
                     <KakaoPay payLink={payLink} />
                 ) : (
                     <>
-                        <p>금액</p> <input type="text" />
-                        <p>{amount}</p>
+                        <p>Krayon 아이템 정기구독</p>{' '}
+                        <p>한달 2000원으로 모든 아이템을 써보세요 !</p>
                         <button onClick={fetchPay}>결제하기</button>{' '}
                     </>
                 )}

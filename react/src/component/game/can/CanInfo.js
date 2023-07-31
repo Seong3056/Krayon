@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../../resource/scss/gametest/followword/Info.scss';
 
+
 const CanInfo = ({ gameStart, turn }) => {
     const [turnState, setTurnState] = useState(true);
     useEffect(() => {

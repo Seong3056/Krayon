@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 // import Chatting from '../main/Chatting'
 // import UserList from '../main/UserList'
 import "../../../resource/scss/game/can/can.scss"
-
+import '../../../resource/scss/gametest/followword/Info.scss';
 
 
 import PaintZone from './PaintZone'

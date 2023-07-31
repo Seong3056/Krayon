@@ -41,9 +41,14 @@ body{
     position: relative;
     margin: 150px auto;
     display: flex;
+
+    -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
 }
 @media screen and (max-width: 500px){
-    .section{
+    .wrapper{
         margin-top: 40px;
         width: 100vw;
         height: 80vh;
