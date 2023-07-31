@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "bookmark")
 public class Word {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column(name = "word", nullable = false)
