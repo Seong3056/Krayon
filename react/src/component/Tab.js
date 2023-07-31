@@ -1,6 +1,6 @@
-import React from "react";
-import "../resource/scss/Tab.scss";
-import { Link } from "react-router-dom";
+import React from 'react';
+import '../resource/scss/Tab.scss';
+import { Link } from 'react-router-dom';
 const Tab = () => {
   return (
     <>
@@ -17,6 +17,9 @@ const Tab = () => {
         </Link>
         <Link to="/shop" className="d tab-shop">
           상점
+        </Link>
+        <Link to="/Login" className="d tab-shop">
+          로그인확인용
         </Link>
       </div>
     </>

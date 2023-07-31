@@ -1,34 +1,27 @@
-
 package com.krayon.backend.koreanAPI.service;
-
 
 import com.krayon.backend.koreanAPI.entity.Word;
 import com.krayon.backend.koreanAPI.repository.WordRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import com.krayon.backend.config.CorsConfig;
-
-import javax.transaction.Transactional;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 
 @Service
 @Slf4j
-@Transactional
 public class OpenApiService {
     private static final String API_KEY = "BAAA5C2F46E8178AC1D5714D4775EAB5";
     private static final String BASE_URL = "https://opendict.korean.go.kr/api/search";
@@ -39,19 +32,19 @@ public class OpenApiService {
         this.wordRepository = wordRepository;
     }
 
-
-    public List<Map<String, String>> getWordsContaining(String searchWord) { // API에서 지정된 검색어가 포함된 단어를 가져오는 역할을 함
+    public List<Map<String, String>> getWordsContaining(String searchWord, int page) {
         List<Map<String, String>> wordList = new ArrayList<>();
 
         try {
-            String encodedSearchWord = URLEncoder.encode(searchWord, StandardCharsets.UTF_8.toString()); //인코딩된 검색어 및 요청 유형을 JSON으로 사용하여 요청 URL을 구성함
-            String requestUrl = BASE_URL + "?key=" + API_KEY + "&q=" + encodedSearchWord + "&req_type=json";
+            String encodedSearchWord = URLEncoder.encode(searchWord, StandardCharsets.UTF_8.toString());
+            String requestUrl = BASE_URL + "?key=" + API_KEY + "&q=" + encodedSearchWord + "&req_type=json"
+                    + "&start=" + page ;  // Include the start and num parameters in the request URL
             log.info(requestUrl);
             URLConnection connection = new URL(requestUrl).openConnection();
             connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
             connection.connect();
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(); //sb는 URL에 대한 연결이 열리고 API응답을 읽고 호출. sb는 디버깅 목적으로 기록할 것
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -61,66 +54,53 @@ public class OpenApiService {
 
             log.info(sb.toString());
 
-            
-              /*
-              즉, 인코딩된 검색어 및 요청 유형을 JSON으로 사용하여 요청 URL을 구성함,
-              API URL에 대한 연결을 열고 응답 데이터를 가져옴, 
-              메서드 를 사용하여 응답 데이터가 유효한 JSON 형식인지 확인함,
-              isValidJson은 응답 데이터가 유효한 JSON이면 JSON 데이터를 구문 분석하여 단어 정의를 추출하고 
-              목록에 추가함,
-              Map<String, String>은 각 맵에는 단어와 해당 정의가 포함되어 있음,
-              응답 데이터가 유효한 JSON 형식이 아니거나 단어 정의가 없으면 빈 목록을 반환함
-              */
-            
-            
-
-
-            
-            // JSON 형식을 확인하여 처리 -> isValidJson은 문자열에서 JSON 개체 및 배열을 생성하려고 시도하여 주어진 JSON문자열이 유효한 JSON형태인지 확인하는 메서드.
-            //성공하면 트루, 아니면 폴스를 반환한다.
-            if (isValidJson(sb.toString())) {
-                JSONObject json = new JSONObject(sb.toString());
-                //응답 데이터는 JSONObjectnamed 로 변환된 json을 channel사용하여 JSON에서 개체를 가져옴. json.getJSONObject("channel").
+            if (isValidJson(sb.toString())) { //이 섹션은 JSON 형식의 API응답 데이터를 분석하고 단어 정의 및 단어 추출.
+                JSONObject json = new JSONObject(sb.toString()); //isValiJsos -> 메서드를 활용하여 JSON데이터가 유효한지 확인
                 JSONObject channelObject = json.getJSONObject("channel");
-                JSONArray itemArray = channelObject.getJSONArray("item");
-                //Map<String, String> wordMap = new HashMap<>();
-                if (itemArray.length() == 0) {
-                    return wordList;
+
+                // Check if the "item" key exists in the JSON response
+                /*
+
+                그런 다음 JSON 응답의 "channel" 개체에 키 "item"이 있는지 확인합니다.
+                존재하지 않는 경우 검색어에 대해 일치하는 단어가 발견되지 않았음을 의미하며
+                메서드는 빈 값을 반환합니다 -> 반환은 wordList로
+
+                */
+                if (!channelObject.has("item")) {
+                    log.info("No matching words found for the search term");
+                    return null;
                 }
-                //String definition = "";
-                //String wordValue = "";
+
+
+                JSONArray itemArray = channelObject.getJSONArray("item");
+                if (itemArray.length() == 0) {
+                    return null; // Return null when the itemArray is empty
+                }
+
+//"item" 키가 있는 경우 메서드는 JSON 응답에서 단어 배열을 검색하고 각 항목을 반복하여 단어 정의를 추출함.
                 for (int j = 0; j < itemArray.length(); j++) {
+                    //추출된 단어 정의와 단어는 월드맵에 추가될 것 -> 다시 wordList에 추가
                     Map<String, String> wordMap = new HashMap<>();
                     JSONObject itemObject = itemArray.getJSONObject(j);
-                    log.error(itemObject.toString());
-                    // 수정: definition 필드가 없는 경우에 대한 처리
+
                     JSONArray sense = itemObject.getJSONArray("sense");
                     for (int k = 0; k < sense.length(); k++) {
                         JSONObject senseObject = sense.getJSONObject(k);
-                        log.warn("이거 안될시 용석이형 재입대 " + senseObject.toString());
                         String definition = senseObject.optString("definition");
                         String wordValue = itemObject.optString("word", "");
 
-                        // Replace caret symbol (^) with underscore (_)
-                        // ...
                         // Replace caret symbol (^) with underscore (_) and space
-                        definition = definition.replace("^", " ").replace("_", " ").replace("<FL>", "").trim();
-                        wordValue = wordValue.replace("^", " ").replace("_", " ").replace("<FL>", "").trim();
+                        definition = definition.replace("^", "").replace("_", "").replace("<FL>", "").trim();
+                        wordValue = wordValue.replace("^", "").replace("_", "").replace("<FL>", "").trim();
 
-                        log.info("            " + definition);
                         wordMap.put("definition", definition);
                         wordMap.put("word", wordValue);
-                        log.info("+++++++++++++++++++++++" + wordMap.toString() + "+++++++++++++++++++++++");
                     }
                     wordList.add(wordMap);
-                    log.info("================" + wordList.toString() + "==================");
                 }
                 return wordList;
             } else {
-                // JSON 형식이 올바르지 않을 경우 처리
-                // 예를 들어, 에러 메시지를 출력하거나 빈 결과를 반환할 수 있습니다.
                 log.error("Received data is not in valid JSON format");
-                // 수정: 빈 결과 반환
                 return wordList;
             }
         } catch (Exception e) {
@@ -129,13 +109,12 @@ public class OpenApiService {
         return wordList;
     }
 
-
-
-
     public void saveWordsContaining(String searchWord) {
-        List<Map<String, String>> wordList = getWordsContaining(searchWord);
+        int start = 1; // Provide a default value for start
+        int num = 10; // Provide a default value for num
+        List<Map<String, String>> wordList = getWordsContaining(searchWord, start);
 
-        if (!wordList.isEmpty()) {
+        if (wordList != null && !wordList.isEmpty()) { // Check for null before attempting to save
             List<Word> wordsToSave = wordList.stream()
                     .map(wordMap -> {
                         Word wordEntity = new Word();
@@ -149,15 +128,6 @@ public class OpenApiService {
         }
     }
 
-
-
-
-
-
-
-
-
-    // JSON 형식 유효성 검사 함수
     private boolean isValidJson(String jsonStr) {
         try {
             new JSONObject(jsonStr);
