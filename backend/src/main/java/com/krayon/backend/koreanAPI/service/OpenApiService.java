@@ -118,6 +118,7 @@ public class OpenApiService {
             List<Word> wordsToSave = wordList.stream()
                     .map(wordMap -> {
                         Word wordEntity = new Word();
+                        wordEntity.setId("testId");
                         wordEntity.setWord(wordMap.get("word"));
                         wordEntity.setDefinition(wordMap.get("definition"));
                         return wordEntity;

@@ -1,13 +1,16 @@
 package com.krayon.backend.koreanAPI.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Getter @Setter @ToString
+@EqualsAndHashCode(of = "word")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Getter
-@Setter
+@Table(name = "bookmark")
 public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

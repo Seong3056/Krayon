@@ -2,8 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import CheckWord from './CheckWord';
 import Copy from './Copy';
 import '../../../resource/scss/game/followword/followword.scss';
+import '../../../resource/scss/gametest/followword/Info.scss';
+import '../../../resource/scss/gametest/followword/User.scss';
 import { Link } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import User from '../User';
+import Info from '../Info';
+import { BASE_URL } from '../../../config/host-config';
 
 const FollowWord = ({ history }) => {
     const ws = useRef(null);
@@ -13,55 +18,20 @@ const FollowWord = ({ history }) => {
     const [chkLog, setChkLog] = useState(false);
     const [startWord, setStartWord] = useState('');
     const [start, setStart] = useState(false);
-    const [turn, setTurn] = useState(true);
+    const [turn, setTurn] = useState('');
     const [timer, setTimer] = useState(120);
     const [userTimer, setUserTimer] = useState(10);
 
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
-    const ip = '175.114.130.19';
-    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + id;
+    const ip = 'localhost';
+    const URL = 'ws://' + BASE_URL + '/api/game/followword?name=' + id;
 
     useEffect(() => {
         webSocketLogin();
-
+        console.log(URL);
         console.log('1111111111111111웹소켓로그인');
     }, []);
-
-    // useEffect(() => {
-    //     const limitTime = setInterval(() => {
-    //         setTimer((e) => e - 1);
-    //     }, 1000);
-    //     // console.log(timer + '초');
-    //     if (timer === 0) {
-    //         clearInterval(limitTime);
-    //         setTimer(120);
-    //         console.log('접근');
-    //         send('끝');
-    //     }
-    //     return () => {
-    //         clearInterval(limitTime);
-    //     };
-    // }, [start, timer]);
-    // const limitTime = () =>
-    //     setInterval(() => {
-    //         setTimer((e) => e - 1);
-    //     }, 1000);
-    // useEffect(() => {
-    //     if (turn) {
-    //         limitTime();
-    //         // console.log(timer + '초');
-    //         if (userTimer === 0) {
-    //             clearInterval(limitTime);
-    //             setUserTimer(10);
-    //             console.log('접근');
-    //             send('끝');
-    //         }
-    //         return () => {
-    //             clearInterval(limitTime);
-    //         };
-    //     }
-    // }, [turn, userTimer]);
 
     useEffect(() => {
         // const leave = history.block('페이지를 나가실건가요?');
@@ -87,6 +57,7 @@ const FollowWord = ({ history }) => {
                 char: dataSet.char,
                 turn: dataSet.turn,
                 result: dataSet.result,
+                point: dataSet.point,
             };
             console.log(dataSet);
             // console.log('11111111111 ' + dataSet.list);
@@ -97,7 +68,8 @@ const FollowWord = ({ history }) => {
             }
 
             setSocketData(data);
-            setTurn(dataSet.turn);
+            console.log(data);
+            if (dataSet.user !== undefined) setTurn(dataSet.user);
             if (!dataSet.char) {
                 if (dataSet.wordInfo !== undefined) {
                     setStartWord(dataSet.wordInfo);
@@ -107,7 +79,7 @@ const FollowWord = ({ history }) => {
                     setStart(false);
                 }
             }
-            console.log('!!!!!!!!!!!!' + dataSet.re);
+
             if (data.result !== undefined) {
                 console.log(data.result[0]);
                 console.log(data.result[0].name);
@@ -228,9 +200,9 @@ const FollowWord = ({ history }) => {
 
     return (
         <>
-            <div>{id}</div>
-            <div>시간:{timer}</div>
-            <ProgressBar
+            <User turn={turn} data={socketData} list={list} />
+            {/* <div>시간:{timer}</div> */}
+            {/* <ProgressBar
                 variant="danger"
                 now={(timer / 120) * 100}
                 label={`${timer}초`}
@@ -241,23 +213,31 @@ const FollowWord = ({ history }) => {
                 now={userTimer * 10}
                 label={`${userTimer}초`}
                 className="progress"
-            />
+            /> */}
 
             <Copy
                 list={list}
                 data={socketData}
                 sendChar={sendChar}
                 send={send}
-                startWord={startWord}
+                sendStart={startWord}
             />
-            {<button onClick={gameStart}>게임시작</button>}
-            <Link to="/" onClick={disconnectSocket}>
-                나가기
-            </Link>
+            <Info
+                point={socketData.point}
+                sendStart={gameStart}
+                textData={socketData}
+            />
+            {/* <button className="ready" onClick={gameStart}>
+                게임시작
+            </button> */}
 
-            {list.map((e) => (
+            {/* <Link to="/" onClick={disconnectSocket}>
+                나가기
+            </Link> */}
+
+            {/* {list.map((e) => (
                 <div>{e}</div>
-            ))}
+            ))} */}
         </>
     );
 };

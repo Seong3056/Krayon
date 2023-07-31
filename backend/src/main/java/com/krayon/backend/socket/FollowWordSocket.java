@@ -12,6 +12,8 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
@@ -22,12 +24,16 @@ public class FollowWordSocket {
     //이페이지에 접속해있는 유저 세션을 담은 리스트 (Set)
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
     private static Map<String,String> currentWordMap = new HashMap<>();
-    private static HashSet<String > correct = new HashSet<>();
-    private static List<Session> correctList = new ArrayList<>();
-
+    private static HashSet<String > correct = new HashSet<>(); // 입력받은 단어 리스트(재입력 방지)
+    private static List<Session> correctList = new ArrayList<>(); //
+    private static List<Map<String, Object>> control = new ArrayList<>(); //점수 관려 리스트 key: name, point
 
     private Map<String ,Object > objMap = new HashMap<>();
     private static Session sessionTurn = null;
+
+    private static boolean start = false;
+
+    final int point = 10;
     //데이터값을 JSON 형태로 변환해주는 클래스 선언
     ConversionJson c = new ConversionJson();
     WordService wordService = new WordService();
@@ -54,11 +60,30 @@ public class FollowWordSocket {
 //        log.info(session.getPathParameters().toString());
 //        log.info(session.getId());
 //        log.info(session.getId());
-        if(!clients.contains(session)) {
+        AtomicInteger index = new AtomicInteger();
+        control.forEach(e -> {
+            log.info("controll {} , session {}",e.get("session"),session);
+            if(e.get("name").equals(name)){
+                index.set(1);
+                return;
+            }});
+        if(index.get() == 0 ) {
+            Map<String,Object> userMap = new HashMap<>();
+            userMap.put("session",session);
+            userMap.put("point",0);
+            userMap.put("name",name);
+            control.add(userMap);
+        }
+        log.info("controll: {}",control);
+        objMap.put("point",control);
+        AtomicBoolean isSession = new AtomicBoolean(false);
+        clients.forEach(e -> {
+            if(e.getRequestParameterMap().get("name").get(0).equals(name)){
+                isSession.set(true);
+            }
+        });
+        if(!isSession.get()){
             clients.add(session);
-            log.info("session open : {}", session);
-        }else{
-            log.info("이미 연결된 session");
         }
         log.info("res={}", res);
         log.info(Arrays.toString(clients.toArray()));
@@ -112,10 +137,14 @@ public class FollowWordSocket {
                         objMap.put("pos",currentWordMap.get("pos"));
                         objMap.put("msg",msg);
                         objMap.put("turn",false);
+
                         if((Session)clientsArray[i] == clientsArray[(index+1)%clientsArray.length]) {
                             sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
                             objMap.replace("turn",true);
+
                         }
+                        String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                        objMap.put("user",user);
                         message=c.conversionWord(objMap, true);
                         log.info("session:{} send data : {}",clientsArray[i], message);
                         ((Session)clientsArray[i]).getBasicRemote().sendText(message);
@@ -126,6 +155,17 @@ public class FollowWordSocket {
                     objMap.put("word",currentWordMap.get("word"));
                     objMap.put("definition",currentWordMap.get("definition"));
                     objMap.put("pos",currentWordMap.get("pos"));
+                    objMap.put("msg",msg);
+                    objMap.put("turn",false);
+                    for(int i =0;i<clients.size();i++) {
+                        if ((Session) clientsArray[i] == clientsArray[(index + 1) % clientsArray.length]) {
+                            sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
+                            objMap.replace("turn", true);
+
+                        }
+                    }
+                    String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                    objMap.put("user",user);
                     message=c.conversionWord(objMap, false);
                     for (Session s : clients) {
                         log.info("send data : {}", message);
@@ -145,7 +185,14 @@ public class FollowWordSocket {
                     currentWordMap.replace("definition",definition);
                     currentWordMap.replace("pos",pos);
 
-
+                    control.forEach(e -> {
+                        log.info("map: {}",e.toString());
+                        if(e.get("name").equals(name)){
+                            int p = (Integer) e.get("point");
+                            e.replace("point",p+point);
+                            return;
+                        }});
+                    objMap.put("point",control);
                     correct.add(word);
                     correctList.add(session);
                     int frequency = Collections.frequency(correctList, session);
@@ -168,9 +215,7 @@ public class FollowWordSocket {
                                 resultMap.put("result",finish);
 
                             }
-                            resultMap.put("word","");
-                            resultMap.put("definition","");
-                            resultMap.put("pos","");
+
                             message = c.conversion(resultMap);
 
                             log.warn(resultMap.toString());
@@ -187,11 +232,17 @@ public class FollowWordSocket {
                   if((Session)clientsArray[i] == clientsArray[(index+1)%clientsArray.length]) {
                       sessionTurn = (Session) clientsArray[(i)%clientsArray.length];
                       objMap.replace("turn",true);
+
                   }
-                  message=c.conversionWord(objMap, true);
-                  log.info("session:{} send data : {}",clientsArray[i], message);
-                  ((Session)clientsArray[i]).getBasicRemote().sendText(message);
               }
+                for (Session s : clients) {
+                    String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                    objMap.put("user",user);
+                    message=c.conversionWord(objMap, true);
+
+                    s.getBasicRemote().sendText(message);
+                }
+
             } else {
                 for (Session s : clients) {
                     s.getBasicRemote().sendText(message);
@@ -205,11 +256,16 @@ public class FollowWordSocket {
         } else if(map.containsKey("start")){ //게임시작버튼이 눌렸을때
             if(map.get("start").equals("true")){
                 sessionTurn = session;
-                Map<String, String> randomWord = wordService.randomWord("명사");
+                Map<String, String> randomWord = new HashMap<>();
+ start = true;
+                while (true) {
+                    randomWord = wordService.randomWord("명사");
+                    if(randomWord != null) break;
+                }
                 objMap.put("word",randomWord.get("word"));
                 objMap.put("definition",randomWord.get("definition"));
                 objMap.put("pos","");
-                
+//                objMap.put("word",randomWord.get("word"));
                 currentWordMap.put("word",randomWord.get("word"));
                 currentWordMap.put("definition",randomWord.get("definition"));
                 currentWordMap.put("pos","");
@@ -219,6 +275,8 @@ public class FollowWordSocket {
                 for (Session s : clients) {
                     objMap.put("turn",false);
                     if(s == sessionTurn) objMap.replace("turn",true);
+                    String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                    objMap.put("user",user);
                     message = c.conversionWord(objMap,true);
                     log.info(message);
                     s.getBasicRemote().sendText(message);

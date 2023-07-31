@@ -71,21 +71,21 @@ public class WordService {
 			// 수정: definition 필드가 없는 경우에 대한 처리
 			JSONArray sense = itemObject.getJSONArray("sense");
 
-				JSONObject senseObject = sense.getJSONObject(0);
+			JSONObject senseObject = sense.getJSONObject(0);
 
-				String definition = senseObject.optString("definition");
-				String wordValue = itemObject.optString("word", "");
-				String pos = senseObject.optString("pos");
+			String definition = senseObject.optString("definition");
+			String wordValue = itemObject.optString("word", "");
+			String pos = senseObject.optString("pos");
 
-				definition = definition.replace("^", " ").replace("_", " ");
-				wordValue = wordValue.replace("^", " ").replace("_", " ");
+			definition = definition.replace("^", " ").replace("_", " ");
+			wordValue = wordValue.replace("^", " ").replace("_", " ");
 
 //				log.info("            " + definition);
-				wordMap.put("definition", definition);
-				wordMap.put("word", wordValue);
-				wordMap.put("pos",pos);
-				
-				wordList.add(wordMap);
+			wordMap.put("definition", definition);
+			wordMap.put("word", wordValue);
+			wordMap.put("pos",pos);
+
+			wordList.add(wordMap);
 		}
 		//생성된 단어리스트를 리턴
 		return wordList;
@@ -144,57 +144,63 @@ public class WordService {
 		String replaceWord = "";
 		String definition = "";
 
-		while (true){
-			int r = (int) Math.floor(random.nextInt(100000) +1);
-			log.info(String.valueOf(r));
-			String requestUrl = VIEW_URL + "?key=" + key +"&method=target_code"+ "&q="+r;
-			log.info(requestUrl);
-			StringBuilder sb = null;
-			try {
-				URLConnection connection = new URL(requestUrl).openConnection();
-				connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
-				connection.connect();
 
-				sb = new StringBuilder();
-				try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-					String line;
-					while ((line = reader.readLine()) != null) {
-						sb.append(line);
-					}
+		int r = (int) Math.floor(random.nextInt(100000) +1);
+		log.info(String.valueOf(r));
+		String requestUrl = VIEW_URL + "?key=" + key +"&method=target_code"+ "&q="+r;
+		log.info(requestUrl);
+		StringBuilder sb = null;
+		try {
+			URLConnection connection = new URL(requestUrl).openConnection();
+			connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
+			connection.connect();
+
+			sb = new StringBuilder();
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					sb.append(line);
 				}
-			} catch (IOException e) {
-				return null;
 			}
+		} catch (IOException e) {
+			return null;
+		}
 
 //		log.info(sb.toString());
 
-			try {
-				JSONObject json = XML.toJSONObject(sb.toString());
-				JSONObject channelObject = json.getJSONObject("channel");
-				JSONObject item = channelObject.getJSONObject("item");
+		try {
+			JSONObject json = XML.toJSONObject(sb.toString());
+			JSONObject channelObject = json.getJSONObject("channel");
+			JSONObject item = channelObject.getJSONObject("item");
 
-				JSONObject wordInfo = item.getJSONObject("wordInfo");
-				String findWord = wordInfo.getString("word");
-				JSONObject senseInfo = item.getJSONObject("senseInfo");
-				definition = senseInfo.getString("definition");
-				String findWordPos = senseInfo.getString("pos");
-				System.out.println("findWordPos = " + findWordPos);
-				String findWordType = senseInfo.getString("type");
-				System.out.println("findWordType = " + findWordType);
+			JSONObject wordInfo = item.getJSONObject("wordInfo");
+			String findWord = wordInfo.getString("word");
+			JSONObject senseInfo = item.getJSONObject("senseInfo");
+
+			definition = senseInfo.getString("definition");
+			System.out.println("definition = " + definition);
+			String findWordPos = null;
+			if(!senseInfo.isNull("pos")){
+				findWordPos = senseInfo.getString("pos");}
+
+			System.out.println("findWordPos = " + findWordPos);
+			String findWordType = senseInfo.getString("type");
+			System.out.println("findWordType = " + findWordType);
 //				log.warn(findWord+findWordPos);
-				if(findWordPos == null || !findWordPos.contains(pos) || findWord.length()<2) { log.info("다시실행"); continue; }
-				else {
-					replaceWord = findWord.replace("^", " ").replace("-", " ").replace("_", " ");
-					map.put("word", replaceWord);
-					map.put("definition", definition);
-					log.info(map.toString());
-					break;
-				}
 
-			} catch (JSONException e) {
-				return null;
+			if(findWordPos == null || !findWordPos.contains(pos) || findWord.length()<2) { log.info("다시실행"); map=null;}
+			else {
+				replaceWord = findWord.replace("^", "").replace("-", "").replace("_", "");
+				map.put("word", replaceWord);
+				map.put("definition", definition);
+				log.info(map.toString());
 			}
+
+
+		} catch (JSONException e) {
+			return map = null;
 		}
+
 
 
 
@@ -217,7 +223,7 @@ public class WordService {
 
 
 
-	// JSON 형식 유효성 검사 함수
+// JSON 형식 유효성 검사 함수
 //	private boolean isValidJson(String jsonStr) {
 //		try {
 //			new JSONObject(jsonStr);

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/catch")
 public class CMController {
 

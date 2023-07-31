@@ -18,6 +18,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/followWord")
 public class FWController {
 
@@ -38,5 +39,6 @@ public class FWController {
 //        } else {
 //            return ResponseEntity.badRequest().body("Error");
 //        }
+
     }
 }
