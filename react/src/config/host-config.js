@@ -16,6 +16,6 @@ if (clientHostName === 'localhost') {
 } else if (clientHostName === 'krayon.store') {
     //배포해서 서비스중
     // backEndHostName = 'https://api.spring.com';
-    backEndHostName = '13.125.244.151';
+    backEndHostName = '13.124.169.109';
 }
 export const BASE_URL = backEndHostName;
