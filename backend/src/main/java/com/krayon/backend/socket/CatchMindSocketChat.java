@@ -15,6 +15,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -25,7 +26,6 @@ public class CatchMindSocketChat {
     //이페이지에 접속해있는 유저 세션을 담은 리스트 (Set)
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
     private static Map<String,String> currentWordMap = new HashMap<>();
-    private static HashSet<String> correct = new HashSet<>();
 
 
     private Map<String ,Object > objMap = new HashMap<>();
@@ -42,18 +42,6 @@ public class CatchMindSocketChat {
         String name = res.get("name").get(0);
 //        String conversion = c.conversion("open",clients,currentWordMap,id,"시스템");
         log.info("시작");
-
-//        log.info(session.getId());
-//        log.info(session.getContainer().toString());
-//        log.info(session.getOpenSessions().toString());
-//        log.info("메세지 핸들러"+session.getMessageHandlers().toString());
-//
-//
-//        log.info(session.getUserProperties().toString());
-//        log.info(session.getRequestURI().toString());
-//        log.info(session.getPathParameters().toString());
-//        log.info(session.getId());
-//        log.info(session.getId());
         if(!clients.contains(session)) {
             clients.add(session);
             log.info("session open : {}", session);
@@ -77,7 +65,7 @@ public class CatchMindSocketChat {
     }
 
     @OnMessage(maxMessageSize = 100000)
-    public void onMessage(String message, Session session) throws IOException, JSONException {
+    public void onMessage(String message, Session session) throws IOException, JSONException, InterruptedException {
         log.info("receive message : {}", message);
         ObjectMapper json = new ObjectMapper();
         Map<String, String> map = json.readValue((String) message, new TypeReference<Map<String, String>>() {
@@ -127,6 +115,9 @@ public class CatchMindSocketChat {
 //                objMap.put("definition",randomWord.get("definition"));
                 objMap.put("pos", "");
 
+                String user = sessionTurn.getRequestParameterMap().get("name").get(0);
+                objMap.put("user",user);
+
 
 
                 for (Session s : clients) {
@@ -140,11 +131,24 @@ public class CatchMindSocketChat {
         } else if (map.containsKey("answer")) {//정답입력하면 모두 false 주고 맞춘사람 true줘서 턴돌리기
             if (sendAnswer.equals(currentWordMap.get("word"))) {
                 log.info("단어 정답검증 접근했는데");
-                for (int i = 0; i < clients.size(); i++) {
-                    if ((Session) clientsArray[i] == clientsArray[(index) % clientsArray.length]) {
+                for (int i = 0; i < clients.size(); i++)
+                    if ((Session) clientsArray[i] == clientsArray[(index) % clientsArray.length])
                         sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
+
+
+                    //정답 알림
+                    objMap.put("correct",currentWordMap.get("word"));
+                    objMap.put("correctName",session.getRequestParameterMap().get("name").get(0));
+                    message = c.conversion(objMap);
+                    objMap.remove("correct");
+                    objMap.remove("correctName");
+                    log.info("정답나옴");
+                    for( Session s :clients){
+                        s.getBasicRemote().sendText(message);
                     }
 
+
+                    //정답 후 다른사용자에게 다른 단어 생성해서 턴 돌리고 시작
                     Map<String, String> randomWord = new HashMap<>();
                     while (true) {
                         randomWord = wordService.randomWord("명사");
@@ -158,7 +162,9 @@ public class CatchMindSocketChat {
                     objMap.put("turn", false);
                     String user = sessionTurn.getRequestParameterMap().get("name").get(0);
                     objMap.put("user",user);
-                }
+                    log.info("턴");
+
+
                 for (Session s : clients) {
                     objMap.put("turn", false);
                     if (s == sessionTurn) objMap.replace("turn", true);
@@ -175,23 +181,6 @@ public class CatchMindSocketChat {
                     s.getBasicRemote().sendText(message);
                 }
 
-//                sessionTurn = session;
-//                Map<String, String> randomWord = wordService.randomWord("명사");
-//                objMap.put("word",randomWord.get("word"));
-////                objMap.put("definition",randomWord.get("definition"));
-//                objMap.put("pos","");
-//
-//                currentWordMap.put("word",randomWord.get("word"));
-////                currentWordMap.put("definition",randomWord.get("definition"));
-//                currentWordMap.put("pos","");
-//
-//                for (Session s : clients) {
-//                    objMap.put("turn",false);
-//                    if(s == sessionTurn) objMap.replace("turn",true);
-//                    message = c.conversionWord(objMap,true);
-//                    log.info(message);
-//                    s.getBasicRemote().sendText(message);
-//                }
             }
 
         }
@@ -216,14 +205,27 @@ public class CatchMindSocketChat {
         sessionTurn = (Session) clientsArray[(index+1)%clientsArray.length];
         log.error("삭제후"+clientsArray.toString());
 
-        log.info(clients.toString());
-        if(clients.size()==0){//세션에 아무도없다면 세션단어 삭제
-            currentWordMap.clear();
-        }
         String message = c.conversion("close",clients, currentWordMap, id, "시스템");
         for (Session s : clients) {
             s.getBasicRemote().sendText(message);
         }
+
+        log.info(clients.toString());
+        if(clients.size()==0){//세션에 아무도없다면 세션단어 삭제
+            currentWordMap.clear();
+        }
+        else{//나가면 모두 false하고 유저리스트에서 다음사람에서 true줌
+            for (Session s : clients) {
+                objMap.put("turn", false);
+                if (s == sessionTurn) objMap.replace("turn", true);
+                message = c.conversionWord(objMap, true);
+                log.info("---"+message);
+                s.getBasicRemote().sendText(message);
+            }
+        }
+
+
+
     }
 //    @OnError
     public void onError(Session session, Throwable thr) {
