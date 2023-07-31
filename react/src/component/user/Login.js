@@ -1,66 +1,68 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from 'react';
 import {
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-  Link,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import AuthContext from "../../util/AuthContext";
-import CustomSnackBar from "../layout/CustomSnackBar";
+    Button,
+    Container,
+    Grid,
+    TextField,
+    Typography,
+    Link,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../util/AuthContext';
+import CustomSnackBar from '../layout/CustomSnackBar';
 
 const Login = () => {
-  const redirection = useNavigate(null);
 
-  const { onLogin, isLoggedIn } = useContext(AuthContext);
+    const redirection = useNavigate(null);
 
-  const [open, setOpen] = useState(false);
+    const { onLogin, isLoggedIn } = useContext(AuthContext);
 
-  const BASE = "http://localhost:8181";
-  const USER = "/api";
-  const REQUEST_URL = BASE + USER + "/login";
-  const GUEST_URL = BASE + USER + "/guest";
+    const [open, setOpen] = useState(false);
 
-  const fetchLogin = async () => {
-    const $userId = document.getElementById("userId");
-    const $password = document.getElementById("password");
-    console.log(REQUEST_URL);
-    const res = await fetch(REQUEST_URL, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        userId: $userId.value,
-        userPw: $password.value,
-      }),
-    });
+    const BASE = 'http://localhost:8181';
+    const USER = '/api';
+    const REQUEST_URL = BASE + USER + '/login';
+    const GUEST_URL =  BASE + USER + '/guest';
 
-    if (res.status === 400) {
-      const text = await res.text();
-      alert(text);
-      return;
-    }
+    const fetchLogin = async () => {
+        const $userId = document.getElementById('userId');
+        const $password = document.getElementById('password');
+        console.log(REQUEST_URL);
+        const res = await fetch(REQUEST_URL, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+                userId: $userId.value,
+                userPw: $password.value,
+            }),
+        });
 
-    const { userId } = await res.json();
+        if (res.status === 400) {
+            const text = await res.text();
+            alert(text);
+            return;
+        }
 
-    onLogin(userId);
-    console.log("userId : " + userId);
-    sessionStorage.setItem("id", userId);
-    sessionStorage.setItem("role", "user");
-    redirection("/main");
-  };
+        const { userId } = await res.json();
 
-  const loginHandler = (e) => {
-    e.preventDefault();
-    fetchLogin();
-  };
+        onLogin(userId);
+        console.log('userId : ' + userId);
+        sessionStorage.setItem('id', userId);
 
-  const guestLogin = async () => {
-    let uuid = crypto.randomUUID();
-    const num = uuid.replace(/[^0-9]/g, "").substring(0, 4);
-    const guestId = "Guest_" + num;
-    console.log(guestId);
+        redirection('/');
+    };
+
+    const loginHandler = (e) => {
+        e.preventDefault();
+        fetchLogin();
+    };
+
+    const guestLogin = async () => {
+        // const uuid = crypto.randomUUID();
+        // const num = uuid.replace(/[^0-9]/g, '').substring(0, 4);
+        const num = Math.floor(Math.random() * 8999) + 1000;
+        const guestId = 'Guest_' + num;
+        console.log(guestId);
 
     sessionStorage.setItem("id", guestId);
     sessionStorage.setItem("role", "guest");
@@ -69,8 +71,8 @@ const Login = () => {
     // alert(guest);
     // onLogin(guest);
 
-    redirection("/main");
-  };
+        redirection('/');
+    };
 
   return (
     <>
