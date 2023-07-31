@@ -158,6 +158,8 @@ export default function PaintZone({
 
     const fetchSaveImg = (imgFile) => {
         const imgBlob = new Blob(imgFile);
+  const fetchSaveImg = (imgFile) => {
+    // const imgBlob = new Blob([imgFile], { type: "appication/png" });
 
         const imgData = new FormData();
         imgData.append('img', imgBlob);
@@ -174,6 +176,20 @@ export default function PaintZone({
             }
         });
     };
+    fetch("http://localhost:8181/api/save", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ img: imgFile, word: crtWord }),
+    }).then((res) => {
+      if (res.status === 200) {
+        alert("이미지 저장 완료!");
+      } else {
+        alert("서버와의 통신이 원활하지 않습니다");
+      }
+    });
+  };
 
     const sendCanvasData = async () => {
         const smallCanvas = canvasRef2.current;
