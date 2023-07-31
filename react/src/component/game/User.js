@@ -17,6 +17,22 @@ const User = ({ data, list, turn }) => {
                 $comment.classList.remove('claim');
                 $comment.textContent = '';
             }, 2000);
+        } else {
+            console.log(data);
+            const $user = document.getElementById(data.name);
+            console.log('이것은 유저 지목이요' + $user);
+            if ($user === null) return;
+            const $comment = $user.querySelector('.comment');
+
+            if (data.msg === undefined) return;
+
+            $comment.classList.add('claim');
+            console.log(data.msg);
+            $comment.textContent = data.msg;
+            setTimeout(() => {
+                $comment.classList.remove('claim');
+                $comment.textContent = '';
+            }, 2000);
         }
     }, [data.msg]);
 
@@ -45,7 +61,7 @@ const User = ({ data, list, turn }) => {
                     <div className="user" id={e}>
                         <div className="profile"></div>
                         <div className="score">{e}</div>
-                        <div className="comment">sdf</div>
+                        <div className="comment"></div>
                     </div>
                 ))}
 

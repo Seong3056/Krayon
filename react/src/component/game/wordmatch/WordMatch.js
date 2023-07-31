@@ -2,21 +2,27 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import WordQuiz from './WordQuiz';
 import WMPlayer from './WMPlayer';
 
+import '../../../resource/scss/gametest/followword/Play.scss';
 import '../../../resource/scss/game/wordmatch/WordMatch.scss';
 import User from '../User';
 import Info from '../Info';
+import { BASE_URL } from '../../../config/host-config';
 
-const WordMatch = () => {
+const WordMatch = ({ history }) => {
     const ws = useRef(null);
 
     const [socketData, setSocketData] = useState('');
     const [list, setList] = useState([]);
     const [chkLog, setChkLog] = useState(false);
-
+    const [start, setStart] = useState(false);
+    const [definition, setDefinition] = useState('');
+    const [word, setWord] = useState('');
+    const [answer, setAnswer] = useState('');
+    const disableBtn = false;
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/game/wm?name=' + id;
+    const URL = 'ws://' + BASE_URL + '/api/game/wm?name=' + id;
 
     useEffect(() => {
         webSocketLogin();
@@ -24,8 +30,8 @@ const WordMatch = () => {
 
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
-        if (ws.current.readyState === 1) ws.current.close();
-        console.log('웹소켓 접속11');
+        // if (ws.current.readyState === 1) ws.current.close();
+        console.log('워드매치 웹소켓 접속');
         ws.current.onmessage = (message) => {
             //웹소켓에서 전송한 데이터를 수신 및 객체 저장
             console.log('웹소켓 수신 데이터: ' + message.data);
@@ -34,19 +40,31 @@ const WordMatch = () => {
                 name: dataSet.name,
                 date: dataSet.date,
                 msg: dataSet.msg,
+                definition: dataSet.definition,
+                word: dataSet.word,
+                point: dataSet.point,
             };
 
             // console.log('11111111111 ' + dataSet.list);
+            if (dataSet.answer !== undefined) setAnswer(dataSet.answer);
             if (dataSet.list !== undefined) {
-                console.log('메인에서 진입');
+                console.log('워드매치에서 진입');
                 console.log(dataSet.list);
 
                 setList(dataSet.list);
             }
+            console.log(data);
             setSocketData(data);
+
+            if (data.definition !== undefined) {
+                console.log('defitnion' + data.definition);
+                setDefinition(data.definition);
+                setWord(data.word);
+            }
         };
     });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const send = useCallback((msg) => {
         //웹소켓으로 메세지 전송
         if (!chkLog) {
@@ -96,12 +114,38 @@ const WordMatch = () => {
         }
         // setMsg('');
     });
+    const sendStart = () => {
+        const def = sessionStorage.getItem('definition');
 
+        if (start && def !== definition) return;
+        console.log('시작버튼이 눌림');
+        const data = {
+            name: id,
+            start: true,
+        }; //전송 데이터(JSON)
+
+        const temp = JSON.stringify(data);
+        setStart(true);
+        ws.current.send(temp);
+    };
+
+    //     ws.current.close();
+    // }, [history]);
     return (
         <>
             <User data={socketData} list={list} />
-            <WordQuiz />
-            <Info />
+            <WordQuiz
+                word={socketData.word}
+                answer={word}
+                send={send}
+                definitionData={definition}
+            />
+            <Info
+                p={socketData.point}
+                sendStart={sendStart}
+                disableBtn={disableBtn}
+                textData={socketData}
+            />
             {/* <WMPlayer list={list} /> */}
         </>
     );

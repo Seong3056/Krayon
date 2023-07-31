@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import User from '../User';
 import Info from '../Info';
+import { BASE_URL } from '../../../config/host-config';
 
 const FollowWord = ({ history }) => {
     const ws = useRef(null);
@@ -24,12 +25,11 @@ const FollowWord = ({ history }) => {
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
-    const URL = 'ws://' + ip + ':8181/api/game/followword?name=' + id;
-
+    const URL = 'ws://' + BASE_URL + '/api/game/followword?name=' + id;
 
     useEffect(() => {
         webSocketLogin();
-
+        console.log(URL);
         console.log('1111111111111111웹소켓로그인');
     }, []);
 
@@ -57,6 +57,7 @@ const FollowWord = ({ history }) => {
                 char: dataSet.char,
                 turn: dataSet.turn,
                 result: dataSet.result,
+                point: dataSet.point,
             };
             console.log(dataSet);
             // console.log('11111111111 ' + dataSet.list);
@@ -67,6 +68,7 @@ const FollowWord = ({ history }) => {
             }
 
             setSocketData(data);
+            console.log(data);
             if (dataSet.user !== undefined) setTurn(dataSet.user);
             if (!dataSet.char) {
                 if (dataSet.wordInfo !== undefined) {
@@ -77,7 +79,7 @@ const FollowWord = ({ history }) => {
                     setStart(false);
                 }
             }
-            console.log('!!!!!!!!!!!!' + dataSet.re);
+
             if (data.result !== undefined) {
                 console.log(data.result[0]);
                 console.log(data.result[0].name);
@@ -218,9 +220,13 @@ const FollowWord = ({ history }) => {
                 data={socketData}
                 sendChar={sendChar}
                 send={send}
-                startWord={startWord}
+                sendStart={startWord}
             />
-            <Info gameStart={gameStart} />
+            <Info
+                point={socketData.point}
+                sendStart={gameStart}
+                textData={socketData}
+            />
             {/* <button className="ready" onClick={gameStart}>
                 게임시작
             </button> */}
