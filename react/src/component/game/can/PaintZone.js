@@ -12,6 +12,8 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
   const canvasRef2 = useRef(null);
   const canvasWrapRef = useRef(null);
   const gameRef = useRef(null);
+  const id = sessionStorage.getItem("id");
+  const role = sessionStorage.getItem("role");
 
   const [canvasWidth, setCanvasWidth] = useState(canvasWrapRef.current?.clientWidth || 1160);
 
@@ -23,6 +25,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
   const [getPic, setGetPic] = useState();
   const [userTurn, setUserTurn] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
+  
 
   const [answer, setAnswer] = useState('');//정답작성
 
@@ -125,18 +128,46 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     }
   };
 
+  const [imgFile, setImgFile] = useState("");
+
   const saveAsImageHandler = () => {
-    const target = document.querySelector('.play');
+    const target = document.querySelector(".play");
+    if (role === "guest") {
+      alert("게스트는 저장할수 없습니다! ");
+      return;
+    }
     if (!target) {
-      return alert('결과 저장에 실패했습니다.');
+      return alert("결과 저장에 실패했습니다.");
     }
     html2canvas(target).then((canvas) => {
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       document.body.appendChild(link);
-      link.href = canvas.toDataURL('image/png');
-      link.download = 'result.png';
-      link.click();
+      link.href = canvas.toDataURL("image/png");
+      setImgFile(link.href);
+      link.download = crtWord;
+
       document.body.removeChild(link);
+    });
+
+    fetchSaveImg(imgFile);
+  };
+
+  const fetchSaveImg = (imgFile) => {
+    const imgBlob = new Blob(imgFile);
+
+    const imgData = new FormData();
+    imgData.append("img", imgBlob);
+    imgData.append("word", crtWord);
+
+    fetch("localhost:8181/api/save", {
+      method: "POST",
+      body: imgData,
+    }).then((res) => {
+      if (res.status === 200) {
+        alert("이미지 저장 완료!");
+      } else {
+        alert("서버와의 통신이 원활하지 않습니다");
+      }
     });
   };
 
@@ -178,13 +209,14 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     }
   }, [data.turn, data.name]);
 
+
   return (
     <div className="play">
     <div className="game" ref={gameRef}>
     {!userTurn ? (
 
         <div className="getQuiz" disabled={!userTurn}>
-          <p>{data.name}가 그림을 그리는중...</p>
+          <p>{data.name} 그림을 그리는중...</p>
 
         <img
           src={getPic}
