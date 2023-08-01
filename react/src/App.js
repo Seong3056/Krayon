@@ -15,7 +15,7 @@ import CatchMind from './component/game/can/CatchMind';
 import WordMatch from './component/game/wordmatch/WordMatch';
 import SearchApp from './component/search/SearchApp';
 
-import Login from './component/user/Login';
+import Login from './component/Login';
 import Join from './component/user/Join';
 
 const App = () => {
@@ -23,9 +23,9 @@ const App = () => {
         <div className="wrapper">
             <Tab />
             <Routes>
-                <Route path="/login" Component={Login} />
+                <Route path="/" Component={Login} />
                 <Route path="/join" Component={Join} />
-                <Route path="/" Component={Main} />
+                <Route path="/main" Component={Main} />
                 {/* <Route path="/user" Component={MyInfo} /> */}
                 <Route path="/shop" Component={Shop} />
                 <Route path="login" Component={Login} />
@@ -33,7 +33,7 @@ const App = () => {
 
                 <Route path="/search" Component={SearchApp} />
 
-                <Route path="/game/*" Component={game}>
+                <Route path="/game/*">
                     <Route path="followword" Component={FollowWord} />
                     <Route path="can" Component={CatchMind} />
                     <Route path="wordmatch" Component={WordMatch} />

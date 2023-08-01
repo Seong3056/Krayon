@@ -185,29 +185,29 @@ const Main = ({ history }) => {
     TypeHangul.type('#test');
   }
 
-  const room = [
-    {
-      game: '캐치마인드',
-      describe:
-        `제시받은 단어를 그려서 정답을 외치게 유도해보세요! ` +
-        ' 그려지는 그림을 보고 정답을 맞춰보세요!',
-      url: 'game/can',
-    },
-    {
-      game: '끝말잇기',
-      describe:
-        '이전 사람의 단어를 보고 이어 나가보세요! 틀리면 자동으로 턴이 넘어갑니다.',
-      url: 'game/followword',
-    },
-    {
-      game: '단어맞추기',
-      describe: '제시된 뜻을 보고 단어를 유추해보세요! ',
-      url: 'game/wordmatch',
-    },
-  ];
-  const toggleMenu = () => {
-    setToggleIcon(!toggleIcon);
-  };
+    const room = [
+        {
+            game: '캐치마인드',
+            describe:
+                `제시받은 단어를 그려서 정답을 외치게 유도해보세요! ` +
+                ' 그려지는 그림을 보고 정답을 맞춰보세요!',
+            url: '/game/can',
+        },
+        {
+            game: '끝말잇기',
+            describe:
+                '이전 사람의 단어를 보고 이어 나가보세요! 틀리면 자동으로 턴이 넘어갑니다.',
+            url: '/game/followword',
+        },
+        {
+            game: '단어맞추기',
+            describe: '제시된 뜻을 보고 단어를 유추해보세요! ',
+            url: '/game/wordmatch',
+        },
+    ];
+    const toggleMenu = () => {
+        setToggleIcon(!toggleIcon);
+    };
 
   let gameTitle = document.getElementById('gameTitle');
   // console.log("gameTitle: " + gameTitle.textContent);

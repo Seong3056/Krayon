@@ -1,38 +1,36 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { CanvasStyle } from './style/canvas';
+import React, { useRef, useEffect, useState } from "react";
+import { CanvasStyle } from "./style/canvas";
 import '../../../resource/scss/gametest/followword/Play.scss';
-import '../../../resource/scss/game/can/can.scss';
+import "../../../resource/scss/game/can/can.scss"
+import html2canvas from "html2canvas";
+import bgImage from '../can/style/bg2.jpg';
 
-const API = 'http://localhost:8181/api/catch';
+const API = "http://localhost:8181/api/catch";
 
-export default function PaintZone({
-  data,
-  sendImg,
-  crtWord,
-  list,
-  sendAnswer,
-}) {
+export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  }) {
   // useRef
   const canvasRef = useRef(null);
   const canvasRef2 = useRef(null);
   const canvasWrapRef = useRef(null);
   const gameRef = useRef(null);
-  const id = sessionStorage.getItem('id');
-  const role = sessionStorage.getItem('role');
-  const [canvasWidth, setCanvasWidth] = useState(
-    canvasWrapRef.current?.clientWidth || 1160
-  );
+  const id = sessionStorage.getItem("id");
+
+  const [canvasWidth, setCanvasWidth] = useState(canvasWrapRef.current?.clientWidth || 1160);
 
   // useState
   const [getCtx, setGetCtx] = useState(null);
   const [painting, setPainting] = useState(false);
   const [lineWidth, setLineWidth] = useState(2.5);
-  const [penColor, setPenColor] = useState('#000000');
+  const [penColor, setPenColor] = useState("#000000");
   const [getPic, setGetPic] = useState();
   const [userTurn, setUserTurn] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
 
-  const [answer, setAnswer] = useState(''); //정답작성
+
+  const [answer, setAnswer] = useState('');//정답작성
+  const [drawer, setDrawer]  = useState('');
+  const [correct, setCorrect]  = useState('');
+  const [correctUser, setCorrectUser]  = useState('');
 
   useEffect(() => {
     // canvas useRef
@@ -41,22 +39,26 @@ export default function PaintZone({
     if (canvas) {
       canvas.width = canvasWidth;
       canvas.height = 540;
-      const ctx = canvas.getContext('2d');
-      ctx.lineJoin = 'round';
+      const ctx = canvas.getContext("2d");
+      ctx.lineJoin = "round";
       ctx.lineWidth = 2.5;
-      ctx.strokeStyle = '#000000';
+      ctx.strokeStyle = "#000000";
       setGetCtx(ctx);
-      console.log('정상캔버스 등장');
+      console.log("정상캔버스 등장");
     }
-  }, [userTurn, canvasWidth, gameStarted]);
+    if(data.correct !== undefined){
+      alert("정답자: "+data.correctUser+" 정답: "+data.correct);
+    }
+
+  }, [userTurn, canvasWidth, gameStarted, data.correct, data.correctUser]);
 
   useEffect(() => {
     // 브라우저 창 크기가 변경될 때마다 이벤트 리스너 등록
-    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener("resize", handleWindowResize);
 
     return () => {
       // 컴포넌트가 언마운트될 때 이벤트 리스너 해제
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
 
@@ -68,6 +70,7 @@ export default function PaintZone({
       setCanvasWidth(Math.min(availableWidth, 1140));
     }
   };
+
 
   const handlePenColorChange = (newColor) => {
     setPenColor(newColor);
@@ -86,22 +89,27 @@ export default function PaintZone({
 
   const resetCanvas = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     sendCanvasData();
   };
 
   const eraseMode = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#FFFFFF';
+    const ctx = canvas.getContext("2d");
+    // Set the composite operation to "destination-out" to erase
+    ctx.globalCompositeOperation = "destination-out";
+    // Set a larger line width for better erasing effect
+    ctx.lineWidth = 20;
   };
 
   const penMode = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#000000';
-    ctx.strokeStyle = penColor;
+    const ctx = canvas.getContext("2d");
+    // Set the composite operation back to default for normal drawing
+    ctx.globalCompositeOperation = "source-over";
+    // Set the line width back to the original value
+    ctx.lineWidth = lineWidth;
   };
 
   const drawFn = (e) => {
@@ -117,8 +125,8 @@ export default function PaintZone({
 
     const smallCanvas = canvasRef2.current;
     if (smallCanvas && getCtx) {
-      const smallCtx = smallCanvas.getContext('2d');
-      smallCtx.lineJoin = 'round';
+      const smallCtx = smallCanvas.getContext("2d");
+      smallCtx.lineJoin = "round";
       smallCtx.lineWidth = 2.5;
       smallCtx.strokeStyle = getCtx.strokeStyle;
       smallCtx.clearRect(0, 0, smallCanvas.width, smallCanvas.height);
@@ -188,6 +196,19 @@ export default function PaintZone({
       } else {
         alert('서버와의 통신이 원활하지 않습니다');
       }
+  const saveAsImageHandler = () => {
+    const target = document.querySelector('.play');
+    if (!target) {
+      return alert('결과 저장에 실패했습니다.');
+    }
+    html2canvas(target).then((canvas) => {
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = canvas.toDataURL('image/png');
+      link.download = crtWord+'.png';
+      link.click();
+      document.body.removeChild(link);
+      console.log(crtWord);
     });
   };
 
@@ -199,13 +220,15 @@ export default function PaintZone({
 
   useEffect(() => {
     if (data.img !== undefined) {
-      console.log('그림' + data.img);
+      console.log("그림" + data.img);
       setGetPic(data.img);
+
     }
+    if(data.drawer !== undefined) setDrawer(data.drawer);
   }, [data]);
 
   useEffect(() => {
-    console.log('이미지 src 바뀜');
+    console.log("이미지 src 바뀜");
   }, []);
 
   // window.onload = () => {
@@ -215,166 +238,157 @@ export default function PaintZone({
   useEffect(() => {
     if (!!crtWord);
     if (data.wordInfo !== undefined) {
+
     }
-    console.log('!!!!!!!!!!!!!!!' + data.turn);
+    console.log("!!!!!!!!!!!!!!!" + data.turn);
     if (data.turn !== undefined) {
       setUserTurn(data.turn);
-      console.log('턴에 접근');
+      console.log("턴에 접근");
 
       // if (data.turn === true) {
-      setGameStarted(true);
+          setGameStarted(true);
       //   console.log("게임 진행중");
       // }
     }
-  }, [data]);
+  }, [data.turn]);
+
 
   return (
     <div className="play">
-      <div className="game" ref={gameRef}>
-        {!userTurn ? (
-          <div>
-            <img
-              src={getPic}
-              id="getPicture"
-              alt=""
-              style={{
-                width: '100%',
-                height: 540,
-                backgroundColor: 'white',
-              }}
-            />
-          </div>
-        ) : gameStarted ? (
-          <div className="paintZone">
-            <div className="getQuiz" disabled={!userTurn}>
-              <p>문제 : {crtWord}</p>
-            </div>
+    <div className="game" ref={gameRef}>
+    {!userTurn ? (
 
-            <div
-              className="canvasWrap"
-              onClick={sendCanvasData}
-              style={{
-                width: '100%',
-                height: 540,
-                backgroundColor: 'white',
-              }}
-              ref={canvasWrapRef}
-            >
-              <canvas
-                className="canvas"
-                ref={canvasRef}
-                onMouseDown={() => setPainting(true)}
-                onMouseUp={() => setPainting(false)}
-                onMouseMove={(e) => drawFn(e)}
-                onMouseLeave={() => setPainting(false)}
-                // style={{ width: "100%", height: "100%" }}
-                id="canvasDraw"
-              />
-            </div>
+        <div className="getQuiz" disabled={!userTurn}>
+          <p>{drawer} 그림을 그리는중...</p>
 
-            <div className="canvasTools">
-              {/* <button id="resetBtn" onClick={saveAsImageHandler}>
-                                화면 캡쳐
-                            </button> */}
-              <button id="resetBtn" onClick={resetCanvas}>
-                전체 지우기
-              </button>
-              <button id="eraserBtn" onClick={eraseMode}>
-                지우개
-              </button>
-              <button id="penBtn" onClick={penMode}>
-                펜
-              </button>
-              <input
-                className="boldBar"
-                type="range"
-                min="1"
-                max="30"
-                step="0.5"
-                value={lineWidth}
-                onChange={handleChangeLineWidth}
-              />
+        <img
+          src={getPic}
+          id="getPicture"
+          alt=""
+          style={{ width: "100%", height: 540, backgroundImage: `url(${bgImage})` }}
+        />
+      </div>
 
-              <button
-                className="paint"
-                style={{ backgroundColor: 'red' }}
-                onClick={() => handlePenColorChange('red')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'orange' }}
-                onClick={() => handlePenColorChange('orange')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'yellow' }}
-                onClick={() => handlePenColorChange('yellow')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'green' }}
-                onClick={() => handlePenColorChange('green')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'blue' }}
-                onClick={() => handlePenColorChange('blue')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'indigo' }}
-                onClick={() => handlePenColorChange('indigo')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'purple' }}
-                onClick={() => handlePenColorChange('purple')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'brown' }}
-                onClick={() => handlePenColorChange('brown')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'black' }}
-                onClick={() => handlePenColorChange('black')}
-              ></button>
-            </div>
-          </div>
-        ) : (
-          <div>
+      ) : gameStarted ? (
+
+      <div className="paintZone">
+
+        <div className="getQuiz" disabled={!userTurn}>
+          <p>문제 : {crtWord}</p>
+        </div>
+
+        <div className="canvasWrap" onClick={sendCanvasData} style={{ width: "100%", height: 540, backgroundColor: "white" }} ref={canvasWrapRef}>
+          <canvas
+            className="canvas"
+            ref={canvasRef}
+            onMouseDown={() => setPainting(true)}
+            onMouseUp={() => setPainting(false)}
+            onMouseMove={(e) => drawFn(e)}
+            onMouseLeave={() => setPainting(false)}
+            // style={{ width: "100%", height: "100%" }}
+            id="canvasDraw"
+          />
+        </div>
+
+        <div className="canvasTools">
+          <button id="resetBtn" onClick={saveAsImageHandler}>
+            화면 캡쳐
+          </button>
+          <button id="resetBtn" onClick={resetCanvas}>
+            전체 지우기
+          </button>
+          <button id="eraserBtn" onClick={eraseMode}>
+            지우개
+          </button>
+          <button id="penBtn" onClick={penMode}>
+            펜
+          </button>
+          <input
+            className="boldBar"
+            type="range"
+            min="1"
+            max="30"
+            step="0.5"
+            value={lineWidth}
+            onChange={handleChangeLineWidth}
+          />
+
+          <button
+            className="paint"
+            style={{ backgroundColor: "red"}}
+            onClick={() => handlePenColorChange("red")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "orange" }}
+            onClick={() => handlePenColorChange("orange")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "yellow" }}
+            onClick={() => handlePenColorChange("yellow")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "green" }}
+            onClick={() => handlePenColorChange("green")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "blue" }}
+            onClick={() => handlePenColorChange("blue")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "indigo" }}
+            onClick={() => handlePenColorChange("indigo")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "purple" }}
+            onClick={() => handlePenColorChange("purple")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "brown" }}
+            onClick={() => handlePenColorChange("brown")}
+          ></button>
+          <button
+            className="paint"
+            style={{ backgroundColor: "black" }}
+            onClick={() => handlePenColorChange("black")}
+          ></button>
+
+
+        </div>
+
+
+      </div>
+      ):(
+        <div>
             <p>Waiting for the game to start...</p>
           </div>
-        )}
-      </div>
+      )}
+
+    </div>
       <div className="chat">
-        <input
-          className="input"
-          type="text"
-          onChange={(e) => setAnswer(e.target.value)}
-          placeholder="정답 또는 채팅을 입력해주세요!"
-          // disabled={userTurn}
-          onKeyDown={(e) => {
+        <input className="input" type="text"
+        onChange={(e) => setAnswer(e.target.value)}
+        placeholder="정답 또는 채팅을 입력해주세요!"
+        // disabled={userTurn}
+        onKeyDown={(e) => {
             if (e.keyCode === 13) {
-              sendAnswer(answer);
-              document.querySelector('.input').value = '';
+                sendAnswer(answer);
+                document.querySelector('.input').value = '';
             }
-          }}
+        }}
         />
         <button className="button">입력</button>
       </div>
-      <div
-        style={{
-          backGroundColor: '#ffff00',
-          width: 400,
-          height: 270,
-          marginTop: 500,
-        }}
-        disabled={!userTurn}
-      >
-        <canvas ref={canvasRef2} alt="" id="test1" width="400" height="270" />
-      </div>
-    </div>
+    <div style={{ backGroundColor: "#ffff00", width: 400, height: 270, marginTop: 500 }} disabled={!userTurn} >
+    <canvas ref={canvasRef2} alt="" id="test1" width="400" height="270" />
+  </div>
+
+  </div>
   );
 }
