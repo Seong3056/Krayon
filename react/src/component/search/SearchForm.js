@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { BsStar, BsStarFill } from "react-icons/bs";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from 'react';
+import { BsStar, BsStarFill } from 'react-icons/bs';
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const MAX_DESCRIPTION_LENGTH = 25; //단어 설명 길이
+const MAX_DESCRIPTION_LENGTH = 15; //단어 설명 길이
 const MAX_FAVORITES_COUNT = 10; //즐찾에 추가할 수 있는 단어 수
 const ITEMS_PER_PAGE = 10; //한 페이지당 보여줄 단어 수
 
 const SearchForm = () => {
-  const [searchWord, setSearchWord] = useState(""); //검색어를 입력받을 상태
+  const [searchWord, setSearchWord] = useState(''); //검색어를 입력받을 상태
   const [wordList, setWordList] = useState([]); //검색 결과 단어 리스트 상태
   const [isLoading, setIsLoading] = useState(false); //로딩 중인지 여부를 나타내는 상태
-  const [errorMessage, setErrorMessage] = useState(""); //오류 메시지 상태
+  const [errorMessage, setErrorMessage] = useState(''); //오류 메시지 상태
   const [expandedIndex, setExpandedIndex] = useState(-1); //확장된 단어 설명의 인덱스 상태
   const [alreadyAdded, setAlreadyAdded] = useState(false); //즐찾에 이미 추가되었는지 여부
   const [currentPage, setCurrentPage] = useState(1); //현재 페이지 번호
   const [cachedResults, setCachedResults] = useState({}); //페이지별 검색 결과를 캐시로 저장하는 상태(페이징 버튼이 너무 느려서)
 
   const [favorites, setFavorites] = useState(() => {
-    const storedFavorites = localStorage.getItem("favorites"); //로컬 스토리지에서 즐겨찾기 목록을 가져옴
+    const storedFavorites = localStorage.getItem('favorites'); //로컬 스토리지에서 즐겨찾기 목록을 가져옴
     return storedFavorites ? JSON.parse(storedFavorites) : []; //JSON으로 파싱하여 즐겨찾기 목록 상태를 설정
   });
 
   //즐찾 목록에서 단어를 클릭할 때 호출되는 함수 -> 해당 단어를 검색 결과에서 삭제하고 에러 메시지와 검색어 입력을 초기화하며 단어를 selectedFavorite 상태로 설정함.
   const handleFavoriteClick = (word) => {
     setWordList([]); //검색 결과 목록을 빈 배열로 설정. 이로 인해 검색 결과가 화면에 표시X
-    setErrorMessage(""); //이전에 발생한 에러 메시지 초기화.
-    setSearchWord(""); //검색어 입력 상자를 빈 문자열로 설정. 이로 인해 이전에 입력된 검색어가 사라짐.
+    setErrorMessage(''); //이전에 발생한 에러 메시지 초기화.
+    setSearchWord(''); //검색어 입력 상자를 빈 문자열로 설정. 이로 인해 이전에 입력된 검색어가 사라짐.
     setSelectedFavorite(word); //클릭한 단어를 selectedFavorite 상태로 설정함. selectedFavorite상태는 현재 선택된 단어의 정보를 가지고 있음.
   };
 
@@ -73,13 +73,13 @@ const SearchForm = () => {
   //검색어를 이용하여 API로부터 검색 결과를 받을 함수. 검색어가 비어있으면 에러 메시지 출력.
   const handleSearch = async () => {
     if (!searchWord.trim()) {
-      setErrorMessage("검색어를 입력하세요.");
+      setErrorMessage('검색어를 입력하세요.');
       return;
     }
 
     try {
       setIsLoading(true);
-      setErrorMessage("");
+      setErrorMessage('');
       setSelectedFavorite(null);
 
       const response = await fetch(
@@ -91,18 +91,18 @@ const SearchForm = () => {
       if (response.ok) {
         const data = await response.json();
         setWordList(data);
-        setErrorMessage("");
+        setErrorMessage('');
       } else {
-        console.log("Request failed:", response.status);
+        console.log('Request failed:', response.status);
         setWordList([]);
         setErrorMessage(
-          "저희 사전에 검색 결과가 존재하지 않습니다. 다시 입력해주세요!"
+          '저희 사전에 검색 결과가 존재하지 않습니다. 다시 입력해주세요!'
         );
       }
     } catch (error) {
-      console.error("Error occurred:", error);
+      console.error('Error occurred:', error);
       setWordList([]);
-      setErrorMessage("오류가 발생했습니다.");
+      setErrorMessage('오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -110,7 +110,7 @@ const SearchForm = () => {
 
   //Enter키 누르면 handleSearch 함수를 호출함.
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSearch();
     }
   };
@@ -140,7 +140,7 @@ const SearchForm = () => {
 
       if (!isAlreadyInFavorites && prevFavorites.length < MAX_FAVORITES_COUNT) {
         const newFavorites = [...prevFavorites, { ...word, id: wordId }];
-        localStorage.setItem("favorites", JSON.stringify(newFavorites));
+        localStorage.setItem('favorites', JSON.stringify(newFavorites));
         setAlreadyAdded(false);
         return newFavorites;
       } else {
@@ -168,7 +168,7 @@ const SearchForm = () => {
     }
 
     localStorage.setItem(
-      "favorites",
+      'favorites',
       JSON.stringify(favorites.filter((favWord) => favWord.id !== word.id))
     );
 
@@ -193,7 +193,7 @@ const SearchForm = () => {
   const fetchWords = async () => {
     try {
       setIsLoading(true);
-      setErrorMessage("");
+      setErrorMessage('');
       setSelectedFavorite(null);
 
       const response = await fetch(
@@ -205,18 +205,18 @@ const SearchForm = () => {
       if (response.ok) {
         const data = await response.json();
         setWordList(data);
-        setErrorMessage("");
+        setErrorMessage('');
       } else {
-        console.log("Request failed:", response.status);
+        console.log('Request failed:', response.status);
         setWordList([]);
         setErrorMessage(
-          "저희 사전에 검색 결과가 존재하지 않습니다. 다시 입력해주세요!"
+          '저희 사전에 검색 결과가 존재하지 않습니다. 다시 입력해주세요!'
         );
       }
     } catch (error) {
-      console.error("Error occurred:", error);
+      console.error('Error occurred:', error);
       setWordList([]);
-      setErrorMessage("오류가 발생했습니다.");
+      setErrorMessage('오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -226,8 +226,8 @@ const SearchForm = () => {
   const cleanDefinition = (definition) => {
     const specialCharsAndSpacesRegex = /[^a-zA-Z가-힣0-9]/g;
     const sanitizedDefinition = definition
-      .replace(specialCharsAndSpacesRegex, " ")
-      .replace(/<[^>]+>|[()FLgtl&;/]/g, "")
+      .replace(specialCharsAndSpacesRegex, ' ')
+      .replace(/<[^>]+>|[()FLgtl&;/]/g, '')
       .trim();
 
     return sanitizedDefinition;
@@ -235,43 +235,45 @@ const SearchForm = () => {
 
   //JSX를 통해 컴포넌트의 렌더링 결과 반환시작
   return (
-    <div className="search-form">
-      <div className="input-group mb-3">
+    <div className="searchCon">
+      <div className="searchForm">
         {/*검색어를 input에 입력하거나 변경하면 setSearch함수를 통해 searchWord 상태가 업데이트됨.*/}
         <input
           type="text"
-          className="form-control"
+          className="searchInput"
           value={searchWord}
           onChange={(e) => setSearchWord(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           placeholder="검색어를 입력하세요"
         />
         {/*검색어를 입력하거나 버튼 누르면 handleSearch함수가 호출됨*/}
         <button
-          className="btn btn-primary"
+          className="searchBtn"
           type="button"
           onClick={handleSearch}
           disabled={isLoading}
         >
-          {isLoading ? "검색 중..." : "검색"}
+          {isLoading ? '검색 중...' : '검색'}
         </button>
 
-        <div className="search-form"></div>
+        <div className=""></div>
       </div>
 
       {/*즐찾 목록을 나타냄. favorites 상태를 map 함수를 이용하여 반복적으로 보여줌*/}
-      <div className="favorites-list">
-        <h3>즐겨찾기 목록</h3>
-        <div className="added-favorites ml-auto">
+      <div className="favWrap">
+        <div class="favTitle">
+          <h3>즐겨찾기</h3>
+        </div>
+        <div className="favList">
           {favorites.map((favWord, index) => (
             <div key={favWord.id} title={favWord.word}>
               <BsStarFill
-                className="favorite-icon"
+                className="favStar"
                 onClick={() => removeFromFavorites(favWord, index)}
-                style={{ color: "blue" }}
+                style={{ color: 'rgb(249, 111, 95);' }}
               />
               <a href="#" onClick={() => handleFavoriteClick(favWord)}>
-                <span className="favorite-word">{favWord.word}</span>
+                <span className="favWord">{favWord.word}</span>
               </a>
             </div>
           ))}
@@ -283,7 +285,7 @@ const SearchForm = () => {
           즐겨찾기로 등록할 수 있는 단어는 최대 10개입니다.
           <button
             type="button"
-            className="close custom-button"
+            className="closeAlt"
             onClick={() => setAlreadyAdded(false)}
           >
             <FontAwesomeIcon icon={faTimes} />
@@ -293,11 +295,11 @@ const SearchForm = () => {
       {selectedFavorite ? (
         //선택된 즐찾 단어를 나타내는 부분. selectedFavorite 상태가 있으면 해당 단어의 정보를 보여주며
         //cleanDefinition 함수를 통해 단어의 설명을 깔끔하게 표시함.
-        <div className="search-ys">
-          <div className="search-here text-center mt-4">
-            <h3 style={{ fontSize: "2rem" }}>{selectedFavorite.word}</h3>
+        <div className="desWrap">
+          <div className="describe">
+            <h3 style={{ fontSize: '2.4rem' }}>{selectedFavorite.word}</h3>
             <br></br>
-            <p style={{ fontSize: "1.2rem" }}>
+            <p style={{ fontSize: '1.2rem' }}>
               {cleanDefinition(selectedFavorite.definition)}
             </p>
           </div>
@@ -307,13 +309,11 @@ const SearchForm = () => {
         //단어의 설명이 긴 경우,toggleDescription 함수를 사용하여 더보기/접기가 가능하며
         //pagination-buttons는 이전 페이지와 다음 페이지로 가는 버튼이다.
         //handlePreviousPage와 handleNextPage 함수가 호출됨.
-        <div className="search-here">
-          <div className="search-overing">
-            <p className="search-results">
-              검색 결과: {sortedWordList.length}개
-            </p>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <ul className="search-results-list">
+        <div className="resultCon">
+          <div className="resultWrap">
+            <p className="count">검색 결과: {sortedWordList.length}개</p>
+            {errorMessage && <p className="errorMsg">{errorMessage}</p>}
+            <ul className="searchList">
               {sortedWordList.map((word, index) => {
                 const uniqueId = `${word.word}-${index}`;
                 const starFilled = isWordInFavorites(word, index);
@@ -322,12 +322,12 @@ const SearchForm = () => {
                   <li key={index}>
                     <strong>{word.word} : </strong>
                     {word.definition.length > MAX_DESCRIPTION_LENGTH ? (
-                      <div>
+                      <span>
                         {expandedIndex === index ? (
                           <>
-                            {cleanDefinition(word.definition)}
+                            <span> {cleanDefinition(word.definition)}</span>
                             <span
-                              className="collapse-toggle"
+                              className="hide"
                               onClick={() => toggleDescription(index)}
                             >
                               접기
@@ -340,7 +340,7 @@ const SearchForm = () => {
                             )}
                             ...
                             <span
-                              className="expand-toggle"
+                              className="more"
                               onClick={() => toggleDescription(index)}
                             >
                               더 보기
@@ -349,45 +349,39 @@ const SearchForm = () => {
                         )}
                         {starFilled ? (
                           <BsStarFill
-                            className="favorite-icon"
+                            className=""
                             onClick={() => removeFromFavorites(word, index)}
-                            style={{ color: "blue" }}
+                            style={{ color: 'rgb(249, 111, 95);' }}
                           />
                         ) : (
                           <BsStar
-                            className="favorite-icon"
+                            className=""
                             onClick={() => addToFavorites(word, index)}
                           />
                         )}
-                      </div>
+                      </span>
                     ) : (
-                      <div>
+                      <span>
                         {cleanDefinition(word.definition)}
                         {starFilled ? (
                           <BsStarFill
-                            className="favorite-icon"
+                            className=""
                             onClick={() => removeFromFavorites(word, index)}
-                            style={{ color: "blue" }}
+                            style={{ color: 'rgb(249, 111, 95);' }}
                           />
                         ) : (
                           <BsStar
-                            className="favorite-icon"
+                            className=""
                             onClick={() => addToFavorites(word, index)}
                           />
                         )}
-                        <span
-                          className="collapse-toggle"
-                          style={{ display: "none" }}
-                        >
+                        <span className="hide" style={{ display: 'none' }}>
                           접기
                         </span>
-                        <span
-                          className="expand-toggle"
-                          style={{ display: "none" }}
-                        >
+                        <span className="more" style={{ display: 'none' }}>
                           더 보기
                         </span>
-                      </div>
+                      </span>
                     )}
                   </li>
                 );
@@ -396,28 +390,28 @@ const SearchForm = () => {
           </div>
         </div>
       ) : searchWord ? (
-        <div className="search-here">
-          <p className="no-results">
+        <div className="empty">
+          <p className="">
             저희 사전에 검색 결과가 존재하지 않습니다. 다시 입력해주세요!
           </p>
         </div>
       ) : null}
-      <div className="pagination-buttons mt-3">
+      <div className="btnWrap">
         <button
           type="button"
-          className="btn btn-secondary"
+          className="prevBtn"
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
         >
-          이전 페이지
+          이전
         </button>
         <button
           type="button"
-          className="btn btn-secondary mx-2"
+          className="nextBtn"
           onClick={handleNextPage}
           disabled={wordList.length < ITEMS_PER_PAGE}
         >
-          다음 페이지
+          다음
         </button>
       </div>
     </div>

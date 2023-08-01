@@ -1,15 +1,16 @@
 .info {
     width: 20%;
     height: 100%;
-    // background: #dde1e7;
+    // background: #f7f7f7;
     // background: url("https://applemagazine.com/wp-content/uploads/2020/09/AppleMagazine-iPad-Air-Wallpaper-2020-4.png");
     position: relative;
     // display: flex;
+    font-weight: bold;
 
     .score {
         width: 90%;
         height: 20%;
-        background: #dde1e7;
+        background: #f7f7f7;
         box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
         // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
         // backdrop-filter: blur(10px);
@@ -17,6 +18,7 @@
         // border: 2px solid rgba(255, 255, 255, 0.18);
         // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         margin: 30px 60px 30px auto;
+        padding: 25px;
         display: flex;
         flex-direction: column;
 
@@ -40,7 +42,7 @@
         width: 90%;
         height: 50%;
         margin: 20px 60px 0 auto;
-        background: #dde1e7;
+        background: #f7f7f7;
         box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
         // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
         // backdrop-filter: blur(10px);
@@ -62,7 +64,7 @@
         // left: 1%;
         // margin: 5% auto;
         transition: background-color 0.3s;
-        background: #3498db;
+        background: rgb(249, 111, 95);
         box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
         // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
         // backdrop-filter: blur(10px);
@@ -70,9 +72,12 @@
         // border: 2px solid rgba(255, 255, 255, 0.18);
         // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         cursor: pointer;
+        color: #f7f7f7;
+        font-size: 1.3em;
+        letter-spacing: 6px;
 
         &:hover {
-            background-color: #2980b9;
+            background-color: rgb(250, 99, 82);
         }
     }
 
@@ -86,7 +91,7 @@
         justify-content: center;
         // left: 5%;
         // margin: auto;
-        background: #dde1e7;
+        background: #f7f7f7;
         box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
         // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
         // backdrop-filter: blur(10px);
@@ -94,5 +99,8 @@
         // border: 2px solid rgba(255, 255, 255, 0.18);
         // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         cursor: pointer;
+        color: rgb(100, 100, 100);
+        letter-spacing: 6px;
+        font-size: 1.3em;
     }
 }

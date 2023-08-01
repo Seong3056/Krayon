@@ -9,9 +9,9 @@
     width: 80vw;
     height: 100%;
     background-color: #fbfbfb;
+    box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
     // background: #dde1e7;
     // background: no-repeat url(../../public/pngwing.com.png);
-    box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -47,6 +47,11 @@
             // box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
         }
 
+        &.col2 {
+            // background-color: yellow;
+            // max-width: 600px
+        }
+
         h1 {
             margin: 0 60px 40px 100px;
             color: black;
@@ -58,30 +63,34 @@
         
         p {
             margin: 0 100px 40px 100px;
-            color: black;
+            // color: black;
             /* font-size: 11px; */
             font-size: 1.2vw;
             /* line-height: 15px; */
-            line-height: 36px;
+            line-height: 24px;
             font-weight: 500;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-shadow: -8px -8px 12px rgba(255, 255, 255, 0.4),
                            8px 8px 12px rgba(0,0,0,0.08);
             // text-align: center;
         }
         
         button {
-            margin: 0 0 20px 100px;
-            width: 180px;
-            color: #000;
+            margin: 0 0 20px 0px;
+            width: 90px;
+            height: 45px;
+            // position: absolute;
+            // right: 24px;
+            // color: #000;
             font-size: 16px;
             padding: 12px 0;
-            background: #fff;
+            background: rgb(249, 111, 95);
+            color: #fbfbfb;
             box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
             border: 0;
             outline: none;
             margin-top: 10px;
-            border-radius: 5px;
+            border-radius: 6px;
         }
 
         .room {
@@ -264,7 +273,7 @@
                 position: absolute;
                 width: 20px;
                 height: 3px;
-                background: #f4166b;
+                background: rgb(249, 111, 95);
                 border-radius: 4px;
                 transition: 0.5s;
             }

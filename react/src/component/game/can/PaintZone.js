@@ -25,7 +25,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
   const [getPic, setGetPic] = useState();
   const [userTurn, setUserTurn] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
-  
+
 
   const [answer, setAnswer] = useState('');//정답작성
   const [drawer, setDrawer]  = useState('');
@@ -102,7 +102,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     // Set a larger line width for better erasing effect
     ctx.lineWidth = 20;
   };
-  
+
   const penMode = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -140,6 +140,62 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     }
   };
 
+  // const [imgFile, setImgFile] = useState('');
+
+  // const saveAsImageHandler = () => {
+  //     const target = document.querySelector('.play');
+  //     if (role === 'guest') {
+  //         alert('게스트는 저장할수 없습니다! ');
+  //         return;
+  //     }
+  //     if (!target) {
+  //         return alert('결과 저장에 실패했습니다.');
+  //     }
+  //     html2canvas(target).then((canvas) => {
+  //         const link = document.createElement('a');
+  //         document.body.appendChild(link);
+  //         link.href = canvas.toDataURL('image/png');
+  //         setImgFile(link.href);
+  //         link.download = crtWord;
+
+  //         document.body.removeChild(link);
+  //     });
+
+  //     fetchSaveImg(imgFile);
+  // };
+
+  const fetchSaveImg = (imgFile) => {
+    const imgBlob = new Blob(imgFile);
+    const fetchSaveImg = (imgFile) => {
+      // const imgBlob = new Blob([imgFile], { type: "appication/png" });
+
+      const imgData = new FormData();
+      imgData.append('img', imgBlob);
+      imgData.append('word', crtWord);
+
+      fetch('localhost:8181/api/save', {
+        method: 'POST',
+        body: imgData,
+      }).then((res) => {
+        if (res.status === 200) {
+          alert('이미지 저장 완료!');
+        } else {
+          alert('서버와의 통신이 원활하지 않습니다');
+        }
+      });
+    };
+    fetch('http://localhost:8181/api/save', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ img: imgFile, word: crtWord }),
+    }).then((res) => {
+      if (res.status === 200) {
+        alert('이미지 저장 완료!');
+      } else {
+        alert('서버와의 통신이 원활하지 않습니다');
+      }
   const saveAsImageHandler = () => {
     const target = document.querySelector('.play');
     if (!target) {
@@ -166,7 +222,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
     if (data.img !== undefined) {
       console.log("그림" + data.img);
       setGetPic(data.img);
-      
+
     }
     if(data.drawer !== undefined) setDrawer(data.drawer);
   }, [data]);
@@ -182,7 +238,7 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
   useEffect(() => {
     if (!!crtWord);
     if (data.wordInfo !== undefined) {
-      
+
     }
     console.log("!!!!!!!!!!!!!!!" + data.turn);
     if (data.turn !== undefined) {
@@ -212,9 +268,9 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
           style={{ width: "100%", height: 540, backgroundImage: `url(${bgImage})` }}
         />
       </div>
-        
+
       ) : gameStarted ? (
-        
+
       <div className="paintZone">
 
         <div className="getQuiz" disabled={!userTurn}>
@@ -303,21 +359,21 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
             onClick={() => handlePenColorChange("black")}
           ></button>
 
-          
+
         </div>
 
-        
+
       </div>
       ):(
         <div>
             <p>Waiting for the game to start...</p>
           </div>
       )}
-      
+
     </div>
       <div className="chat">
         <input className="input" type="text"
-        onChange={(e) => setAnswer(e.target.value)} 
+        onChange={(e) => setAnswer(e.target.value)}
         placeholder="정답 또는 채팅을 입력해주세요!"
         // disabled={userTurn}
         onKeyDown={(e) => {
@@ -325,14 +381,14 @@ export default function PaintZone({ data, sendImg, crtWord, list, sendAnswer  })
                 sendAnswer(answer);
                 document.querySelector('.input').value = '';
             }
-        }} 
+        }}
         />
         <button className="button">입력</button>
       </div>
     <div style={{ backGroundColor: "#ffff00", width: 400, height: 270, marginTop: 500 }} disabled={!userTurn} >
     <canvas ref={canvasRef2} alt="" id="test1" width="400" height="270" />
   </div>
-    
+
   </div>
   );
 }

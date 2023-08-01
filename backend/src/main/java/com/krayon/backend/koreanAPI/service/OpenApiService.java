@@ -125,7 +125,7 @@ public class OpenApiService {
                     })
                     .collect(Collectors.toList());
 
-            wordRepository.saveAll(wordsToSave);
+//            wordRepository.saveAll(wordsToSave);
         }
     }
 
