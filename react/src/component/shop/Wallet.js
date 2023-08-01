@@ -14,7 +14,9 @@ const Wallet = ({ openPay }) => {
           보유 캐시: <span>2500</span>
         </div> */}
       </div>
-      <button onClick={openPay}>충전하기</button>
+      <button id="payBtn" onClick={openPay}>
+        충전하기
+      </button>
     </div>
   );
 };
