@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Data
 @Getter
@@ -20,4 +21,6 @@ public class Payment {
     private String pod;
     private String pud;
     private String amount;
+    private Date expireDate;
+
 }

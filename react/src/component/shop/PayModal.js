@@ -9,7 +9,7 @@ const PayModal = ({ close }) => {
     const [payLink, setPayLink] = useState('');
     const loc = useLocation(null);
     const id = sessionStorage.getItem('id');
-    const url = BASE_URL + '/api/kakaoPay';
+    const url = 'http://' + BASE_URL + '/api/kakaoPay';
     const fetchPay = async () => {
         let fet = await fetch(url, {
             method: 'post',
@@ -18,15 +18,15 @@ const PayModal = ({ close }) => {
             body: JSON.stringify({
                 id: id,
                 amount: '2000',
-                itemName: 'Krayon 구독',
+                itemName: 'Krayon 구독권',
             }),
         });
         const data = await fet.text();
         console.log(payState);
         setPayLink(data);
         console.log(data);
-        setPayState(true);
-        // window.open(data, '_blank', 'width=300, height=700');
+        // setPayState(true);
+        window.open(data, '_blank', 'width=800, height=600, left=500');
     };
     useEffect(() => {
         console.log(payLink);

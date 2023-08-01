@@ -7,6 +7,7 @@ import '../../../resource/scss/game/wordmatch/WordMatch.scss';
 import User from '../User';
 import Info from '../Info';
 import { BASE_URL } from '../../../config/host-config';
+import WmInfo from './WmInfo';
 
 const WordMatch = ({ history }) => {
     const ws = useRef(null);
@@ -18,7 +19,7 @@ const WordMatch = ({ history }) => {
     const [definition, setDefinition] = useState('');
     const [word, setWord] = useState('');
     const [answer, setAnswer] = useState('');
-    const disableBtn = false;
+
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
@@ -140,10 +141,9 @@ const WordMatch = ({ history }) => {
                 send={send}
                 definitionData={definition}
             />
-            <Info
-                p={socketData.point}
+            <WmInfo
+                // p={socketData}
                 sendStart={sendStart}
-                disableBtn={disableBtn}
                 textData={socketData}
             />
             {/* <WMPlayer list={list} /> */}

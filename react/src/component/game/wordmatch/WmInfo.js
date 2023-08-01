@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../../resource/scss/gametest/followword/Info.scss';
-import Chat from '../main/Chat';
+import '../../../resource/scss/gametest/followword/Info.scss';
+import Chat from '../../main/Chat';
 
-const Info = ({ sendStart, textData, p }) => {
+const WmInfo = ({ sendStart, textData, p }) => {
     const [point, setPoint] = useState([]);
     const [sortPoint, setSortPoint] = useState([]);
     useEffect(() => {
@@ -54,4 +54,4 @@ const Info = ({ sendStart, textData, p }) => {
     );
 };
 
-export default Info;
+export default WmInfo;

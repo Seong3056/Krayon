@@ -4,7 +4,7 @@ import Wallet from './Wallet';
 import Article from './Article';
 
 import '../../resource/scss/shop/shop.scss';
-import PayModal from './PayModal';
+import PayModal from './PayModalA';
 
 const Shop = () => {
     const [modal, setModal] = useState(false);

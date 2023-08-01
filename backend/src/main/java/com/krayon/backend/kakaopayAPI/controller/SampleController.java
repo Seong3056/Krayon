@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 @RestController
@@ -36,11 +39,18 @@ public class SampleController {
 
         return ResponseEntity.ok().body(result);
     }
-
     @GetMapping("/kakaoPaySuccess")
     public ResponseEntity<?> kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
         KakaoPayApproval approval = kakaopay.kakaoPayInfo(pg_token);
-        return ResponseEntity.ok().body(approval);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy년MM월dd일ahh시mm분");
+
+
+
+        return ResponseEntity.ok().body("<div style=\"font-size:30px; margin-left:20px\">결제가 성공적으로 진행됐습니다.<br/>" +
+                        "결제금액: " + approval.getAmount().getTotal()+ "<br/>"+
+                        "구독 만료일: "+ format.format(approval.getExpire_at())+
+                        " </div>"
+                );
     }
     @GetMapping("/kakaoPayCancel")
     public ResponseEntity<?> kakaoPayCancel() {
