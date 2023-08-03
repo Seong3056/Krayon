@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 const Tab = () => {
   return (
     <>
-      <div className="title">Krayon</div>
       <div className="tab">
         <Link to="/" className="d tab-main">
           메인
