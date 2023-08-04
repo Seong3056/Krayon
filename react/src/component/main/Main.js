@@ -34,7 +34,9 @@ const Main = ({ history }) => {
 
   const [selGame, setSelGame] = useState('');
   const [selDes, setSelDes] = useState('');
-  const [url, setUrl] = useState('');
+  const [selUrl, setSelUrl] = useState('');
+  const [selImg, setSelImg] = useState('');
+  const [selId, setSelId] = useState('');
 
   const [chatIcon, setChatIcon] = useState(false);
   const [toggleIcon, setToggleIcon] = useState(false);
@@ -54,6 +56,12 @@ const Main = ({ history }) => {
     console.log(BASE_URL);
     ws.current = new WebSocket(URL);
 
+    if (sessionStorage.getItem('hex') === null) {
+      const hex = (Math.floor(Math.random() * 5592405) + 5592405).toString(16);
+      const profile = Math.floor(Math.random() * 6);
+      sessionStorage.setItem('hex', hex);
+      sessionStorage.setItem('profile', profile);
+    }
     if (ws.current.readyState === 1) ws.current.close();
     console.log('웹소켓 접속11');
     ws.current.onmessage = (message) => {
@@ -185,41 +193,52 @@ const Main = ({ history }) => {
     TypeHangul.type('#test');
   }
 
-    const room = [
-        {
-            game: '캐치마인드',
-            describe:
-                `제시받은 단어를 그려서 정답을 외치게 유도해보세요! ` +
-                ' 그려지는 그림을 보고 정답을 맞춰보세요!',
-            url: '/game/can',
-        },
-        {
-            game: '끝말잇기',
-            describe:
-                '이전 사람의 단어를 보고 이어 나가보세요! 틀리면 자동으로 턴이 넘어갑니다.',
-            url: '/game/followword',
-        },
-        {
-            game: '단어맞추기',
-            describe: '제시된 뜻을 보고 단어를 유추해보세요! ',
-            url: '/game/wordmatch',
-        },
-    ];
-    const toggleMenu = () => {
-        setToggleIcon(!toggleIcon);
-    };
+  const room = [
+    {
+      game: '캐치마인드',
+      describe:
+        `제시받은 단어를 그려서 정답을 외치게 유도해보세요! ` +
+        ' 그려지는 그림을 보고 정답을 맞춰보세요!',
+      url: '/game/can',
+      img: '../../resource/image/background//blue.png',
+      id: 'mainImg1',
+    },
+    {
+      game: '끝말잇기',
+      describe:
+        '이전 사람의 단어를 보고 이어 나가보세요! 틀리면 자동으로 턴이 넘어갑니다.',
+      url: '/game/followword',
+      img: '../../resource/image/background//blue.png',
+      id: 'mainImg2',
+    },
+    {
+      game: '단어맞추기',
+      describe: '제시된 뜻을 보고 단어를 유추해보세요! ',
+      url: '/game/wordmatch',
+      img: '../../resource/image/background//blue.png',
+      id: 'mainImg3',
+    },
+  ];
+  const toggleMenu = () => {
+    setToggleIcon(!toggleIcon);
+  };
 
   let gameTitle = document.getElementById('gameTitle');
   // console.log("gameTitle: " + gameTitle.textContent);
   const clickStart = () => {
-    navi(url);
+    navi(selUrl);
   };
   const describe = useCallback((pickCardTitle) => {
+    setSelGame('');
+    setSelDes('');
     room.map((r) => {
       if (r.game === pickCardTitle) {
+        setSelUrl(r.url);
+
         setSelGame(r.game);
         setSelDes(r.describe);
-        setUrl(r.url);
+
+        setSelId(r.id);
         return;
       }
     });
@@ -238,8 +257,73 @@ const Main = ({ history }) => {
   };
   useEffect(() => {}, [describe]);
 
+  ////////////////////////////////////////////////
+
+  function initManuscript() {
+    const manuscript = document.querySelectorAll('.manuscript');
+    const handleResize = () => {
+      manuscript.forEach((elt) => {
+        resizeMnuascriptContainer(elt);
+        resizeImage(elt);
+      });
+    };
+
+    window.addEventListener('load', handleResize, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    manuscript.forEach((element) => {
+      element.querySelectorAll('p').forEach((element) => {
+        const text = element.innerText;
+
+        element.innerHTML = '';
+        [...text].forEach((word) => {
+          const span = document.createElement('span');
+          const textNode = document.createTextNode(word);
+
+          span.appendChild(textNode);
+          element.append(span);
+        });
+      });
+    });
+
+    handleResize();
+  }
+
+  function resizeMnuascriptContainer(element) {
+    element.style.width = `${
+      (Math.floor(element.parentElement.offsetWidth / 24) - 1) * 24 - 1
+    }px`;
+  }
+
+  function resizeImage(element) {
+    element.querySelectorAll('img').forEach((img) => {
+      const { naturalWidth, naturalHeight } = img;
+      const ratio = naturalHeight / naturalWidth;
+      const newHeight = element.offsetWidth * ratio;
+
+      img.height = Math.floor(newHeight - (newHeight % 32) - 8);
+    });
+  }
+
+  useEffect(() => {
+    const showCol = document.querySelector('.col1');
+    showCol.animate(show, { duration: 1500 });
+
+    initManuscript();
+  }, [selDes]);
+
+  useEffect(() => {
+    // const gameImgShow = document.querySelector(`${selId}`);
+    // gameImgShow.animate(show, { duration: 2000 });
+    initManuscript();
+  }, [path]);
+
+  const show = [{ opacity: 0 }, { opacity: 1 }];
+
+  /////////////////////////////////////////////////
+
   return (
-    <div className="select" ondragstart="return false">
+    <div className={`select ${selId ? selId : ''}`} ondragstart="return false">
       <UserList userList={list} />
       <div className="navbar">
         {/* <div className="logo"></div> */}
@@ -271,7 +355,7 @@ const Main = ({ history }) => {
           </div>
         </div>
       </div>
-      <div class="article">
+      <div className="article">
         {/* <div id="test">한글타이핑 테스트내용입니다.</div>
                 <button onClick={test}>실행</button> */}
 
@@ -285,15 +369,21 @@ const Main = ({ history }) => {
                 return (
                   <>
                     <h1>{!!selGame ? selGame : 'Krayon'}</h1>
-                    <p>
-                      {/* 보는 이상 그것을 품고 소금이라 눈에 같이 부패뿐이다.
-                    군영과 그들의 얼마나 이상, 보이는 눈에 피에 사랑의
-                    쓸쓸하랴? 돋고, 새가 같으며, 황금시대다. 밥을 풍부하게
-                    이상의 작고 천지는 몸이 철환하였는가? 황금시대를 실현에
-                    광야에서 귀는 약동하다. */}
-                      {selDes}
-                    </p>
-                    <Link to={url}>시작</Link>
+                    <div class="manuscript-container">
+                      <div className="manuscript">
+                        <p>
+                          {/* 보는 이상 그것을 품고 소금이라 눈에 같이 부패뿐이다.
+                          군영과 그들의 얼마나 이상, 보이는 눈에 피에 사랑의
+                          쓸쓸하랴? 돋고, 새가 같으며, 황금시대다. 밥을 풍부하게
+                          이상의 작고 천지는 몸이 철환하였는가? 황금시대를
+                          실현에 광야에서 귀는 약동하다. */}
+                          {selDes}
+                        </p>
+                      </div>
+                    </div>
+                    <Link to={selUrl}>
+                      <div className="gameStart">시작하기</div>
+                    </Link>
                   </>
                 );
               case 'search':

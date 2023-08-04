@@ -15,32 +15,32 @@ import CatchMind from './component/game/can/CatchMind';
 import WordMatch from './component/game/wordmatch/WordMatch';
 import SearchApp from './component/search/SearchApp';
 
-import Login from './component/Login';
+import Login from './component/user/Login';
 import Join from './component/user/Join';
 
 const App = () => {
-    return (
-        <div className="wrapper">
-            <Tab />
-            <Routes>
-                <Route path="/" Component={Login} />
-                <Route path="/join" Component={Join} />
-                <Route path="/main" Component={Main} />
-                {/* <Route path="/user" Component={MyInfo} /> */}
-                <Route path="/shop" Component={Shop} />
-                <Route path="login" Component={Login} />
-                <Route path="join" Component={Join} />
+  return (
+    <div className="wrapper">
+      <Tab />
+      <Routes>
+        <Route path="/" Component={Login} />
+        <Route path="/join" Component={Join} />
+        <Route path="/main" Component={Main} />
+        {/* <Route path="/user" Component={MyInfo} /> */}
+        <Route path="/shop" Component={Shop} />
+        <Route path="login" Component={Login} />
+        <Route path="join" Component={Join} />
 
-                <Route path="/search" Component={SearchApp} />
+        <Route path="/search" Component={SearchApp} />
 
-                <Route path="/game/*">
-                    <Route path="followword" Component={FollowWord} />
-                    <Route path="can" Component={CatchMind} />
-                    <Route path="wordmatch" Component={WordMatch} />
-                </Route>
-            </Routes>
-        </div>
-    );
+        <Route path="/game/*">
+          <Route path="followword" Component={FollowWord} />
+          <Route path="can" Component={CatchMind} />
+          <Route path="wordmatch" Component={WordMatch} />
+        </Route>
+      </Routes>
+    </div>
+  );
 };
 
 export default App;

@@ -133,6 +133,7 @@ public class WMSocket {
                 Map<String, String> randomWord = new HashMap<>();
                 while (true) {
                     randomWord = wordService.randomWord("명사");
+                    if(randomWord.get("definition").length() > 50) continue;
                     if(randomWord != null) break;
                 }
 

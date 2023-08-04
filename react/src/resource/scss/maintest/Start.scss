@@ -3,6 +3,40 @@
     font-family: 'Noto Sans KR','Roboto', sans-serif;
 }
 
+@keyframes game {
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+
+
+.mainImg1 {
+    background: no-repeat url(../../image/background/blue.png);
+    background-size: contain;
+    animation-name: game;
+    animation-duration: 3s;
+}
+
+.mainImg2 {
+    background: no-repeat url(../../image/background/rainbow.png);
+    animation-name: game;
+    animation-duration: 3s;
+    background-size: 60%;
+    animation-name: game;
+    animation-duration: 3s;
+}
+
+.mainImg3 {
+    background: no-repeat url(../../image/background/unicorn.png);
+    background-size: contain;
+    animation-name: game;
+    animation-duration: 3s;
+}
+
 
 .select {
     
@@ -11,7 +45,7 @@
     background-color: #fbfbfb;
     box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
     // background: #dde1e7;
-    // background: no-repeat url(../../public/pngwing.com.png);
+    // background: no-repeat url(../../image/background/paint.png);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -45,6 +79,8 @@
             // border: 4px solid #000;
             // margin: 100px 0 0px 0px;
             // box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
+            // display: flex;
+            // flex-direction: column;
         }
 
         &.col2 {
@@ -54,26 +90,27 @@
 
         h1 {
             margin: 0 60px 40px 100px;
+            text-align: center;
             color: black;
-            font-size: 6vw;
+            font-size: 5.5vw;
             font-weight: 600;
             text-shadow: -8px -8px 12px rgba(255, 255, 255, 0.4),
                            8px 8px 12px rgba(0,0,0,0.08);
         }
         
-        p {
-            margin: 0 100px 40px 100px;
-            // color: black;
-            /* font-size: 11px; */
-            font-size: 1.2vw;
-            /* line-height: 15px; */
-            line-height: 24px;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-shadow: -8px -8px 12px rgba(255, 255, 255, 0.4),
-                           8px 8px 12px rgba(0,0,0,0.08);
-            // text-align: center;
-        }
+        // p {
+        //     margin: 0 100px 40px 100px;
+        //     // color: black;
+        //     /* font-size: 11px; */
+        //     font-size: 1.2vw;
+        //     /* line-height: 15px; */
+        //     line-height: 24px;
+        //     font-weight: 500;
+        //     letter-spacing: 0.1em;
+        //     text-shadow: -8px -8px 12px rgba(255, 255, 255, 0.4),
+        //                    8px 8px 12px rgba(0,0,0,0.08);
+        //     // text-align: center;
+        // }
         
         button {
             margin: 0 0 20px 0px;
@@ -93,6 +130,28 @@
             border-radius: 6px;
         }
 
+        .gameStart {
+            font-size: 1.5em;
+            text-align: center;
+            line-height: 1.8em;
+            margin: 40px auto;
+            width: 150px;
+            height: 50px;
+            // height: 50px;
+            background-color: #fbfbfb;
+            border: 2px solid rgb(249, 111, 95);
+            color: black;
+            box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+            // position: relative;
+            // top: 50px;
+            // left: 80px;
+
+            &:hover {
+                color: white;
+                background-color: rgb(249, 111, 95);
+            }
+        }
+
         .room {
             width: 200px;
             height: 230px;
@@ -101,37 +160,58 @@
             padding: 15px 25px;
             box-sizing: border-box;
             cursor: pointer;
-            margin: 10px 15px;
+            margin: 20px;
             /* background-image: url(images/background.jpg); */
             background-position: center;
             background-size: cover;
             box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
             transition: transform 0.5s;
-            font-size: 25px;
+            font-size: 30px;
+            // color: #fbfbfb;
+            color: black;
+            font-weight: bold;
+            // text-shadow: -8px -8px 12px rgba(255, 255, 255, 0.4),
+            //                8px 8px 12px rgba(0,0,0,0.08);
+            line-height: 200px;
             position: relative;
+            text-align: center;
+
+            
             
         }
 
         .room1 {
             // margin-top: 150px;
-            background-image: url('../../image/background/paint3.avif');
+            background-image: url(../../image/background/blue.png);
+            
         }
         
         .room2 {
-            background-image: url('../../image/background/pngwing.com.png');
+            background-image: url('../../image/background/rainbow.png');
+            // background-size: contain;
         }
         
         .room3 {
-            background-image: url('../../image/background/paint3.avif');
+            background-image: url('../../image/background/unicorn.png');
+            // background-size: contain;
         }
         
         .room4 {
-            background-image: url('../../image/background/paint3.avif');
+            background-image: url('../../image/background/paint.png');
+            color: #fbfbfb;
         }
         
         .room:hover {
-            transform: translateY(-40px);
+            transform: translateY(-20px);
         }
+
+        // .gameImg2 {
+        //     background-color: red;
+
+        //     width: 90%;
+        //     height: 70%;
+        //     // background-image: url('../../image/background/paint3.avif');
+        // }
 
         // .lab {
         //     color: #fff;
@@ -170,8 +250,21 @@
         // }
     }
 
+    @keyframes show {
+        0% {
+          opacity: 0;
+        }
+      
+        100% {
+          opacity: 1;
+        }
+      }
+
     .col1 {
         flex: 1;
+        animation-name : show;
+        animation-duration : 3s;
+
     }
     .col2 {
         flex: 1;
@@ -214,8 +307,21 @@
                 // cursor: pointer;
                 
             }
+
+            @keyframes go {
+                0% {
+                  height: 0;
+                  opacity: 0;
+                }
+              
+                100% {
+                  height: 715px;
+                  opacity: 1;
+                }
+              }
             
             .showMenu {
+                margin-top: 25px;
                 width: 50px;
                 font-size: 1.2vw;
                 text-align: center;
@@ -224,6 +330,8 @@
                 justify-content: space-evenly;
                 // left: 35px;
                 // cursor: pointer;
+                animation-name : go;
+                animation-duration : 1s;
     
                 .showIcon {
                     width: 35px;
@@ -236,11 +344,14 @@
                         // width: 100%;
                         // height: 35px;
                         scale: (1.3);
-                        box-shadow: -1px -1px 3px #ffffff83, 1px 1px 2px rgba(94, 104, 121, .288);
+                        // box-shadow: -1px -1px 3px #ffffff83, 1px 1px 2px rgba(94, 104, 121, .288);
+                        color: rgb(249, 111, 95);
+                        transition: 0.5s;
                     }
 
                     &:active {
-                        box-shadow: inset -1px -1px 3px #ffffff83, inset 1px 1px 2px rgba(94, 104, 121, .288);
+                        text-shadow: inset -1px -1px 3px #ffffff83, inset 1px 1px 2px rgba(94, 104, 121, .288);
+                        // color: rgb(249, 111, 95);
                     }
                 }
 
@@ -253,7 +364,7 @@
                 width: 40px;
                 height: 40px;
                 // left: 150px;
-                background: #f9f9f9;
+                background: #fbfbfb;
                 /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); */
                 box-shadow: -1px -1px 3px #ffffff00, 1px 1px 2px rgba(94, 104, 121, .288);
                 border-radius: 10px;
@@ -313,7 +424,147 @@
 }
 
 
+:root {
+    --bg-color: #fff;
+    --bg-transparent: rgba(255, 255, 255, 0);
+    --border-color: rgb(249, 111, 95);
+}
 
+.manuscript-container {
+    margin: 0 auto;
+    width: 600px;
+    background-color: #fbfbfb;
+    padding: 10px;
+    box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
 
+}
+
+.manuscript {
+    font-size: 16px;
+    line-height: 32px;
+    padding: 8px 0;
+    border: 2px solid var(--border-color);
+    background: -webkit-linear-gradient(
+            top,
+            var(--bg-transparent) 0%,
+            var(--bg-transparent) 1px,
+            var(--bg-color) 1px,
+            var(--bg-color) 8px,
+            var(--bg-transparent) 8px,
+            var(--bg-transparent) 100%
+        ),
+        -webkit-linear-gradient(
+            top,
+            var(--bg-transparent) 0%,
+            var(--bg-transparent) 1px,
+            var(--bg-color) 1px,
+            var(--bg-color) 8px,
+            var(--bg-transparent) 8px,
+            var(--bg-transparent) 100%
+        ),
+        -webkit-linear-gradient(
+            left,
+            var(--border-color) 0%,
+            var(--border-color) 1px,
+            var(--bg-transparent) 1px,
+            var(--bg-transparent) 100%
+        ),
+        -webkit-linear-gradient(
+            top,
+            var(--border-color) 0%,
+            var(--border-color) 1px,
+            var(--bg-transparent) 1px,
+            var(--bg-transparent) 100%
+        ),
+        -webkit-linear-gradient(
+            top,
+            var(--border-color) 0%,
+            var(--border-color) 1px,
+            var(--bg-transparent) 1px,
+            var(--bg-transparent) 100%
+        ),
+        var(--bg-color);
+    background: linear-gradient(
+            to bottom,
+            var(--bg-transparent) 0%,
+            var(--bg-transparent) 1px,
+            var(--bg-color) 1px,
+            var(--bg-color) 8px,
+            var(--bg-transparent) 8px,
+            var(--bg-transparent) 100%
+        ),
+        linear-gradient(
+            to bottom,
+            var(--bg-transparent) 0%,
+            var(--bg-transparent) 1px,
+            var(--bg-color) 1px,
+            var(--bg-color) 8px,
+            var(--bg-transparent) 8px,
+            var(--bg-transparent) 100%
+        ),
+        linear-gradient(
+            to right,
+            var(--border-color) 0%,
+            var(--border-color) 1px,
+            var(--bg-transparent) 1px,
+            var(--bg-transparent) 100%
+        ),
+        linear-gradient(
+            to bottom,
+            var(--border-color) 0%,
+            var(--border-color) 1px,
+            var(--bg-transparent) 1px,
+            var(--bg-transparent) 100%
+        ),
+        linear-gradient(
+            to bottom,
+            var(--border-color) 0%,
+            var(--border-color) 1px,
+            var(--bg-transparent) 1px,
+            var(--bg-transparent) 100%
+        ),
+        var(--bg-color);
+    background-size: 32px 40px;
+    margin: 0 auto;
+    background-position: 0 -1px, 0 0, -1px 0, 0 8px, 0px -1px;
+}
+
+.manuscript > p {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -8px -1px 8px 0;
+    font-size: 24px;
+    line-height: 32px;
+}
+
+.manuscript > p > span {
+    display: inline-block;
+    text-align: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+
+.manuscript > :empty:not(img) {
+    height: 32px;
+    margin-bottom: 8px;
+}
+
+.manuscript > :last-child {
+    margin-bottom: 0;
+}
+
+.manuscript > img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+.manuscript > *:not(:last-child) {
+    margin-bottom: 40px;
+}
 
 

@@ -1,12 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import "../../resource/scss/main/Rooms.scss";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import '../../resource/scss/main/Rooms.scss';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Rooms = ({ dis, describe }) => {
   const handler = (e) => {
-    let pickCardTitle = e.target.querySelector("i").textContent;
+    let pickCardTitle = '';
+    if (e.target.tagName === 'a')
+      pickCardTitle = e.target.querySelector('i').textContent;
+    else pickCardTitle = e.target.textContent;
 
-    console.log("자식: " + pickCardTitle);
+    console.log('자식: ' + pickCardTitle);
     dis();
     describe(pickCardTitle);
   };
@@ -31,7 +34,7 @@ const Rooms = ({ dis, describe }) => {
         </Link>
         <Link to="" onClick={handler} className="room room4">
           <i className="lab" id="game4">
-            단어맞추기
+            크레용소개
           </i>
         </Link>
       </ul>
