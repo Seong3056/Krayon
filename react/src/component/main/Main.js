@@ -46,19 +46,17 @@ const Main = ({ history }) => {
     const id = sessionStorage.getItem('id');
     const ip = 'localhost';
     const URL = 'ws://' + BASE_URL + '/api/chatt?name=' + id;
-    const socketClose = () => {
-        if (ws.current.readyState === 1) ws.current.close();
-    };
+
     const webSocketLogin = useCallback(() => {
-        console.log(window.location.hostname);
-        console.log(BASE_URL);
+        //console.log(window.location.hostname);
+        //console.log(BASE_URL);
         ws.current = new WebSocket(URL);
 
         if (ws.current.readyState === 1) ws.current.close();
-        console.log('웹소켓 접속11');
+        //console.log('웹소켓 접속11');
         ws.current.onmessage = (message) => {
             //웹소켓에서 전송한 데이터를 수신 및 객체 저장
-            console.log('웹소켓 수신 데이터: ' + message.data);
+            //console.log('웹소켓 수신 데이터: ' + message.data);
             const dataSet = JSON.parse(message.data);
             const data = {
                 name: dataSet.name,
@@ -66,11 +64,7 @@ const Main = ({ history }) => {
                 msg: dataSet.msg,
             };
 
-            // console.log('11111111111 ' + dataSet.list);
             if (dataSet.list !== undefined) {
-                console.log('메인에서 진입');
-                console.log(dataSet.list);
-
                 setList(dataSet.list);
             }
             setSocketData(data);
@@ -80,14 +74,14 @@ const Main = ({ history }) => {
     // 메세지가 들어오면 아이콘을 반짝
     useEffect(() => {
         const $icon = document.getElementById('chatIcon');
-        console.log(chatIcon);
-        console.log(socketData.msg);
+        //console.log(chatIcon);
+        //console.log(socketData.msg);
         if (socketData.msg !== undefined) {
             if (!!chatIcon) {
-                console.log('on 제거');
+                //console.log('on 제거');
                 // $icon.animate();
             } else if (!chatIcon) {
-                console.log('on 추가');
+                //console.log('on 추가');
                 $icon.animate(twinkle, { duration: 1500, iterations: 4 });
             }
         }
@@ -133,47 +127,18 @@ const Main = ({ history }) => {
 
             const temp = JSON.stringify(data);
 
-            // if (ws.current.readyState === 0) {
-            //     //readyState는 웹 소켓 연결 상태를 나타냄
-            //     ws.current.onopen = () => {
-            //         //webSocket이 맺어지고 난 후, 실행
-            //         console.log(ws.current.readyState);
-            //         ws.current.send(temp);
-            //     };
-            // } else {
             ws.current.send(temp);
-            // }
         } else {
-            // 입력창이 공란일경우 안내창
-            // alert('메세지를 입력하세요.');
-            // document.getElementById('chat').focus();
             return;
         }
-        // setMsg('');
     });
 
-    // const textMsg = (e) => {
-    //     setMsg(e);
-    // };
-
-    // const userList = (e) => {
-    //     setList(e);
-
-    //     if (e !== undefined) {
-    //         console.log(e);
-    //         return e;
-    //     }
-    // };
-
-    // window.onload = () => {
-    //     webSocketLogin();
-    // };
     const disconnectSocket = () => {
         //     ws.current.close();
     };
 
     useEffect(() => {
-        console.log(list);
+        //console.log(list);
     }, [list]);
     useEffect(() => {
         webSocketLogin();
@@ -210,7 +175,7 @@ const Main = ({ history }) => {
     };
 
     let gameTitle = document.getElementById('gameTitle');
-    // console.log("gameTitle: " + gameTitle.textContent);
+    // //console.log("gameTitle: " + gameTitle.textContent);
     const clickStart = () => {
         navi(url);
     };
@@ -229,7 +194,7 @@ const Main = ({ history }) => {
     };
     const click = (e) => {
         e.preventDefault();
-        console.log(e.target.tagName);
+        //console.log(e.target.tagName);
         if (e.target.tagName == 'path')
             setPath(e.target.parentNode.getAttribute('values'));
         else setPath(e.target.parentNode.getAttribute('values'));
@@ -261,13 +226,12 @@ const Main = ({ history }) => {
                     >
                         {toggleIcon && (
                             <>
-                                <div className="">
-                                    <HiHome
-                                        className="showIcon"
-                                        values="home"
-                                        id="home"
-                                    />
-                                </div>
+                                <HiHome
+                                    className="showIcon"
+                                    values="home"
+                                    id="home"
+                                />
+
                                 {/* <FaFaceSmileWink></FaFaceSmileWink> */}
                                 <MdFace3
                                     className="showIcon"

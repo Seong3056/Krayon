@@ -6,7 +6,7 @@ const Info = ({ sendStart, textData, p }) => {
     const [point, setPoint] = useState([]);
     const [sortPoint, setSortPoint] = useState([]);
     useEffect(() => {
-        console.log(p);
+        //console.log(p);
         // if (p !== undefined)
         // p.map(e=>{
         //     if(e.name === )
@@ -18,7 +18,7 @@ const Info = ({ sendStart, textData, p }) => {
         // });
     }, [p]);
     useEffect(() => {
-        console.log(point);
+        //console.log(point);
         for (var i = 0; i < point.length; i++) {
             for (var j = i + 1; j < point.length; j++) {
                 if (point[i].point < point[j].point) {

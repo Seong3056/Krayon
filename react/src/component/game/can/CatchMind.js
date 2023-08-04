@@ -10,7 +10,7 @@ import Chatting from '../../main/Chatting';
 import UserInfo from '../../main/UserInfo';
 import UserList from '../../main/UserList';
 import GetQuiz from './style/GetQuiz';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import User from '../User';
 import Info from '../Info';
 import { BASE_URL } from '../../../config/host-config';
@@ -28,6 +28,8 @@ const CatchMind = ({ history }) => {
     const [turn, setTurn] = useState(false);
     const [answer, setAnswer] = useState(''); //정답작성
 
+    const navi = useNavigate(null);
+
     const disableBtn = false;
 
     const id = sessionStorage.getItem('id');
@@ -37,7 +39,7 @@ const CatchMind = ({ history }) => {
     useEffect(() => {
         // const leave = history.block('페이지를 나가실건가요?');
         return () => {
-            console.log('웹소켓로그아웃');
+            //console.log('웹소켓로그아웃');
             // ws.current.close();
         };
     }, [history]);
@@ -47,12 +49,12 @@ const CatchMind = ({ history }) => {
     const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket(URL);
         sessionStorage.setItem('socketURL', URL);
-        console.log('웹소켓 접속');
+        //console.log('웹소켓 접속');
         ws.current.onmessage = (message) => {
             //웹소켓에서 전송한 데이터를 수신 및 객체 저장
-            console.log('웹소켓 수신 데이터: ' + message.data);
+            //console.log('웹소켓 수신 데이터: ' + message.data);
             const dataSet = JSON.parse(message.data);
-            console.log(dataSet);
+            //console.log(dataSet);
             const data = {
                 name: dataSet.name,
                 img: dataSet.img,
@@ -62,19 +64,19 @@ const CatchMind = ({ history }) => {
             if (dataSet.wordInfo !== undefined) {
                 if (dataSet.wordInfo.isVaild) {
                     setCrtWord(dataSet.wordInfo.word);
-                    console.log('캐치마인드 단어 수신' + dataSet.wordInfo.word);
+                    //console.log('캐치마인드 단어 수신' + dataSet.wordInfo.word);
                 }
             }
 
             if (dataSet.list !== undefined) {
-                console.log('메인에서 캐치마인드진입');
-                console.log(dataSet.list);
+                //console.log('메인에서 캐치마인드진입');
+                //console.log(dataSet.list);
                 setList(dataSet.list);
             }
             setSocketData(data);
-            console.log(crtWord);
+            //console.log(crtWord);
             if (dataSet.turn !== undefined) setTurn(dataSet.turn);
-            console.log('내턴값' + dataSet.turn);
+            //console.log('내턴값' + dataSet.turn);
         };
     });
 
@@ -114,7 +116,7 @@ const CatchMind = ({ history }) => {
             const temp = JSON.stringify(data);
 
             ws.current.send(temp);
-            // console.log("데이터 발신---"+img);
+            // //console.log("데이터 발신---"+img);
         } else {
             return;
         }
@@ -154,7 +156,7 @@ const CatchMind = ({ history }) => {
             const temp = JSON.stringify(data);
 
             ws.current.send(temp);
-            console.log('데이터 발신---' + answer);
+            //console.log('데이터 발신---' + answer);
             setAnswer(''); // 전송 후 입력값 초기화
         } else {
             return;
@@ -165,7 +167,7 @@ const CatchMind = ({ history }) => {
     const gameStart = useCallback(() => {
         //게임 시작 start true
         //웹소켓으로 메세지 전송
-        console.log(URL);
+        //console.log(URL);
         const date =
             (new Date().getHours() < 10
                 ? '0' + new Date().getHours()
@@ -187,9 +189,15 @@ const CatchMind = ({ history }) => {
     });
     const handleBeforeUnload = (e) => {
         e.preventDefault();
-        console.log('페이지이동이 감지됨');
+        //console.log('페이지이동이 감지됨');
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
+
+    const dis = () => {
+        console.log('클릭');
+        ws.current.close();
+        navi('/main');
+    };
 
     return (
         <>
@@ -222,6 +230,7 @@ const CatchMind = ({ history }) => {
                 textData={socketData}
                 gameStart={gameStart}
                 disableBtn={disableBtn}
+                dis={dis}
             />
             {/* <button onClick={gameStart}>게임시작</button> */}
         </>

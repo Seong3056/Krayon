@@ -162,22 +162,8 @@ public class WMSocket {
 
                 }
                 objMap.put("point",control);
-//                controll.forEach(user -> {
-//                    if(((Session)user.get("session")).equals(session)){
-//                        log.info("똑같다");
-//                        int p = (Integer) user.get("point");
-//                        user.replace("point",p+point);
-//                        return;
-//                    }
-//                });
-//                Map<String, Object> userMap = controll.stream().filter(user -> ;
-
                 message = c.conversion(objMap);
-
                 TimeUnit.SECONDS.sleep(3);
-
-
-
 
                 for (Session s : clients) {
                     log.info("send data : {}", message);

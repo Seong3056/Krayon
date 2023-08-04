@@ -21,8 +21,8 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
     const $def = document.getElementById('definition');
     const $ans = document.getElementById('answer');
     useEffect(() => {
-        // console.log(document.getElementById('definition').textContent);
-        console.log('42424' + definitionData);
+        // //console.log(document.getElementById('definition').textContent);
+        //console.log('42424' + definitionData);
         if (definitionData !== '') {
             console.log(definitionData);
             // setDefinition(definitionData);
@@ -31,15 +31,15 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
             $ans.textContent = '';
             setAns('');
             $def.textContent = definitionData;
-            // console.log(cho_hangul(word));
+            // //console.log(cho_hangul(word));
             $ans.textContent = cho_hangul(word);
             TypeHangul.type('#definition');
-            console.log(dummy);
+            //console.log(dummy);
         }
     }, [definitionData]);
 
     useEffect(() => {
-        console.log('answer' + answer);
+        //console.log('answer' + answer);
         if (answer !== undefined) {
             setAns(answer);
         }
@@ -82,7 +82,7 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
             'ㅎ',
         ];
         let result = '';
-        console.log('sssssssssssssssss' + str);
+        //console.log('sssssssssssssssss' + str);
         if (str !== undefined)
             for (let i = 0; i < str.length; i++) {
                 let code = str.charCodeAt(i) - 44032;
@@ -95,7 +95,7 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
         123: 5000,
     };
     const b = 123;
-    console.log(a.b);
+    //console.log(a.b);
     return (
         <div className="play">
             <div className="game wm">
@@ -109,7 +109,7 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') sendMsg(msg);
                         else setMsg(e.target.value);
-                        console.log(e.target.value);
+                        //console.log(e.target.value);
                     }}
                 />
                 <button

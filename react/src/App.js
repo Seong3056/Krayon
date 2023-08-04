@@ -10,7 +10,7 @@ import MyInfo from './component/userinfo/MyInfo';
 import Shop from './component/shop/Shop';
 
 import FollowWord from './component/game/followword/FollowWord';
-import game from './component/game/game';
+
 import CatchMind from './component/game/can/CatchMind';
 import WordMatch from './component/game/wordmatch/WordMatch';
 import SearchApp from './component/search/SearchApp';

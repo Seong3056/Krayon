@@ -7,24 +7,24 @@ import '../../resource/scss/shop/shop.scss';
 import PayModal from './PayModalA';
 
 const Shop = () => {
-    const [modal, setModal] = useState(false);
-    const openPay = () => {
-        setModal(true);
-    };
-    const closePay = () => {
-        setModal(false);
-    };
-    return (
-        <>
-            <div class="shop">
-                <Article />
-                {modal && <PayModal close={closePay} />}
-                <div class="shop-left">
-                    <Wallet openPay={openPay} />
-                </div>
-            </div>
-        </>
-    );
+  const [modal, setModal] = useState(false);
+  const openPay = () => {
+    setModal(true);
+  };
+  const closePay = () => {
+    setModal(false);
+  };
+  return (
+    <>
+      <div class="shop">
+        <div class="shop-left">
+          <Wallet openPay={openPay} />
+        </div>
+        <Article />
+        {modal && <PayModal close={closePay} />}
+      </div>
+    </>
+  );
 };
 
 export default Shop;

@@ -18,7 +18,7 @@ const Login = () => {
 
     const [open, setOpen] = useState(false);
 
-    const BASE = 'http://localhost:8181';
+    const BASE = 'http://43.201.18.202';
     const USER = '/api';
     const REQUEST_URL = BASE + USER + '/login';
     const GUEST_URL = BASE + USER + '/guest';
@@ -26,7 +26,7 @@ const Login = () => {
     const fetchLogin = async () => {
         const $userId = document.getElementById('userId');
         const $password = document.getElementById('password');
-        console.log(REQUEST_URL);
+        //console.log(REQUEST_URL);
         const res = await fetch(REQUEST_URL, {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
@@ -45,7 +45,7 @@ const Login = () => {
         const { userId } = await res.json();
 
         onLogin(userId);
-        console.log('userId : ' + userId);
+        //console.log('userId : ' + userId);
         sessionStorage.setItem('id', userId);
 
         redirection('/main');
@@ -61,7 +61,7 @@ const Login = () => {
         // const num = uuid.replace(/[^0-9]/g, '').substring(0, 4);
         const num = Math.floor(Math.random() * 8999) + 1000;
         const guestId = 'Guest_' + num;
-        console.log(guestId);
+        //console.log(guestId);
 
         sessionStorage.setItem('id', guestId);
         sessionStorage.setItem('role', 'guest');
@@ -72,7 +72,9 @@ const Login = () => {
 
         redirection('/main');
     };
-
+    const toJoin = () => {
+        redirection('/join');
+    };
     return (
         <>
             {!isLoggedIn && (
@@ -119,7 +121,7 @@ const Login = () => {
 
                             <Grid item xs={12}>
                                 <Button
-                                    href="/join"
+                                    onClick={toJoin}
                                     fullWidth
                                     variant="contained"
                                     color="primary"

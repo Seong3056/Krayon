@@ -6,9 +6,9 @@ const User = ({ data, list, turn }) => {
     useEffect(() => {
         // 말풍선 출력
         if (data.wordInfo !== undefined) {
-            console.log('이것은 유저에서 보이는거여' + data.name);
+            //console.log('이것은 유저에서 보이는거여' + data.name);
             const $user = document.getElementById(data.name);
-            console.log('이것은 유저 지목이요' + $user);
+            //console.log('이것은 유저 지목이요' + $user);
             if ($user === null) return;
             const $comment = $user.querySelector('.comment');
             $comment.classList.add('claim');
@@ -18,16 +18,16 @@ const User = ({ data, list, turn }) => {
                 $comment.textContent = '';
             }, 2000);
         } else {
-            console.log(data);
+            //console.log(data);
             const $user = document.getElementById(data.name);
-            console.log('이것은 유저 지목이요' + $user);
+            //console.log('이것은 유저 지목이요' + $user);
             if ($user === null) return;
             const $comment = $user.querySelector('.comment');
 
             if (data.msg === undefined) return;
 
             $comment.classList.add('claim');
-            console.log(data.msg);
+            //console.log(data.msg);
             $comment.textContent = data.msg;
             setTimeout(() => {
                 $comment.classList.remove('claim');
@@ -38,11 +38,11 @@ const User = ({ data, list, turn }) => {
 
     useEffect(() => {
         // 턴 지정
-        console.log('turn' + turn);
+        //console.log('turn' + turn);
         if (turn !== '') {
             if (list.length !== 0) {
                 const $user = document.querySelectorAll('.user');
-                console.log('$user' + $user);
+                //console.log('$user' + $user);
                 if ($user !== null) {
                     [...$user].forEach((e) => {
                         e.classList.remove('turn');

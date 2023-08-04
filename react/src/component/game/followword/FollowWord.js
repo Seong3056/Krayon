@@ -4,11 +4,12 @@ import Copy from './Copy';
 import '../../../resource/scss/game/followword/followword.scss';
 import '../../../resource/scss/gametest/followword/Info.scss';
 import '../../../resource/scss/gametest/followword/User.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import User from '../User';
 import Info from '../Info';
 import { BASE_URL } from '../../../config/host-config';
+import FwInfo from './FwInfo';
 
 const FollowWord = ({ history }) => {
     const ws = useRef(null);
@@ -21,6 +22,7 @@ const FollowWord = ({ history }) => {
     const [turn, setTurn] = useState('');
     const [timer, setTimer] = useState(120);
     const [userTimer, setUserTimer] = useState(10);
+    const navi = useNavigate(null);
 
     // const [msg, setMsg] = useState('');
     const id = sessionStorage.getItem('id');
@@ -197,7 +199,11 @@ const FollowWord = ({ history }) => {
         console.log('페이지이동이 감지됨');
     };
     // window.addEventListener('beforeunload', handleBeforeUnload);
-
+    const dis = () => {
+        console.log('클릭');
+        ws.current.close();
+        navi('/main');
+    };
     return (
         <>
             <User turn={turn} data={socketData} list={list} />
@@ -222,10 +228,11 @@ const FollowWord = ({ history }) => {
                 send={send}
                 sendStart={startWord}
             />
-            <Info
+            <FwInfo
                 point={socketData.point}
                 sendStart={gameStart}
                 textData={socketData}
+                dis={dis}
             />
             {/* <button className="ready" onClick={gameStart}>
                 게임시작

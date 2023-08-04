@@ -33,7 +33,7 @@ const Chat = ({ ws, textData, send }) => {
                     key={idx}
                     className={item.name === name ? 'me ' : 'other '}
                 >
-                    [ {item.date} ]
+                    {path === '/' ? `[ ${item.date} ]` : ''}
                     <span>
                         <b> {item.date === '시스템' ? '' : item.name + ':'} </b>
                     </span>{' '}
@@ -43,11 +43,11 @@ const Chat = ({ ws, textData, send }) => {
     );
 
     useEffect(() => {
-        console.log(textData);
+        //console.log(textData);
         if (textData !== undefined) {
             if (textData.char !== undefined) return;
             const tempData = chatt.concat(textData);
-            console.log(tempData);
+            //console.log(tempData);
             setChatt(tempData);
         }
 
@@ -56,7 +56,7 @@ const Chat = ({ ws, textData, send }) => {
     }, [textData, list]); //socketData가 바뀔때마다
 
     const onText = (event) => {
-        console.log(event.target.value);
+        //console.log(event.target.value);
         setMsg(event.target.value);
     };
 

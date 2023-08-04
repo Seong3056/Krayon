@@ -8,6 +8,8 @@ if (clientHostName === 'localhost') {
     // backEndHostName = 'http://3.35.144.168';
     backEndHostName = 'localhost:8181';
 } else if (clientHostName === 'krayon.store') {
-    backEndHostName = '13.125.166.75';
+    backEndHostName = '43.201.18.202';
+} else if (clientHostName === '175.114.130.19') {
+    backEndHostName = '175.114.130.19';
 }
 export const BASE_URL = backEndHostName;

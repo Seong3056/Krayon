@@ -73,7 +73,7 @@ function _type(target, options) {
     let lastType = options.append ? _getText(target) : '';
 
     let progress = lastType;
-    console.log(progress);
+    //console.log(progress);
     // intervalType 계산 함수
     function getIntervalType() {
         if (options.humanize === null) {
@@ -93,7 +93,7 @@ function _type(target, options) {
         // run: 연속적으로 타이핑 되는 구간
         let run = textProcess[idxRun];
 
-        // console.log('length ' + run.length);
+        // //console.log('length ' + run.length);
 
         // run 타이핑 완료
 
@@ -200,7 +200,7 @@ function _humanize(number, ratio) {
 
 const TypeHangul = {
     type: function (selector, options) {
-        // console.log('!!!!!!!!!!!!!!!' + selector);
+        // //console.log('!!!!!!!!!!!!!!!' + selector);
         // selector 필수 입력
         if (selector === undefined) {
             throw new Error("'selector' cannnot be undefined");
@@ -214,7 +214,7 @@ const TypeHangul = {
         let a;
         for (let i = 0; i < target.length; i++) {
             a = _type(target[i], options);
-            console.log('123123123 ' + a);
+            //console.log('123123123 ' + a);
         }
         return a;
     },

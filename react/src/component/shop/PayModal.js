@@ -22,14 +22,14 @@ const PayModal = ({ close }) => {
             }),
         });
         const data = await fet.text();
-        console.log(payState);
+        //console.log(payState);
         setPayLink(data);
-        console.log(data);
+        //console.log(data);
         // setPayState(true);
         window.open(data, '_blank', 'width=800, height=600, left=500');
     };
     useEffect(() => {
-        console.log(payLink);
+        //console.log(payLink);
     }, [payLink]);
     //
     return (
