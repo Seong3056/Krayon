@@ -18,22 +18,39 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
     const [inputValue, setInputValue] = useState('');
     const [ans, setAns] = useState('');
     // setDummy(sessionStorage.getItem('definition'));
-    const $def = document.getElementById('definition');
+
     const $ans = document.getElementById('answer');
     useEffect(() => {
         // //console.log(document.getElementById('definition').textContent);
         //console.log('42424' + definitionData);
+        let $def = document.getElementById('definition');
+
         if (definitionData !== '') {
             console.log(definitionData);
+
+            // clearTimeout(timeout);
+
             // setDefinition(definitionData);
             wait();
             $def.textContent = '';
             $ans.textContent = '';
             setAns('');
+            const typing = sessionStorage.getItem('definition');
+            if (typing !== definition) {
+                $def.parentNode.removeChild(
+                    document.getElementById('definition')
+                );
+                const $div = document.createElement('div');
+                $div.setAttribute('id', 'definition');
+                document.querySelector('.game').appendChild($div);
+            }
+            $def = document.getElementById('definition');
             $def.textContent = definitionData;
+
             // //console.log(cho_hangul(word));
             $ans.textContent = cho_hangul(word);
             TypeHangul.type('#definition');
+
             //console.log(dummy);
         }
     }, [definitionData]);
@@ -47,11 +64,9 @@ const WordQuiz = ({ word, definitionData, send, answer }) => {
 
     const wait = () => {
         let length = sessionStorage.getItem('definition');
-        if (definition == length) return;
-        else if (definition != length) {
-            setTimeout(() => {
-                wait();
-            }, 500);
+        console.log(length);
+        if (definition === length) return;
+        else if (definition !== length) {
         }
     };
 

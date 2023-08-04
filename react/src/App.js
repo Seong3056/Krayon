@@ -17,7 +17,6 @@ import SearchApp from './component/search/SearchApp';
 
 import Login from './component/user/Login';
 import Join from './component/user/Join';
-import PaySuccess from './component/shop/PaySuccess';
 
 const App = () => {
     return (
@@ -31,7 +30,6 @@ const App = () => {
                 <Route path="/shop" Component={Shop} />
                 <Route path="login" Component={Login} />
                 <Route path="join" Component={Join} />
-                <Route path="/paysuccess" Component={PaySuccess} />
 
                 <Route path="/search" Component={SearchApp} />
 

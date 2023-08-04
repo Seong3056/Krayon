@@ -10,7 +10,7 @@ const SearchApp = () => {
           <div className="d-flex align-items-center justify-content-center ">
             <div className="game mt-4">
               <div className="game-header">
-                <h2>단어를 검색하세요!</h2>
+                <h2></h2>
               </div>
               <div className="game-content d-flex justify-content-center">
                 <SearchForm />

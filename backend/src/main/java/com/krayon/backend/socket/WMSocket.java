@@ -136,7 +136,11 @@ public class WMSocket {
                 Map<String, String> randomWord = new HashMap<>();
                 while (true) {
                     randomWord = wordService.randomWord("명사");
-                    if(randomWord != null) break;
+
+                    if(randomWord != null) {
+                        if(randomWord.get("definition").length() > 50) continue;
+                        else  break;
+                    }
                 }
 
                 objMap.put("word",randomWord.get("word"));
@@ -158,9 +162,7 @@ public class WMSocket {
                         userRepository.save(user);}
                         return;
                     }});
-                if(!name.contains("Guest")) {
 
-                }
                 objMap.put("point",control);
                 message = c.conversion(objMap);
                 TimeUnit.SECONDS.sleep(3);

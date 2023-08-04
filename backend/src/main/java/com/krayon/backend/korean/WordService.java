@@ -175,9 +175,21 @@ public class WordService {
 
 			JSONObject wordInfo = item.getJSONObject("wordInfo");
 			String findWord = wordInfo.getString("word");
+			replaceWord = findWord.replace("^", "").replace("-", "").replace("_", "");
+
 			JSONObject senseInfo = item.getJSONObject("senseInfo");
 
 			definition = senseInfo.getString("definition");
+			StringBuilder repDefinition = new StringBuilder();
+			for(int i = 0;i<definition.length();i++){
+				char c =definition.charAt(i);
+
+				if((c>= '\u3400' && c<= '\u4DB5') || (c>='\u4E00' && c<='\u9fff')) continue;
+				repDefinition.append(c);
+			}
+			definition = repDefinition.toString().replace("()", "");
+			if(definition.contains(replaceWord))
+			definition = definition.replace(replaceWord,"[무엇]");
 			System.out.println("definition = " + definition);
 			String findWordPos = null;
 			if(!senseInfo.isNull("pos")){
@@ -190,7 +202,7 @@ public class WordService {
 
 			if(findWordPos == null || !findWordPos.contains(pos) || findWord.length()<2) { log.info("다시실행"); map=null;}
 			else {
-				replaceWord = findWord.replace("^", "").replace("-", "").replace("_", "");
+
 				map.put("word", replaceWord);
 				map.put("definition", definition);
 				log.info(map.toString());

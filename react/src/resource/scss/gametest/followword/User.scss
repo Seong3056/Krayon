@@ -64,8 +64,10 @@
             // background: url('../../../image/game/bubble7.png') no-repeat  left / contain;
             display: none;
     position: absolute;
-    min-width: 145px;
-    height: 80px;
+    min-width: 150px;
+    width: auto;
+    height: auto;
+
     left: 310px;
     bottom: 0px;
     background: #484848;
@@ -98,7 +100,8 @@
             border-bottom: 0px solid transparent;
             content: "";
             position: absolute;
-            top: 32px;
+            top: 50%;
+            transform: translateY(-50%);
             left: -15px;
             transform: rotate(90deg);
         }
@@ -117,8 +120,8 @@
             }
         }
         &.turn {
-            background-color: red;
-            border: 5px solid red;
+            background-color:rgb(249, 111, 95);
+            border: 5px solid rgb(249, 111, 95);
             box-sizing: border-box;
         }
     }

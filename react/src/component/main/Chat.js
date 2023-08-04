@@ -43,7 +43,7 @@ const Chat = ({ ws, textData, send }) => {
     );
 
     useEffect(() => {
-        //console.log(textData);
+        console.log('chat의 ' + textData);
         if (textData !== undefined) {
             if (textData.char !== undefined) return;
             const tempData = chatt.concat(textData);
@@ -53,6 +53,7 @@ const Chat = ({ ws, textData, send }) => {
 
         const windowH = document.querySelector('.in-chat').scrollHeight;
         document.querySelector('.in-chat').scrollTop = windowH - 160;
+        console.log('chatt' + chatt[0]);
     }, [textData, list]); //socketData가 바뀔때마다
 
     const onText = (event) => {

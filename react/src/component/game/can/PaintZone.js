@@ -22,7 +22,7 @@ export default function PaintZone({
     const id = sessionStorage.getItem('id');
 
     const [canvasWidth, setCanvasWidth] = useState(
-        canvasWrapRef.current?.clientWidth || 1260
+        canvasWrapRef.current?.clientWidth || 1160
     );
 
     // useState
@@ -42,7 +42,7 @@ export default function PaintZone({
     useEffect(() => {
         // canvas useRef
         const canvas = canvasRef.current;
-        // //console.log(userTurn);
+        // console.log(userTurn);
         if (canvas) {
             canvas.width = canvasWidth;
             canvas.height = 540;
@@ -51,7 +51,7 @@ export default function PaintZone({
             ctx.lineWidth = 2.5;
             ctx.strokeStyle = '#000000';
             setGetCtx(ctx);
-            //console.log('정상캔버스 등장');
+            console.log('정상캔버스 등장');
         }
         if (data.correct !== undefined) {
             alert('정답자: ' + data.correctUser + ' 정답: ' + data.correct);
@@ -78,6 +78,12 @@ export default function PaintZone({
     };
 
     const handlePenColorChange = (newColor) => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        // Set the composite operation back to default for normal drawing
+        ctx.globalCompositeOperation = 'source-over';
+        // Set the line width back to the original value
+        ctx.lineWidth = lineWidth;
         setPenColor(newColor);
         if (!painting) {
             getCtx.strokeStyle = newColor;
@@ -157,7 +163,7 @@ export default function PaintZone({
             link.download = crtWord + '.png';
             link.click();
             document.body.removeChild(link);
-            //console.log(crtWord);
+            console.log(crtWord);
         });
     };
 
@@ -169,59 +175,50 @@ export default function PaintZone({
 
     useEffect(() => {
         if (data.img !== undefined) {
-            //console.log('그림' + data.img);
+            console.log('그림' + data.img);
             setGetPic(data.img);
         }
         if (data.drawer !== undefined) setDrawer(data.drawer);
     }, [data]);
 
     useEffect(() => {
-        //console.log('이미지 src 바뀜');
+        console.log('이미지 src 바뀜');
     }, []);
 
     // window.onload = () => {
-    //   //console.log("페이지 새로고침");
+    //   console.log("페이지 새로고침");
     // };
 
     useEffect(() => {
         if (!!crtWord);
         if (data.wordInfo !== undefined) {
         }
-        //console.log('!!!!!!!!!!!!!!!' + data.turn);
+        console.log('!!!!!!!!!!!!!!!' + data.turn);
         if (data.turn !== undefined) {
             setUserTurn(data.turn);
-            //console.log('턴에 접근');
+            console.log('턴에 접근');
 
             // if (data.turn === true) {
             setGameStarted(true);
-            //   //console.log("게임 진행중");
+            //   console.log("게임 진행중");
             // }
         }
     }, [data.turn]);
+
     if (!!document.querySelector('.canvasTools'))
         document
             .querySelector('.canvasTools')
             .addEventListener('click', (e) => {
-                console.log(e.target.getAttribute('id'));
-                if (e.target.getAttribute('id') === 'earaser') {
-                    console.log('접근');
-                    document
-                        .getElementById('canvasDraw')
-                        .setAttribute('class', '');
-                    document
-                        .getElementById('canvasDraw')
-                        .classList.add('earaser');
-                    document
-                        .getElementById('canvasDraw')
-                        .classList.add('canvas');
-                    return;
-                }
-                if (!e.target.classList.contains('paint')) return;
-                console.log(e.target.getAttribute('id'));
+                const cls = document
+                    .getElementById('canvasDraw')
+                    .getAttribute('class');
+                const can = cls.substring(cls.indexOf(' ') + 1);
+                document.getElementById('canvasDraw').classList.remove(can);
+
                 const color = e.target.getAttribute('id');
-                document.getElementById('canvasDraw').setAttribute('class', '');
                 document.getElementById('canvasDraw').classList.add(color);
-                document.getElementById('canvasDraw').classList.add('canvas');
+
+                console.log(can);
             });
 
     return (
@@ -280,9 +277,9 @@ export default function PaintZone({
                             <button id="eraserBtn" onClick={eraseMode}>
                                 지우개
                             </button>
-                            <button id="penBtn" onClick={penMode}>
+                            {/* <button id="penBtn" onClick={penMode}>
                                 펜
-                            </button>
+                            </button> */}
                             <input
                                 className="boldBar"
                                 type="range"
