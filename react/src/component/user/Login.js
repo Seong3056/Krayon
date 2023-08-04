@@ -85,57 +85,60 @@ const Login = () => {
       {!isLoggedIn && (
         <div className={`${sign && 'signinForm'} container `}>
           <div className="form signup">
-            <h2>Sign Up</h2>
+            <h2>가입하기</h2>
             <div className="inputBox">
               <input type="text" required="required" />
               <i></i>
-              <span>username</span>
+              <span>별명</span>
             </div>
-            <div className="inputBox">
+            {/* <div className="inputBox">
               <input type="text" required="required" />
               <i></i>
               <span>email address</span>
+            </div> */}
+            <div className="inputBox">
+              <input type="password" required="required" />
+              <i></i>
+              <span>비밀번호 입력</span>
             </div>
             <div className="inputBox">
               <input type="password" required="required" />
               <i></i>
-              <span>create password</span>
+              <span>비밀번호 확인</span>
             </div>
             <div className="inputBox">
-              <input type="password" required="required" />
-              <i></i>
-              <span>confirm password</span>
-            </div>
-            <div className="inputBox">
-              <input type="submit" value="Create Account" />
+              <div className="registBtn Btn">등록</div>
             </div>
             <p>
-              Already a member ?{' '}
+              이미 회원이신가요 ?{' '}
               <a href="#" className="login" onClick={signToggle}>
-                Log in
+                들어가기
               </a>
             </p>
           </div>
 
           <div className="form signin">
-            <h2>Sign In</h2>
+            <h2>안녕하세요</h2>
             <div className="inputBox">
               <input type="text" required="required" />
               <i></i>
-              <span>username</span>
+              <span>별명</span>
             </div>
             <div className="inputBox">
               <input type="password" required="required" />
               <i></i>
-              <span>password</span>
+              <span>비밀번호</span>
             </div>
             <div className="inputBox">
-              <input type="submit" value="Login" />
+              <div className="memberBtn Btn">회원 입장</div>
+            </div>
+            <div className="inputBox guest">
+              <div className="guestBtn Btn">손님입니다</div>
             </div>
             <p>
-              Not Registrated ?{' '}
+              회원이 아니신가요 ?{' '}
               <a href="#" className="create" onClick={signToggle}>
-                Create an account
+                가입하러 가기
               </a>
             </p>
           </div>
