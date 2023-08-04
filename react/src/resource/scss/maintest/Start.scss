@@ -37,6 +37,13 @@
     animation-duration: 3s;
 }
 
+.mainImg4 {
+    background: no-repeat url(../../image/background/paint.png);
+    background-size: contain;
+    animation-name: game;
+    animation-duration: 3s;
+}
+
 
 .select {
     
@@ -132,6 +139,7 @@
 
         .gameStart {
             font-size: 1.5em;
+            font-weight: bold;
             text-align: center;
             line-height: 1.8em;
             margin: 40px auto;
@@ -149,6 +157,7 @@
             &:hover {
                 color: white;
                 background-color: rgb(249, 111, 95);
+                transition-duration: 0.5s;
             }
         }
 

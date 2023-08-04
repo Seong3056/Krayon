@@ -4,7 +4,11 @@ import '../../../resource/scss/gametest/followword/Play.scss';
 import '../../../resource/scss/game/can/can.scss';
 import html2canvas from 'html2canvas';
 import bgImage from '../can/style/bg2.jpg';
-
+import { TbCapture } from 'react-icons/tb';
+import { BsStars } from 'react-icons/bs';
+import { BiSolidEraser } from 'react-icons/bi';
+import { FaPaintBrush } from 'react-icons/fa';
+import { HiPencil } from 'react-icons/hi';
 const API = 'http://localhost:8181/api/catch';
 
 export default function PaintZone({
@@ -77,12 +81,25 @@ export default function PaintZone({
     }
   };
 
+  // const [curColor, setCurColor] = useState('#ffffff');
+
   const handlePenColorChange = (newColor) => {
     setPenColor(newColor);
     if (!painting) {
       getCtx.strokeStyle = newColor;
+      // setCurColor(newColor);
     }
   };
+
+  // const brushMode = () => {
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext('2d');
+  //   // Set the composite operation back to default for normal drawing
+  //   ctx.globalCompositeOperation = 'source-over';
+  //   // Set the line width back to the original value
+  //   ctx.strokeStyle = curColor + '66';
+  //   ctx.lineCap = 'round';
+  // };
 
   const handleChangeLineWidth = (event) => {
     const newLineWidth = parseFloat(event.target.value);
@@ -242,18 +259,29 @@ export default function PaintZone({
             </div>
 
             <div className="canvasTools">
-              <button id="resetBtn" onClick={saveAsImageHandler}>
+              <TbCapture
+                id="resetBtn"
+                className="ctrlBtn"
+                onClick={saveAsImageHandler}
+              >
                 화면 캡쳐
-              </button>
-              <button id="resetBtn" onClick={resetCanvas}>
+              </TbCapture>
+              <BsStars id="resetBtn" className="ctrlBtn" onClick={resetCanvas}>
                 전체 지우기
-              </button>
-              <button id="eraserBtn" onClick={eraseMode}>
+              </BsStars>
+              <BiSolidEraser
+                id="eraserBtn"
+                className="ctrlBtn"
+                onClick={eraseMode}
+              >
                 지우개
-              </button>
-              <button id="penBtn" onClick={penMode}>
+              </BiSolidEraser>
+              <HiPencil id="penBtn" className="ctrlBtn" onClick={penMode}>
                 펜
-              </button>
+              </HiPencil>
+              {/* <button id="brushBtn" onClick={penMode}>
+                붓
+              </button> */}
               <input
                 className="boldBar"
                 type="range"
@@ -263,52 +291,53 @@ export default function PaintZone({
                 value={lineWidth}
                 onChange={handleChangeLineWidth}
               />
-
-              <button
-                className="paint"
-                style={{ backgroundColor: 'red' }}
-                onClick={() => handlePenColorChange('red')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'orange' }}
-                onClick={() => handlePenColorChange('orange')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'yellow' }}
-                onClick={() => handlePenColorChange('yellow')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'green' }}
-                onClick={() => handlePenColorChange('green')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'blue' }}
-                onClick={() => handlePenColorChange('blue')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'indigo' }}
-                onClick={() => handlePenColorChange('indigo')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'purple' }}
-                onClick={() => handlePenColorChange('purple')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'brown' }}
-                onClick={() => handlePenColorChange('brown')}
-              ></button>
-              <button
-                className="paint"
-                style={{ backgroundColor: 'black' }}
-                onClick={() => handlePenColorChange('black')}
-              ></button>
+              <div className="palette">
+                <button
+                  className="paint"
+                  style={{ backgroundColor: '#ff0000' }}
+                  onClick={() => handlePenColorChange('#ff0000')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'orange' }}
+                  onClick={() => handlePenColorChange('orange')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'yellow' }}
+                  onClick={() => handlePenColorChange('yellow')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'green' }}
+                  onClick={() => handlePenColorChange('green')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'blue' }}
+                  onClick={() => handlePenColorChange('blue')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'indigo' }}
+                  onClick={() => handlePenColorChange('indigo')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'purple' }}
+                  onClick={() => handlePenColorChange('purple')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'brown' }}
+                  onClick={() => handlePenColorChange('brown')}
+                ></button>
+                <button
+                  className="paint"
+                  style={{ backgroundColor: 'black' }}
+                  onClick={() => handlePenColorChange('black')}
+                ></button>
+              </div>
             </div>
           </div>
         ) : (

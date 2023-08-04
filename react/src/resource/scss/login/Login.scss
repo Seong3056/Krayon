@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #f7f7f7;
+    // background: #f7f7f7;
 }
 
 .container {
@@ -84,13 +84,15 @@ body {
     transition: 0.5s;
     letter-spacing: 0.05em;
     /* color: rgba(255, 255, 255, 0.5); */
-    color: darkgray;
+    color: rgb(200, 200, 200);
+    letter-spacing: 3px;
+    font-weight: bold;
 }
 
 .container .form .inputBox input:valid ~ span,
 .container .form .inputBox input:focus ~ span {
-    color: salmon;
-    // border: 1px solid salmon;
+    color: rgb(249, 111, 95);
+    // border: 1px solid rgb(249, 111, 95);
     background: #f7f7f7;
     transform: translateX(25px) translateY(-7px);
     font-size: 0.8em;
@@ -100,7 +102,7 @@ body {
 }
 .container .form .inputBox input:valid,
 .container .form .inputBox input:focus {
-    border: 1px solid salmon;
+    border: 2px solid rgb(249, 111, 95);
 }
 .container .form .inputBox i {
     position: absolute;
@@ -109,40 +111,91 @@ body {
     width: 25px;
     padding-right: 8px;
     padding: 2px 0;
-    color: salmon;
-    border-right: 1px solid salmon;
+    color: rgb(249, 111, 95);
+    border-left: 0px solid rgb(249, 111, 95);
+
 }
 
 .container .form .inputBox input[type="submit"]
 {
-    background: salmon;
+    background: rgb(249, 111, 95);
     color: #f7f7f7;
     padding: 10px 0;
     font-weight: bold;
     font-size: 1em;
-    letter-spacing: 3px;
+    letter-spacing: 5px;
     cursor: pointer;
     box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
     /* box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.1),
     5px 5px 15px rgba(0, 0, 0, 0.35); */
     /* inset -5px -5px 15px rgba(255, 255, 255, 0.1),
     inset 5px 5px 15px rgba(0, 0, 0, 0.35); */
+
+    &:hover {
+        background: rgb(255, 255, 255);
+        color: rgb(249, 111, 95);
+        font-size: 1.1em;
+    }
 }
 
 .container .form p {
     /* color: rgba(255, 255, 255, 0.5); */
-    color: darkslategray;
+    color: rgb(148, 148, 148);
     font-size: 0.9em;
     font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .container .form p a {
+    font-size: 1em;
     font-weight: 500;
-    color: black;
+    color: rgb(75, 75, 75);
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    &:hover {
+        color: rgb(249, 111, 95);
+        font-size: 1.1em;
+        transition-duration: 0.3s;
+    }
 }
 
+.container .signin .inputBox.guest input {
+    // width: 500px;
+    position: relative;
+    top: -15px;
+    // padding: 10px 0;
+    border: 2px solid rgb(249, 111, 95);
+    color: rgb(249, 111, 95);
+    background: #f7f7f7;
+}
 
+.inputBox .Btn{
+    border: 2px solid rgb(249, 111, 95);
+    color: #f7f7f7;
+    
+    height: 41px;
+    background-color: rgb(249, 111, 95);
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 1em;
+    letter-spacing: 5px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
+    
+    &:hover {
+        // background: rgb(255, 255, 255);
+        // color: rgb(249, 111, 95);
+        font-size: 1.15em;
+        transition-duration: 0.5s;
+    }
+}
 
+.guest .guestBtn {
+    background: #f7f7f7;
+    color: rgb(249, 111, 95);
+}
 
 
 
