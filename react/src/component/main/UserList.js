@@ -4,7 +4,7 @@ const UserList = ({ userList }) => {
     const [list, setList] = useState([]);
 
     useEffect(() => {
-        console.log(userList);
+        //console.log(userList);
         setList(userList);
     }, [userList]);
 

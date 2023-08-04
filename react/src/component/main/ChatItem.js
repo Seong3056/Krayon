@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 const ChatItem = ({ id, chat, time }) => {
     useEffect(() => {
-        console.log('id:{} chat:{}', id, chat);
+        //console.log('id:{} chat:{}', id, chat);
     }, []);
 
     return (

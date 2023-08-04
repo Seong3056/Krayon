@@ -7,15 +7,9 @@ if (clientHostName === 'localhost') {
     //개발중
     // backEndHostName = 'http://3.35.144.168';
     backEndHostName = 'localhost:8181';
-} else if (
-    clientHostName === 'krayon.store.s3-website.ap-northeast-2.amazonaws.com'
-) {
-    //배포해서 서비스중
-    // backEndHostName = 'https://api.spring.com';
-    backEndHostName = '13.125.244.151';
 } else if (clientHostName === 'krayon.store') {
-    //배포해서 서비스중
-    // backEndHostName = 'https://api.spring.com';
-    backEndHostName = '13.124.169.109';
+    backEndHostName = '43.201.18.202';
+} else if (clientHostName === '175.114.130.19') {
+    backEndHostName = '175.114.130.19';
 }
 export const BASE_URL = backEndHostName;

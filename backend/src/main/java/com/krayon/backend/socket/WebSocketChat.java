@@ -33,19 +33,7 @@ public class WebSocketChat {
         log.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
         String name = res.get("name").get(0);
-        log.info("시작");
 
-//        log.info(session.getId());
-//        log.info(session.getContainer().toString());
-//        log.info(session.getOpenSessions().toString());
-//        log.info("메세지 핸들러"+session.getMessageHandlers().toString());
-//
-//
-//        log.info(session.getUserProperties().toString());
-//        log.info(session.getRequestURI().toString());
-//        log.info(session.getPathParameters().toString());
-//        log.info(session.getId());
-//        log.info(session.getId());
         if(!clients.contains(session)) {
             clients.add(session);
             log.info("session open : {}", session);
@@ -56,11 +44,6 @@ public class WebSocketChat {
         log.info(Arrays.toString(clients.toArray()));
         System.out.println("id = " + name);
         String conversion = c.conversion("open",clients,  name,"시스템");
-
-
-
-
-
         for( Session s :clients){
             s.getBasicRemote().sendText(conversion);
         }
@@ -71,7 +54,8 @@ public class WebSocketChat {
     public void onMessage(String message, Session session) throws IOException {
         log.info("receive message : {}", message);
         ObjectMapper json = new ObjectMapper();
-        Map<String, String > map = json.readValue((String) message, new TypeReference<Map<String, String>>() {});
+        Map<String, String > map =
+                json.readValue((String) message, new TypeReference<Map<String, String>>() {});
 
 
         if(map.containsKey("msg")) {
@@ -79,10 +63,6 @@ public class WebSocketChat {
             log.info("send data : {}", message);
             s.getBasicRemote().sendText((String) message);
 
-            }
-        } else if(map.containsKey("room")){
-            for(Session s: clients){
-//                s.getBasicRemote().sendBinary();
             }
         }
     }

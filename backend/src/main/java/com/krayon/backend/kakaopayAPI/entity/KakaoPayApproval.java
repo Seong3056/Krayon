@@ -24,4 +24,8 @@ public class KakaoPayApproval {
     private Integer vat_amount;
     private Date created_at;
     private Date approved_at;
+    private Date expire_at;
+
+
+
 }

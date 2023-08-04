@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import KakaoPay from './KakaoPay';
 import { BASE_URL } from '../../config/host-config';
+import axios from 'axios';
 
-const PayModal = ({ close }) => {
+const PayModalA = ({ close }) => {
     const [amount, setAmount] = useState('');
     const [payState, setPayState] = useState(false);
     const [payLink, setPayLink] = useState('');
@@ -32,6 +33,7 @@ const PayModal = ({ close }) => {
         //console.log(payLink);
     }, [payLink]);
     //
+
     return (
         <>
             <div className="paymodal">
@@ -50,4 +52,4 @@ const PayModal = ({ close }) => {
     );
 };
 
-export default PayModal;
+export default PayModalA;

@@ -49,17 +49,6 @@ public class FollowWordSocket {
         objMap.put("msg",name+"님이 접속했습니다.");
         objMap.put("wordInfo",currentWordMap);
         objMap.put("list",clients);
-//        log.info(session.getId());
-//        log.info(session.getContainer().toString());
-//        log.info(session.getOpenSessions().toString());
-//        log.info("메세지 핸들러"+session.getMessageHandlers().toString());
-//
-//
-//        log.info(session.getUserProperties().toString());
-//        log.info(session.getRequestURI().toString());
-//        log.info(session.getPathParameters().toString());
-//        log.info(session.getId());
-//        log.info(session.getId());
         AtomicInteger index = new AtomicInteger();
         control.forEach(e -> {
             log.info("controll {} , session {}",e.get("session"),session);
@@ -88,17 +77,10 @@ public class FollowWordSocket {
         log.info("res={}", res);
         log.info(Arrays.toString(clients.toArray()));
         System.out.println("id = " + name);
-
-
-//        String conversion = c.conversion("open",clients,currentWordMap,name,"시스템");
         String conversion = c.conversion(objMap);
-//        log.info(asd);
+
         log.info(conversion);
         System.out.println("currentWordMap = " + currentWordMap);
-
-
-
-
         for( Session s :clients){
             s.getBasicRemote().sendText(conversion);
         }
@@ -119,15 +101,13 @@ public class FollowWordSocket {
         objMap.put("date",date);
 
         log.info("userList"+ Arrays.toString(clients.toArray()));
-//        if(sessionTurn != null) log.info("현재 턴:"+sessionTurn.getRequestParameterMap().get("name").get(0) );
+
         Object[] clientsArray = clients.toArray();
         int index = Arrays.asList(clientsArray).indexOf(session);
 
 
         if (map.containsKey("msg")) { //입력값이 msg 일때
-            log.info("메세지엔 접근했는데");
             if(sessionTurn == session) {
-                log.info("메세지엔 접근했는데");
                 log.info(map.get("msg"));
                 List<Map<String, String>> result = wordService.findWord(map.get("msg"));
                 if(result == null){
@@ -257,7 +237,7 @@ public class FollowWordSocket {
             if(map.get("start").equals("true")){
                 sessionTurn = session;
                 Map<String, String> randomWord = new HashMap<>();
- start = true;
+                start = true;
                 while (true) {
                     randomWord = wordService.randomWord("명사");
                     if(randomWord != null) break;
@@ -291,10 +271,10 @@ public class FollowWordSocket {
     @OnClose
     public void onClose(Session session) throws IOException {
         log.info("끝말잇기 session close : {}", session);
-//        clients.
+
         Map<String, List<String>> map = session.getRequestParameterMap();
         String id = map.get("name").get(0); //파라미터값
-//        String turn = map.get("turn").get(0); //파라미터값
+
 
         Object[] clientsArray = clients.toArray(); //접속종료전 세션list
 
