@@ -87,6 +87,10 @@
         margin-left: 15px;
         margin-bottom: 15px;
       }
+
+      svg {
+        color: rgb(249, 111, 95);
+      }
     }
 
     .favStar {
@@ -195,6 +199,7 @@
 
           svg {
             cursor: pointer;
+            color: rgb(249, 111, 95)
           }
         }
       }
