@@ -32,7 +32,7 @@ export default function PaintZone({
   // useState
   const [getCtx, setGetCtx] = useState(null);
   const [painting, setPainting] = useState(false);
-  const [lineWidth, setLineWidth] = useState(2.5);
+  const [lineWidth, setLineWidth] = useState(5);
   const [penColor, setPenColor] = useState('#000000');
   const [getPic, setGetPic] = useState();
   const [userTurn, setUserTurn] = useState(true);
@@ -52,11 +52,13 @@ export default function PaintZone({
       canvas.height = 540;
       const ctx = canvas.getContext('2d');
       ctx.lineJoin = 'round';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 5;
       ctx.strokeStyle = '#000000';
       setGetCtx(ctx);
       console.log('정상캔버스 등장');
+      ctx.lineCap = 'round';
     }
+
     if (data.correct !== undefined) {
       alert('정답자: ' + data.correctUser + ' 정답: ' + data.correct);
     }
@@ -196,6 +198,8 @@ export default function PaintZone({
     console.log('이미지 src 바뀜');
   }, []);
 
+  // useEffect(() => {}, [lineWidth]);
+
   // window.onload = () => {
   //   console.log("페이지 새로고침");
   // };
@@ -276,9 +280,9 @@ export default function PaintZone({
               >
                 지우개
               </BiSolidEraser>
-              <HiPencil id="penBtn" className="ctrlBtn" onClick={penMode}>
+              {/* <HiPencil id="penBtn" className="ctrlBtn" onClick={penMode}>
                 펜
-              </HiPencil>
+              </HiPencil> */}
               {/* <button id="brushBtn" onClick={penMode}>
                 붓
               </button> */}

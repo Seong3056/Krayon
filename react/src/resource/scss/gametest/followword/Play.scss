@@ -59,12 +59,17 @@
             // -webkit-backdrop-filter: blur(10px);
             // border: 2px solid rgba(255, 255, 255, 0.18);
             // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            caret-color: rgb(249, 111, 95);
-            color: rgb(249, 111, 95);
-            font-size: 1.1em;
+            caret-color: #666666;;
+            color: #666666;
+            font-size: 1em;
             font-weight: bold;
-            padding: 2px;
+            padding: 4px;
             text-indent: 10px;
+            letter-spacing: 1.5px;
+            &::placeholder {
+                color: darkgray;
+                font-size: 0.9em;
+            }
         }
         
         .button {
@@ -76,6 +81,7 @@
             box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
             color: rgb(249, 111, 95);
             font-weight: bold;
+            margin: auto;
             // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
             // backdrop-filter: blur(10px);
             // -webkit-backdrop-filter: blur(10px);
@@ -90,6 +96,11 @@
                 background-color: rgb(250, 99, 83);
                 color: #f7f7f7;
             }
+
+            &:active {
+                box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288);
+            
+              }
         }
     }
 }

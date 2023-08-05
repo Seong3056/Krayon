@@ -218,6 +218,14 @@ const Main = ({ history }) => {
       img: '../../resource/image/background//blue.png',
       id: 'mainImg3',
     },
+    {
+      game: '크레용소개',
+      describe:
+        '다양한 주제들로 새로운 이야기를시작하고, 그림 속에서 모험을 떠나 보세요! 크레용은 당신의 상상력을 자유롭게 펼칠 수 있는세계입니다.',
+      url: '/main',
+      img: '../../resource/image/background//blue.png',
+      id: 'mainImg4',
+    },
   ];
   const toggleMenu = () => {
     setToggleIcon(!toggleIcon);
@@ -249,6 +257,8 @@ const Main = ({ history }) => {
   const click = (e) => {
     e.preventDefault();
     console.log(e.target.tagName);
+    if (e.target.tagName === 'DIV') return;
+
     if (e.target.tagName == 'path')
       setPath(e.target.parentNode.getAttribute('values'));
     else setPath(e.target.parentNode.getAttribute('values'));
@@ -337,7 +347,7 @@ const Main = ({ history }) => {
             <span></span>
           </div>
           <div
-            className={`${toggleIcon && 'showMenu'} menubar`}
+            className={`${toggleIcon ? 'showMenu' : 'hideMenu'} menubar`}
             onClick={(e) => click(e)}
           >
             {toggleIcon && (
@@ -381,9 +391,9 @@ const Main = ({ history }) => {
                         </p>
                       </div>
                     </div>
-                    <Link to={selUrl}>
-                      <div className="gameStart">시작하기</div>
-                    </Link>
+                    <div className="gameStart">
+                      <Link to={selUrl}>시작하기</Link>
+                    </div>
                   </>
                 );
               case 'search':
