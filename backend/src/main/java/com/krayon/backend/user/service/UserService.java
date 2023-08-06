@@ -22,7 +22,10 @@ public class UserService {
     private final PasswordEncoder encoder;
 
     String NoEncodedPw = "";
-
+    public int getPoint(String id){
+        User user = userRepository.findById(id).orElseThrow();
+        return user.getPoint();
+    }
     public UserResponseDTO create(final UserRequestDTO dto) throws RuntimeException {
 
         String userId = dto.getUserId();

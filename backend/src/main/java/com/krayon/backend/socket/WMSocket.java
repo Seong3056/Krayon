@@ -157,9 +157,11 @@ public class WMSocket {
                         int p = (Integer) e.get("point");
                         e.replace("point",p+point);
                         if(!name.contains("Guest")){
-                        User user = userRepository.findById(name).orElseThrow();
-                        user.setPoint((Integer) e.get("point"));
-                        userRepository.save(user);}
+                            User user = userRepository.findById(name).orElseThrow();
+                            user.setPoint((Integer) e.get("point"));
+
+
+                            userRepository.save(user);}
                         return;
                     }});
 
