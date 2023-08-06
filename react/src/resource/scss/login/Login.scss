@@ -15,10 +15,14 @@ body {
 }
 
 .container {
+    background-color: #f9f9f9;
+    width: 420px;
+    // height: 480px;
+    box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
     margin: auto;
-    padding: 40px;
-    border: 8px solid #f7f7f7;
-    border-radius: 10px;
+    padding: 60px;
+    // border: 8px solid #f7f7f7;
+    border-radius: 14px;
     // background-color: red;
     // box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
     /* box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.1),
@@ -42,19 +46,26 @@ body {
 
 .container.signinForm .form.signin {
     display: flex;
+    // position: relative;
+    // background: #f8f8f8;
+    // box-shadow: -5px -5px 10px #ffffff73, 8px 8px 12px rgba(94, 104, 121, .288);
+    // left: 400px;
+    // width: 420px;
+    // height: 470px;
 }
 
 .container .form h2 {
     color: black;
     font-weight: bold;
     letter-spacing: 0.1em;
-    font-size: 3em;
+    font-size: 2.6em;
     margin-bottom: 20px;
 }
 
 .container .form .inputBox {
     position: relative;
     width: 300px;
+    height: 45px;
 }
 
 .container .form .inputBox input {
@@ -65,7 +76,7 @@ body {
     /* border: 1px solid rgba(0, 0, 0, 0.1); */
     color: black;
     font-weight: 300;
-    border-radius: 10px;
+    border-radius: 14px;
     font-size: 1em;
     box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
     /* box-shadow: -5px -5px 15px rgba(255, 255, 255, 0.1),
@@ -87,6 +98,7 @@ body {
     color: rgb(200, 200, 200);
     letter-spacing: 3px;
     font-weight: bold;
+    transition-duration: 0.5s;
 }
 
 .container .form .inputBox input:valid ~ span,
@@ -99,10 +111,12 @@ body {
     padding: 0 8px;
     border-radius: 10px;
     letter-spacing: 0.1em;
+    transition-duration: 0.3s;
 }
 .container .form .inputBox input:valid,
 .container .form .inputBox input:focus {
     border: 2px solid rgb(249, 111, 95);
+    // transition-duration: 1s;
 }
 .container .form .inputBox i {
     position: absolute;
@@ -144,19 +158,25 @@ body {
     font-size: 0.9em;
     font-weight: bold;
     letter-spacing: 1px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
 }
 
 .container .form p a {
+    display: block;
     font-size: 1em;
     font-weight: 500;
     color: rgb(75, 75, 75);
     font-weight: bold;
     letter-spacing: 1px;
+    width: 110px;
+    margin-left: 10px;
 
     &:hover {
         color: rgb(249, 111, 95);
         font-size: 1.1em;
-        transition-duration: 0.3s;
+        transition-duration: 0.4s;
     }
 }
 
@@ -195,9 +215,18 @@ body {
 .guest .guestBtn {
     background: #f7f7f7;
     color: rgb(249, 111, 95);
+    // margin-bottom: 40px;
 }
 
 
+.signin .btn-group{
+    display: flex;
+    flex-direction: column;
+    .guestBtn{
+        margin-top: 10px;
+    }
+
+}
 
 
 
