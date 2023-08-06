@@ -47,11 +47,15 @@ public class UserController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+
     @PostMapping("/point")
     public ResponseEntity<?> getPoint(@RequestBody pointRequestDTO dto){
         int point = userService.getPoint(dto.getUserId());
         return ResponseEntity.ok().body(point);
     }
+
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody UserRequestDTO dto, BindingResult result) {
         try {
