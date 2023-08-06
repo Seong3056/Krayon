@@ -62,28 +62,51 @@
         }
         .comment{
             display: none;
-            width: 134px;
-            height: 95%;
-            background: url('../../../image/game/bubble7.png') no-repeat  left / contain;
-            
+            // width: 134px;
+            // height: 95%;
+            // background: url('../../../image/game/bubble7.png') no-repeat  left / contain;
+            display: none;
+    position: absolute;
+    min-width: 150px;
+    width: auto;
+    height: auto;
+
+    left: 310px;
+    bottom: 0px;
+    background: #484848;
+    color: white;
+    border-radius: 18px;
+    padding: 12px 12.8px;
             // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            // backdrop-filter: blur(10px);
+            // -webkit-backdrop-filter: blur(10px);
             // border: 2px solid rgba(255, 255, 255, 0.18);
             // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             margin-right: 5px;
             // display: none;            
-            position: absolute;
-            top: 0;
-            right: -159px;
+            // position: absolute;
+            // top: 0;
+            // right: -10px;
             // left: 109%;
             opacity: 0;
 
             text-align: center;
-            font-size: 30px;
-            line-height: 76px;            
+            font-size: 24px;
+            line-height: 49px;
             transition: 3s;
            
+        }
+        .comment::after{
+            border-top: 10px solid #484848;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 0px solid transparent;
+            content: "";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -15px;
+            transform: rotate(90deg);
         }
         .claim{
             display: block;

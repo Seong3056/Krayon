@@ -10,32 +10,17 @@ const Chatting = () => {
 
     // let c = ws.onmessage();
     const [chatting, setChatting] = useState([]);
-    // const fetchChat = async () => {
-    //     const res = await fetch('http://localhost:8181/api/chat', {
-    //         method: 'POST',
-    //         headers: { 'content-type': 'application/json' },
 
-    //         body: JSON.stringify({
-    //             id: document.getElementById('id').value,
-    //             chat: document.getElementById('chat').value,
-    //         }),
-    //     });
-    //     const chat = await res.json();
-    //     setChatting([...chatting, chat]);
-    //     console.log(chatting);
-    // };
-    // let a = ws.onmessage();
-    // console.log(a);
     const open = web.addEventListener('open', (e) => {
-        console.log('접속');
-        console.log(e.data);
+        //console.log('접속');
+        //console.log(e.data);
         web.send('hello server');
     });
     let a = [];
     const message = web.addEventListener('message', (e) => {
-        console.log('클릭');
+        //console.log('클릭');
         setChatting([...a, e.data]);
-        console.log(chatting);
+        //console.log(chatting);
     });
     const li = chatting.map((a) => {
         <ChatItem chat={a} />;

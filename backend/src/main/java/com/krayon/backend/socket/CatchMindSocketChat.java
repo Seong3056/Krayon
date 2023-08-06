@@ -74,7 +74,8 @@ public class CatchMindSocketChat {
         String name = map.get("name");
         String date = map.get("date");
         //단어제출 받기
-        String sendAnswer = map.get("answer");//얘랑 wordInfo의 word와 일치하면 유저리스트에서의 다음사람을 그리미로 지정----맞추면 모두 턴을 false하고 리스트에서의 다음사람을 true로 지정해서 순서대로 그리미가 돈다.
+        String sendAnswer = map.get("answer");
+        //sendAnswer와 wordInfo의 word와 일치하면 유저리스트에서의 다음사람을 그리미로 지정----맞추면 모두 턴을 false하고 리스트에서의 다음사람을 true로 지정해서 순서대로 그리미가 돈다.
         log.info("사용자가 입력한 answer: " + sendAnswer);
 
 
@@ -88,7 +89,7 @@ public class CatchMindSocketChat {
 
 
         if (map.containsKey("img")) { //입력값이 img 일때
-            log.info("그림엔 접근했는데");
+
             if (sessionTurn == session) {
 
                 for (Session s : clients) {
@@ -130,24 +131,20 @@ public class CatchMindSocketChat {
             }
         } else if (map.containsKey("answer")) {//정답입력하면 모두 false 주고 맞춘사람 true줘서 턴돌리기
             if (sendAnswer.equals(currentWordMap.get("word"))) {
-                log.info("단어 정답검증 접근했는데");
+
                 for (int i = 0; i < clients.size(); i++)
                     if ((Session) clientsArray[i] == clientsArray[(index) % clientsArray.length])
                         sessionTurn = (Session) clientsArray[(i) % clientsArray.length];
-
-
                     //정답 알림
                     objMap.put("correct",currentWordMap.get("word"));
                     objMap.put("correctName",session.getRequestParameterMap().get("name").get(0));
                     message = c.conversion(objMap);
                     objMap.remove("correct");
                     objMap.remove("correctName");
-                    log.info("정답나옴");
+
                     for( Session s :clients){
                         s.getBasicRemote().sendText(message);
                     }
-
-
                     //정답 후 다른사용자에게 다른 단어 생성해서 턴 돌리고 시작
                     Map<String, String> randomWord = new HashMap<>();
                     while (true) {

@@ -18,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -40,7 +42,7 @@ public class KakaoPay {
 
         // Server request header
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK " + "9fcf41e2fcfb2edafc7d4de2bc9dcf83");
+        headers.add("Authorization", "KakaoAK " + "e33be38d46f10dd1cbe59b3a5dbff461");
         headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
@@ -98,7 +100,7 @@ public class KakaoPay {
         String amount = payment.getAmount();
         // Server request header
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK " + "9fcf41e2fcfb2edafc7d4de2bc9dcf83");
+        headers.add("Authorization", "KakaoAK " + "e33be38d46f10dd1cbe59b3a5dbff461");
         headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
@@ -116,7 +118,16 @@ public class KakaoPay {
         try {
             kakaoPayApproval = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApproval.class);
             log.info("" + kakaoPayApproval);
-            //return KakaoPayApproval;
+            Date approvedAt = kakaoPayApproval.getApproved_at();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(approvedAt);
+            log.info(calendar.getTime().toString());
+            calendar.add(Calendar.MONTH, 1);
+            kakaoPayApproval.setExpire_at(calendar.getTime());
+
+            Payment payment1 = paymentRepository.findById(kakaoPayReady.getTid()).orElseThrow();
+            payment1.setExpireDate(calendar.getTime());
+            paymentRepository.save(payment1);
             return kakaoPayApproval;
         } catch (RestClientException | URISyntaxException e) {
             e.printStackTrace();

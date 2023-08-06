@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krayon.backend.korean.WordService;
 import com.krayon.backend.socket.util.ConversionJson;
+import com.krayon.backend.user.entity.User;
+import com.krayon.backend.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +31,7 @@ public class WMSocket {
     private static Map<String,String> currentWordMap = new HashMap<>();
     private static List<Map<String, Object>> control = new ArrayList<>();
     private static LocalDateTime time = LocalDateTime.now();
-
+    private UserRepository userRepository;
 
     private Map<String ,Object > objMap = new HashMap<>();
     private final int point = 30;
@@ -133,8 +136,11 @@ public class WMSocket {
                 Map<String, String> randomWord = new HashMap<>();
                 while (true) {
                     randomWord = wordService.randomWord("명사");
-                    if(randomWord.get("definition").length() > 50) continue;
-                    if(randomWord != null) break;
+
+                    if(randomWord != null) {
+                        if(randomWord.get("definition").length() > 50) continue;
+                        else  break;
+                    }
                 }
 
                 objMap.put("word",randomWord.get("word"));
@@ -150,25 +156,16 @@ public class WMSocket {
                     if(e.get("name").equals(name)){
                         int p = (Integer) e.get("point");
                         e.replace("point",p+point);
+                        if(!name.contains("Guest")){
+                        User user = userRepository.findById(name).orElseThrow();
+                        user.setPoint((Integer) e.get("point"));
+                        userRepository.save(user);}
                         return;
                     }});
+
                 objMap.put("point",control);
-//                controll.forEach(user -> {
-//                    if(((Session)user.get("session")).equals(session)){
-//                        log.info("똑같다");
-//                        int p = (Integer) user.get("point");
-//                        user.replace("point",p+point);
-//                        return;
-//                    }
-//                });
-//                Map<String, Object> userMap = controll.stream().filter(user -> ;
-
                 message = c.conversion(objMap);
-
                 TimeUnit.SECONDS.sleep(3);
-
-
-
 
                 for (Session s : clients) {
                     log.info("send data : {}", message);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../../resource/scss/gametest/followword/Info.scss';
-import Chat from '../main/Chat';
+import '../../../resource/scss/gametest/followword/Info.scss';
+import Chat from '../../main/Chat';
 
-const Info = ({ sendStart, textData, p }) => {
+const FwInfo = ({ sendStart, textData, p, dis }) => {
     const [point, setPoint] = useState([]);
     const [sortPoint, setSortPoint] = useState([]);
     useEffect(() => {
@@ -49,9 +49,11 @@ const Info = ({ sendStart, textData, p }) => {
             <div className="ready" onClick={sendStart}>
                 게임시작
             </div>
-            <div className="menu">나가기</div>
+            <div className="menu" onClick={dis}>
+                나가기
+            </div>
         </div>
     );
 };
 
-export default Info;
+export default FwInfo;

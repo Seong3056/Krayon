@@ -118,27 +118,24 @@ const Login = () => {
           </div>
 
           <div className="form signin">
-            <h2>안녕하세요</h2>
+            <h2>Sign In</h2>
             <div className="inputBox">
               <input type="text" required="required" />
               <i></i>
-              <span>별명</span>
+              <span>username</span>
             </div>
             <div className="inputBox">
               <input type="password" required="required" />
               <i></i>
-              <span>비밀번호</span>
+              <span>password</span>
             </div>
             <div className="inputBox">
-              <div className="memberBtn Btn">회원 입장</div>
-            </div>
-            <div className="inputBox guest">
-              <div className="guestBtn Btn">손님입니다</div>
+              <input type="submit" value="Login" />
             </div>
             <p>
-              회원이 아니신가요 ?{' '}
+              Not Registrated ?{' '}
               <a href="#" className="create" onClick={signToggle}>
-                가입하러 가기
+                Create an account
               </a>
             </p>
           </div>

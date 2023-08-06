@@ -90,12 +90,39 @@
 //   height: 100%;
 // }
 
-.canvas {
-  cursor: url("./test.cur"),auto;
+#canvasDraw {
+  cursor: url("./pointer_black.cur"),auto;
   .userInfo{
     width: 100px;
   }
   // background-color: #fff;
+  &.red{
+    cursor: url("./pointer_red.cur"),auto;
+  }
+  &.orange{    
+      cursor: url("./pointer_orange.cur"),auto;    
+  }
+  &.yellow{
+    cursor: url("./pointer_yellow.cur"),auto;
+  }
+  &.green{
+    cursor: url("./pointer_green.cur"),auto;
+  }
+  &.blue{
+    cursor: url("./pointer_blue.cur"),auto;
+  }
+  &.purple{
+    cursor: url("./pointer_purple.cur"),auto;
+  }
+  &.brown{
+    cursor: url("./pointer_brown.cur"),auto;
+  }
+  &.black{
+    cursor: url("./pointer_black.cur"),auto;
+  }
+  &.eraserBtn{
+    cursor: url("./earaser.cur"),auto;
+  }
 }
 
 .canvasTools{
