@@ -23,6 +23,13 @@ public class UserService {
 
     String NoEncodedPw = "";
 
+
+    public int getPoint(String id){
+        User user = userRepository.findById(id).orElseThrow();
+        return user.getPoint();
+    }
+
+
     public UserResponseDTO create(final UserRequestDTO dto) throws RuntimeException {
 
         String userId = dto.getUserId();
@@ -49,6 +56,8 @@ public class UserService {
     }
 
     public LoginResponseDTO authenticate(final UserRequestDTO dto) {
+
+        log.info("UserRequestDTO: " + dto);
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(

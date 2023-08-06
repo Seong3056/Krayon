@@ -22,5 +22,7 @@ public class User {
 
 	@Column(nullable = false)
 	private String userPw;
+
+	@Column
 	private int point;
 }

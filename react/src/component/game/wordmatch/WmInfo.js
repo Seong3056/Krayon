@@ -3,57 +3,58 @@ import '../../../resource/scss/gametest/followword/Info.scss';
 import Chat from '../../main/Chat';
 
 const WmInfo = ({ sendStart, textData, p, dis }) => {
-    const [point, setPoint] = useState([]);
-    const [sortPoint, setSortPoint] = useState([]);
-    useEffect(() => {
-        //console.log(p);
-        // if (p !== undefined)
-        // p.map(e=>{
-        //     if(e.name === )
-        // })
-        //     point.map((e) => {
-        //         if (e.name === p.name) {
-        if (p !== undefined) setPoint(p);
-        //     }
-        // });
-    }, [p]);
-    useEffect(() => {
-        //console.log(point);
-        for (var i = 0; i < point.length; i++) {
-            for (var j = i + 1; j < point.length; j++) {
-                if (point[i].point < point[j].point) {
-                    var temp = point[i];
-                    point[i] = point[j];
-                    point[j] = temp;
-                }
-            }
+  const [point, setPoint] = useState([]);
+  const [sortPoint, setSortPoint] = useState([]);
+  useEffect(() => {
+    //console.log(p);
+    // if (p !== undefined)
+    // p.map(e=>{
+    //     if(e.name === )
+    // })
+    //     point.map((e) => {
+    //         if (e.name === p.name) {
+    if (p !== undefined) setPoint(p);
+    //     }
+    // });
+  }, [p]);
+  useEffect(() => {
+    //console.log(point);
+    for (var i = 0; i < point.length; i++) {
+      for (var j = i + 1; j < point.length; j++) {
+        if (point[i].point < point[j].point) {
+          var temp = point[i];
+          point[i] = point[j];
+          point[j] = temp;
         }
-        setSortPoint(point);
-    }, [point]);
+      }
+    }
+    console.log(point);
+    setSortPoint(point);
+  }, [point]);
 
-    return (
-        <div className="info">
-            <div className="score">
-                <div className="title">점수판</div>
+  return (
+    <div className="info">
+      <div className="score">
+        <div className="title">점수판</div>
 
-                {sortPoint.map((e) => (
-                    <div className="user-score">
-                        <div className="name">{e.name}:</div>
-                        <div className="point"> {sortPoint}</div>
-                    </div>
-                ))}
-            </div>
-            <div className="myInfo">
-                <Chat textData={textData} />
-            </div>
-            <div className="ready" onClick={sendStart}>
-                게임시작
-            </div>
-            <div className="menu" onClick={dis}>
-                나가기
-            </div>
-        </div>
-    );
+        {sortPoint.map((e) => (
+          <div className="user-score">
+            <div className="name">{e.name}:</div>
+            <div className="point"> {e.point}</div>
+          </div>
+        ))}
+      </div>
+      <div className="myInfo">
+        <Chat textData={textData} />
+      </div>
+      <div className="ready" onClick={sendStart}>
+        게임시작
+      </div>
+      <div className="menu" onClick={dis}>
+        나가기
+      </div>
+    </div>
+  );
 };
 
 export default WmInfo;
