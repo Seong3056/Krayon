@@ -2,6 +2,7 @@ package com.krayon.backend.user.api;
 
 import com.krayon.backend.exception.NoRegisteredArgumentsException;
 
+import com.krayon.backend.user.dto.pointRequestDTO;
 import com.krayon.backend.user.dto.request.UserRequestDTO;
 import com.krayon.backend.user.dto.response.LoginResponseDTO;
 import com.krayon.backend.user.dto.response.UserResponseDTO;
@@ -46,6 +47,14 @@ public class UserController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+
+    @PostMapping("/point")
+    public ResponseEntity<?> getPoint(@RequestBody pointRequestDTO dto){
+        int point = userService.getPoint(dto.getUserId());
+        return ResponseEntity.ok().body(point);
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody UserRequestDTO dto, BindingResult result) {

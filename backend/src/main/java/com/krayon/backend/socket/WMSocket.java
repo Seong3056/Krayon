@@ -2,12 +2,14 @@ package com.krayon.backend.socket;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.krayon.backend.config.CustomSpringConfigurator;
 import com.krayon.backend.korean.WordService;
 import com.krayon.backend.socket.util.ConversionJson;
 import com.krayon.backend.user.entity.User;
 import com.krayon.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.OnClose;
@@ -24,13 +26,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
-@ServerEndpoint("/api/game/wm")
-
+@ServerEndpoint(value = "/api/game/wm", configurator = CustomSpringConfigurator.class)
 public class WMSocket {
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
     private static Map<String,String> currentWordMap = new HashMap<>();
     private static List<Map<String, Object>> control = new ArrayList<>();
     private static LocalDateTime time = LocalDateTime.now();
+
+    @Autowired
     private UserRepository userRepository;
 
     private Map<String ,Object > objMap = new HashMap<>();
@@ -157,9 +160,14 @@ public class WMSocket {
                         int p = (Integer) e.get("point");
                         e.replace("point",p+point);
                         if(!name.contains("Guest")){
-                        User user = userRepository.findById(name).orElseThrow();
-                        user.setPoint((Integer) e.get("point"));
-                        userRepository.save(user);}
+                            log.info(name);
+                            log.info("userRepository: " + userRepository);
+                            User user = userRepository.findById(name).orElseThrow();
+                            log.info(user.toString());
+                            user.setPoint((Integer) e.get("point"));
+
+
+                            userRepository.save(user);}
                         return;
                     }});
 
