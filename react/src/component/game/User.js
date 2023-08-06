@@ -98,7 +98,9 @@ const User = ({ data, list, turn }) => {
                             style={{
                                 fontSize: 70,
                                 textAlign: 'center',
-                                color: sessionStorage.getItem('hex'),
+                                color: `#${Math.floor(
+                                    Math.random() * 5592405 + 5592405
+                                ).toString(16)}`,
                             }}
                         >
                             {profile[sessionStorage.getItem('profile')]}
