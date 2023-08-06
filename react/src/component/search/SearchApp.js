@@ -6,18 +6,7 @@ const SearchApp = () => {
   return (
     <>
       <div className="search">
-        <div className="border-tool">
-          <div className="d-flex align-items-center justify-content-center ">
-            <div className="game mt-4">
-              <div className="game-header">
-                <h2></h2>
-              </div>
-              <div className="game-content d-flex justify-content-center">
-                <SearchForm />
-              </div>
-            </div>
-          </div>
-        </div>
+        <SearchForm />
       </div>
     </>
   );

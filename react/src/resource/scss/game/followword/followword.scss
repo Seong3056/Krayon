@@ -14,8 +14,10 @@
         text-align: center;
         line-height: 30px;
         letter-spacing: 1px;
-        color: gray;
-        margin-top: 25%;
+        color: darkgray;
+        // text-shadow: inset -8px -8px 12px rgba(255, 255, 255, 0.4),
+        //                   inset 8px 8px 12px rgba(0,0,0,0.08);
+        margin-top: 15%;
     }
     .preview{
         display: flex;
@@ -23,25 +25,26 @@
         width: 80%;
         height: 200px;
         justify-content: center;
+        
         .prev{
             display: flex;
             margin-left: 15%;
-            margin-top: 50%;
+            margin-top: 30%;
             // margin-right: 30px;
-            color: #888;
+            color: lightgray;
             // background-color: red;
             align-items: center;
-            font-size: 60px;
+            font-size: 90px;
             .last-char{
                 color: #555;
             }
         }
         .current{
             display: flex;
-            font-size: 60px;
+            font-size: 90px;
             margin-left: 10%;
             // width: 25%;
-            margin-top: 50%;
+            margin-top: 30%;
             // margin-right: 30px;
             align-items: center;
             

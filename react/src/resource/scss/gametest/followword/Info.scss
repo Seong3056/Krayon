@@ -6,6 +6,7 @@
     position: relative;
     // display: flex;
     font-weight: bold;
+    color: gray;
 
     .score {
         width: 90%;
@@ -64,7 +65,7 @@
         // left: 1%;
         // margin: 5% auto;
         transition: background-color 0.3s;
-        background: rgb(249, 111, 95);
+        // background: rgb(249, 111, 95);
         box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
         // background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
         // backdrop-filter: blur(10px);
@@ -72,13 +73,24 @@
         // border: 2px solid rgba(255, 255, 255, 0.18);
         // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         cursor: pointer;
-        color: #f7f7f7;
+        // color: #f7f7f7;
         font-size: 1.3em;
         letter-spacing: 6px;
-
+        // color: rgb(100, 100, 100);
+        background: rgb(249, 111, 95);
+        color: whitesmoke;
+        
         &:hover {
-            background-color: rgb(250, 99, 82);
+            transition: 0.5s;
+            background-color: rgb(250, 86, 68);
+            font-size: 1.5em;
+            color: white;
         }
+
+        &:active {
+            box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288);
+        
+          }
     }
 
     .menu {
@@ -102,5 +114,15 @@
         color: rgb(100, 100, 100);
         letter-spacing: 6px;
         font-size: 1.3em;
+
+        &:hover {
+            color: rgb(249, 111, 95);
+            transition: 0.3s;
+        }
+
+        &:active {
+            box-shadow: inset -3px -3px 7px #ffffff73, inset 3px 3px 5px rgba(94, 104, 121, .288);
+        
+          }
     }
 }

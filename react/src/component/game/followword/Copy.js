@@ -58,9 +58,9 @@ function Copy({ send, sendChar, data, list, startWord, turn }) {
         setPreviousWord(data.wordInfo.word);
         // alert('단어뜻: ' + data.wordInfo.definition);
 
-        if (data.wordInfo.definition.length > 50)
+        if (data.wordInfo.definition.length > 200)
           setDefinition(
-            data.wordInfo.definition.substring(0, 50).concat('...')
+            data.wordInfo.definition.substring(0, 200).concat('...')
           );
         else setDefinition(data.wordInfo.definition);
         console.log(data.wordInfo.definition.length);
