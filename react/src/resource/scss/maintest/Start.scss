@@ -305,6 +305,7 @@
         }
     
         .menu {
+            height: 100%;
     
             .menubar {
                 width: 0px;
@@ -351,17 +352,13 @@
             // }
             
             .showMenu {
-                
+                margin-top: 25px;
                 width: 50px;
                 font-size: 1.2vw;
                 text-align: center;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-evenly;
-
-                padding-top: 25px;
-                box-sizing: border-box;
-
                 // left: 35px;
                 // cursor: pointer;
                 animation-name : go;
@@ -601,5 +598,3 @@
 .manuscript > *:not(:last-child) {
     margin-bottom: 40px;
 }
-
-

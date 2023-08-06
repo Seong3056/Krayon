@@ -9,6 +9,7 @@ import { BsStars } from 'react-icons/bs';
 import { BiSolidEraser } from 'react-icons/bi';
 import { FaPaintBrush } from 'react-icons/fa';
 import { HiPencil } from 'react-icons/hi';
+import AWS from 'aws-sdk';
 const API = 'http://localhost:8181/api/catch';
 
 export default function PaintZone({
@@ -86,6 +87,12 @@ export default function PaintZone({
     // const [curColor, setCurColor] = useState('#ffffff');
 
     const handlePenColorChange = (newColor) => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        // Set the composite operation back to default for normal drawing
+        ctx.globalCompositeOperation = 'source-over';
+        // Set the line width back to the original value
+        ctx.lineWidth = lineWidth;
         setPenColor(newColor);
         if (!painting) {
             getCtx.strokeStyle = newColor;
@@ -164,8 +171,9 @@ export default function PaintZone({
         }
     };
 
-    const saveAsImageHandler = () => {
+    const saveAsImageHandler = async () => {
         const target = document.querySelector('.play');
+
         if (!target) {
             return alert('결과 저장에 실패했습니다.');
         }
@@ -174,6 +182,8 @@ export default function PaintZone({
             document.body.appendChild(link);
             link.href = canvas.toDataURL('image/png');
             link.download = crtWord + '.png';
+            // const data = canvas.toDataURL('image/png').blob();
+
             link.click();
             document.body.removeChild(link);
             console.log(crtWord);
@@ -219,7 +229,39 @@ export default function PaintZone({
             // }
         }
     }, [data.turn]);
+    if (!!document.querySelector('.canvasTools'))
+        document
+            .querySelector('.canvasTools')
+            .addEventListener('click', (e) => {
+                console.log(e.target.getAttribute('id'));
+                if (e.target.getAttribute('id') === 'eraserBtn') {
+                    console.log('접근');
+                    document
+                        .getElementById('canvasDraw')
+                        .setAttribute('class', '');
+                    document
+                        .getElementById('canvasDraw')
+                        .classList.add('eraserBtn');
+                    document
+                        .getElementById('canvasDraw')
+                        .classList.add('canvas');
+                    return;
+                }
+                if (!e.target.classList.contains('paint')) return;
+                console.log(e.target.getAttribute('id'));
+                const cls = document
+                    .getElementById('canvasDraw')
+                    .getAttribute('class');
+                const can = cls.substring(cls.indexOf(' ') + 1);
+                document.getElementById('canvasDraw').classList.remove(can);
 
+                const color = e.target.getAttribute('id');
+                document.getElementById('canvasDraw').setAttribute('class', '');
+                document.getElementById('canvasDraw').classList.add(color);
+                document.getElementById('canvasDraw').classList.add('canvas');
+
+                console.log(can);
+            });
     return (
         <div className="play">
             <div className="game" ref={gameRef}>
@@ -306,6 +348,7 @@ export default function PaintZone({
                             <div className="palette">
                                 <button
                                     className="paint"
+                                    id="red"
                                     style={{ backgroundColor: '#ff0000' }}
                                     onClick={() =>
                                         handlePenColorChange('#ff0000')
@@ -313,6 +356,7 @@ export default function PaintZone({
                                 ></button>
                                 <button
                                     className="paint"
+                                    id="orange"
                                     style={{ backgroundColor: 'orange' }}
                                     onClick={() =>
                                         handlePenColorChange('orange')
@@ -320,6 +364,7 @@ export default function PaintZone({
                                 ></button>
                                 <button
                                     className="paint"
+                                    id="yellow"
                                     style={{ backgroundColor: 'yellow' }}
                                     onClick={() =>
                                         handlePenColorChange('yellow')
@@ -327,6 +372,7 @@ export default function PaintZone({
                                 ></button>
                                 <button
                                     className="paint"
+                                    id="green"
                                     style={{ backgroundColor: 'green' }}
                                     onClick={() =>
                                         handlePenColorChange('green')
@@ -334,6 +380,7 @@ export default function PaintZone({
                                 ></button>
                                 <button
                                     className="paint"
+                                    id="blue"
                                     style={{ backgroundColor: 'blue' }}
                                     onClick={() => handlePenColorChange('blue')}
                                 ></button>
@@ -346,6 +393,7 @@ export default function PaintZone({
                                 ></button>
                                 <button
                                     className="paint"
+                                    id="purple"
                                     style={{ backgroundColor: 'purple' }}
                                     onClick={() =>
                                         handlePenColorChange('purple')
@@ -353,6 +401,7 @@ export default function PaintZone({
                                 ></button>
                                 <button
                                     className="paint"
+                                    id="brown"
                                     style={{ backgroundColor: 'brown' }}
                                     onClick={() =>
                                         handlePenColorChange('brown')
@@ -360,6 +409,7 @@ export default function PaintZone({
                                 ></button>
                                 <button
                                     className="paint"
+                                    id="black"
                                     style={{ backgroundColor: 'black' }}
                                     onClick={() =>
                                         handlePenColorChange('black')
